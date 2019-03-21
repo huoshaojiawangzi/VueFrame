@@ -30,7 +30,18 @@
 				</el-menu>
       </el-aside>
       <el-main>
-        <router-view></router-view>
+        <el-tabs v-model="editableTabsValue" type="card" editable @edit="handleTabsEdit">
+          <el-tab-pane
+            :key="item.name"
+            v-for="(item, index) in editableTabs"
+            :label="item.title"
+            :name="item.name"
+          >
+            <keep-alive>
+              <router-view></router-view>
+            </keep-alive>
+          </el-tab-pane>
+        </el-tabs>
       </el-main>
     </el-container>
     <el-container>
@@ -54,19 +65,68 @@ export default {
       this.changeHeight();
     }
   },
+  watch: {
+    '$route'(to) {
+      console.log(to);
+    }
+  },
   methods: {
     changeHeight() {
       console.log("change");
       let winHeight = document.documentElement.clientHeight;
       let parentHeight = winHeight;
-      this.parentStyle="height:" + parentHeight + "px";
-      this.contentStyle="height:"+ (parentHeight-90) + "px";
+      this.parentStyle = "height:" + parentHeight + "px";
+      this.contentStyle = "height:" + (parentHeight - 90) + "px";
+    },
+    handleTabsEdit(targetName, action) {
+      if (action === 'add') {
+        let newTabName = ++this.tabIndex + '';
+        this.editableTabs.push({
+          title: 'New Tab',
+          name: newTabName,
+          content: 'New Tab content'
+        });
+        this.editableTabsValue = newTabName;
+      }
+      if (action === 'remove') {
+        let tabs = this.editableTabs;
+        let activeName = this.editableTabsValue;
+        if (activeName === targetName) {
+          tabs.forEach((tab, index) => {
+            if (tab.name === targetName) {
+              let nextTab = tabs[index + 1] || tabs[index - 1];
+              if (nextTab) {
+                activeName = nextTab.name;
+              }
+            }
+          });
+        }
+        this.editableTabsValue = activeName;
+        this.editableTabs = tabs.filter(tab => tab.name !== targetName);
+      }
     }
   },
   data(){
     return{
+      menuOpeions:[],
+      //tabs
+      editableTabsValue: '2',
+      editableTabs: [{
+        title: 'Tab 1',
+        name: '1',
+        content: 'Tab 1 content'
+      }, {
+        title: 'Tab 2',
+        name: '2',
+        content: 'Tab 2 content'
+      }],
+      tabIndex: 2,
+
+      //***************************************************
+
       parentStyle:0,
       contentStyle:0,
+
       menuList:[
         {
           path:"/",
@@ -79,7 +139,6 @@ export default {
             { name: '树形测试',hidden:false,leaf:false,children: [
                 { path: '/meetingList',name: '会议列表',hidden:false,leaf:true},
                 {
-                  path:"/",
                   iconCls: 'el-icon-message',
                   name: '其他测试',
                   hidden:false,
@@ -100,7 +159,6 @@ export default {
           ]
         },
         {
-          path:"/",
           iconCls: 'el-icon-message',
           name: '其他测试',
           hidden:false,
