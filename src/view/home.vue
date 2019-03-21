@@ -30,18 +30,27 @@
 				</el-menu>
       </el-aside>
       <el-main>
-        <el-tabs v-model="editableTabsValue" type="card" editable @edit="handleTabsEdit">
-          <el-tab-pane
-            :key="item.name"
-            v-for="(item, index) in editableTabs"
-            :label="item.title"
-            :name="item.name"
-          >
-            <keep-alive>
-              <router-view></router-view>
-            </keep-alive>
-          </el-tab-pane>
-        </el-tabs>
+        <div class="app-wrap">
+          <!-- 此处放置el-tabs代码 -->
+          <div >
+            <el-tabs
+              v-model="activeIndex"
+              type="card"
+              closable
+            >
+              <el-tab-pane
+                :key="item.name"
+                v-for="(item) in tagOptions"
+                :label="item.name"
+                :name="item.route"
+              >
+              </el-tab-pane>
+            </el-tabs>
+          </div>
+          <div class="content-wrap">
+            <router-view/>
+          </div>
+        </div>
       </el-main>
     </el-container>
     <el-container>
@@ -66,9 +75,35 @@ export default {
     }
   },
   watch: {
-    '$route'(to) {
-      console.log(to);
+    '$route'(to){
+      //判断路由是否已经打开
+      //已经打开的 ，将其置为active
+      //未打开的，将其放入队列里
+      let flag = false;
+      for(let item of this.tagOptions){
+        console.log("item.name",item.name)
+        console.log("t0.name",to.name)
+
+        if(item.name === to.name){
+          console.log('to.path',to.path);
+          this.$store.state.commit('set_active_index',to.path)
+          flag = true;
+          break;
+        }
+      }
+
+      if(!flag){
+        console.log('22222to.path',to.path);
+        this.$store.commit('add_tabs',{route: to.path, name: to.name});
+        this.$store.commit('set_active_index', to.path);
+      }
+
     }
+  },
+  computed: {
+    tagOptions () {
+      return this.$store.state.tagOptions;
+    },
   },
   methods: {
     changeHeight() {
@@ -121,9 +156,6 @@ export default {
         content: 'Tab 2 content'
       }],
       tabIndex: 2,
-
-      //***************************************************
-
       parentStyle:0,
       contentStyle:0,
 
