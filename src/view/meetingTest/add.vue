@@ -84,9 +84,7 @@ export default {
     submitForm(formName) {
        this.$refs[formName].validate((valid) => {
          if (valid) {
-           console.log(this.form.usersId);
            this.form.users = this.form.usersId[0]+"/"+this.form.usersId[1];
-           console.log(this.form.users);
            this.$axios({
                      method:'post',
                      url:'/meeting/save-meeting',

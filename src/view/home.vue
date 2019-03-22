@@ -30,26 +30,26 @@
 				</el-menu>
       </el-aside>
       <el-main>
-        <div class="app-wrap">
           <!-- 此处放置el-tabs代码 -->
           <div >
             <el-tabs
               v-model="activeIndex"
               type="card"
               closable
+              @tab-click="tabClick"
+              @tab-remove="tabRemove"
             >
               <el-tab-pane
                 :key="item.name"
-                v-for="(item) in tagOptions"
+                v-for="(item) in this.$store.getters.getTagOptions"
                 :label="item.name"
                 :name="item.route"
               >
               </el-tab-pane>
             </el-tabs>
-          </div>
-          <div class="content-wrap">
-            <router-view/>
-          </div>
+            <keep-alive>
+              <router-view></router-view>
+            </keep-alive>
         </div>
       </el-main>
     </el-container>
@@ -74,70 +74,61 @@ export default {
       this.changeHeight();
     }
   },
+  computed: {
+    activeIndex:{
+      get: function () {
+        return this.$store.getters.getActiveIndex;
+      },
+      set: function () {
+      }
+    }
+
+  },
   watch: {
     '$route'(to){
       //判断路由是否已经打开
       //已经打开的 ，将其置为active
       //未打开的，将其放入队列里
+      if(to.path==="/")
+      {
+        return;
+      }
       let flag = false;
-      for(let item of this.tagOptions){
-        console.log("item.name",item.name)
-        console.log("t0.name",to.name)
-
-        if(item.name === to.name){
-          console.log('to.path',to.path);
-          this.$store.state.commit('set_active_index',to.path)
+      for(let option of this.$store.state.tag.tagOptions)
+      {
+        if(option.name === to.name)
+        {
           flag = true;
-          break;
+          this.$store.dispatch('setActiveIndex', to.path);
         }
       }
-
       if(!flag){
-        console.log('22222to.path',to.path);
-        this.$store.commit('add_tabs',{route: to.path, name: to.name});
-        this.$store.commit('set_active_index', to.path);
+        this.$store.dispatch('addTabs',{route: to.path, name: to.name});
+        this.$store.dispatch('setActiveIndex', to.path);
       }
 
     }
   },
-  computed: {
-    tagOptions () {
-      return this.$store.state.tagOptions;
-    },
-  },
   methods: {
     changeHeight() {
-      console.log("change");
       let winHeight = document.documentElement.clientHeight;
       let parentHeight = winHeight;
       this.parentStyle = "height:" + parentHeight + "px";
       this.contentStyle = "height:" + (parentHeight - 90) + "px";
     },
-    handleTabsEdit(targetName, action) {
-      if (action === 'add') {
-        let newTabName = ++this.tabIndex + '';
-        this.editableTabs.push({
-          title: 'New Tab',
-          name: newTabName,
-          content: 'New Tab content'
-        });
-        this.editableTabsValue = newTabName;
+    // tab切换时，动态的切换路由
+    tabClick(tab) {
+      this.$store.dispatch('setActiveIndex', tab.name);
+      this.$router.push(tab.name);
+    },
+    tabRemove(tabName){
+      this.$store.dispatch('deleteTab', tabName);
+      if(this.$store.getters.getTagOptions.length === 0) {
+        this.$router.push("/");
       }
-      if (action === 'remove') {
-        let tabs = this.editableTabs;
-        let activeName = this.editableTabsValue;
-        if (activeName === targetName) {
-          tabs.forEach((tab, index) => {
-            if (tab.name === targetName) {
-              let nextTab = tabs[index + 1] || tabs[index - 1];
-              if (nextTab) {
-                activeName = nextTab.name;
-              }
-            }
-          });
-        }
-        this.editableTabsValue = activeName;
-        this.editableTabs = tabs.filter(tab => tab.name !== targetName);
+      else
+      {
+        this.$router.push(this.activeIndex);
       }
     }
   },

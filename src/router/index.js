@@ -11,7 +11,7 @@ export default new Router({
       component:Home,
       index:'1',
       iconCls: 'el-icon-message',
-      name: '导航home',
+      name: '首页',
       children: [
         { path: '/cameraRecordList', component: () =>
             import ('@/view/cameraTest/cameraRecordList'), index:'3', name: '抓拍列表' },

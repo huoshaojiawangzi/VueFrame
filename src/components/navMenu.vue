@@ -24,9 +24,6 @@
       return {}
     },
     methods: {
-      log(){
-        console.log(this.navMenu);
-      }
     }
   }
 
