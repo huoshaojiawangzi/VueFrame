@@ -51,6 +51,7 @@ document.onkeydown = function(e) {
     }
 	};
   export default {
+    name:"meetingList",
     created() {
       this.getList();
       this.getdepartments();

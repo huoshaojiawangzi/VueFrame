@@ -14,11 +14,11 @@ export default new Router({
       name: '首页',
       children: [
         { path: '/cameraRecordList', component: () =>
-            import ('@/view/cameraTest/cameraRecordList'), index:'3', name: '抓拍列表' },
+            import ('@/view/cameraTest/cameraRecordList'), name: 'cameraRecordList'},
         { path: '/meetingList', component: () =>
-            import ('@/view/meetingTest/meetingList'),  index:'5',name: '会议列表' },
+            import ('@/view/meetingTest/meetingList'),name: 'meetingList'},
         { path: '/userList', component: () =>
-            import ('@/view/test/test'), index:'10', name: '用户列表' }
+            import ('@/view/test/test'), name: 'userList'}
       ]
     }],
   mode:"history",

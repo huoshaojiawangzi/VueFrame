@@ -7,6 +7,7 @@
 <script>
 
   export default {
+    name:"userList",
     created() {
       this.$axios({
         method:'get',

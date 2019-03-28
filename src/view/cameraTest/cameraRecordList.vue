@@ -85,6 +85,7 @@ document.onkeydown = function(e) {
     }
 	};
   export default {
+    name:"cameraRecordList",
     created() {
       this.getList();
       this.getUserOptions();

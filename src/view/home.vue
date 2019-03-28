@@ -26,31 +26,14 @@
     <el-container id="conent" :style="this.contentStyle">
       <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
         <el-menu :default-active="$route.path" class="el-menu-vertical-demo" router >
+          <!--树形导航menu-->
           <navMenu :navMenus="menuList"></navMenu>
 				</el-menu>
       </el-aside>
       <el-main>
-          <!-- 此处放置el-tabs代码 -->
-          <div>
-            <el-tabs
-              v-model="activeIndex"
-              type="card"
-              closable
-              @tab-click="tabClick"
-              @tab-remove="tabRemove"
-            >
-              <el-tab-pane
-                :key="item.name"
-                v-for="(item) in this.$store.getters.getTagOptions"
-                :label="item.name"
-                :name="item.path"
-              >
-              </el-tab-pane>
-            </el-tabs>
-            <keep-alive>
-              <router-view></router-view>
-            </keep-alive>
-        </div>
+          <!-- 标签页面-->
+          <dynamicTab>
+          </dynamicTab>
       </el-main>
     </el-container>
     <el-container>
@@ -64,10 +47,11 @@
 <script>
 import ElementUIStyle from '@/style/ElementUIStyle'
 import navMenu from '@/components/navMenu'
+import dynamicTab from '@/components/dynamicTab'
 
 export default {
   name: 'Home',
-  components: { ElementUIStyle,navMenu },
+  components: { ElementUIStyle,navMenu,dynamicTab},
   mounted() {
     this.changeHeight();
     window.onresize = function(){
@@ -75,38 +59,12 @@ export default {
     }
   },
   computed: {
-    activeIndex:{
+    menuList:{
       get: function () {
-        return this.$store.getters.getActiveIndex;
+        return this.$store.getters.getMenuList;
       },
       set: function () {
       }
-    }
-
-  },
-  watch: {
-    '$route'(to){
-      //判断路由是否已经打开
-      //已经打开的 ，将其置为active
-      //未打开的，将其放入队列里
-      if(to.path==="/")
-      {
-        return;
-      }
-      let flag = false;
-      for(let option of this.$store.state.tag.tagOptions)
-      {
-        if(option.name === to.name)
-        {
-          flag = true;
-          this.$store.dispatch('setActiveIndex', to.path);
-        }
-      }
-      if(!flag){
-        this.$store.dispatch('addTabs',{path: to.path, name: to.name});
-        this.$store.dispatch('setActiveIndex', to.path);
-      }
-
     }
   },
   methods: {
@@ -115,80 +73,12 @@ export default {
       let parentHeight = winHeight;
       this.parentStyle = "height:" + parentHeight + "px";
       this.contentStyle = "height:" + (parentHeight - 90) + "px";
-    },
-    // tab切换时，动态的切换路由
-    tabClick(tab) {
-      this.$store.dispatch('setActiveIndex', tab.name);
-      this.$router.push(tab.name);
-    },
-    tabRemove(tabName){
-      this.$store.dispatch('deleteTab', tabName);
-      if(this.$store.getters.getTagOptions.length === 0) {
-        this.$router.push("/");
-      }
-      else
-      {
-        this.$router.push(this.activeIndex);
-      }
     }
   },
   data(){
     return{
-      menuOpeions:[],
-      //tabs
-      editableTabsValue: '2',
-      editableTabs: [{
-        title: 'Tab 1',
-        name: '1',
-        content: 'Tab 1 content'
-      }, {
-        title: 'Tab 2',
-        name: '2',
-        content: 'Tab 2 content'
-      }],
-      tabIndex: 2,
       parentStyle:0,
-      contentStyle:0,
-
-      menuList:[
-        {
-          path:"/",
-          iconCls: 'el-icon-picture',
-          name: '抓拍管理',
-          hidden:false,
-          leaf:false,
-          children: [
-            { path: '/cameraRecordList', name: '抓拍列表',hidden:false,leaf:true},
-            { name: '树形测试',hidden:false,leaf:false,children: [
-                { path: '/meetingList',name: '会议列表',hidden:false,leaf:true},
-                {
-                  iconCls: 'el-icon-message',
-                  name: '其他测试',
-                  hidden:false,
-                  leaf:true,
-                  path: '/userList'
-                }
-              ]}
-          ]
-        },
-        {
-          path:"/",
-          iconCls: 'el-icon-message',
-          name: '会议管理',
-          hidden:false,
-          leaf:false,
-          children: [
-            { path: '/meetingList',name: '会议列表',hidden:false,leaf:true}
-          ]
-        },
-        {
-          iconCls: 'el-icon-message',
-          name: '其他测试',
-          hidden:false,
-          leaf:true,
-          path: '/userList'
-        }
-        ]
+      contentStyle:0
     }
   }
 }
