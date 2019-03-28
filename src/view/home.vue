@@ -31,7 +31,7 @@
       </el-aside>
       <el-main>
           <!-- 此处放置el-tabs代码 -->
-          <div >
+          <div>
             <el-tabs
               v-model="activeIndex"
               type="card"
@@ -43,7 +43,7 @@
                 :key="item.name"
                 v-for="(item) in this.$store.getters.getTagOptions"
                 :label="item.name"
-                :name="item.route"
+                :name="item.path"
               >
               </el-tab-pane>
             </el-tabs>
@@ -103,7 +103,7 @@ export default {
         }
       }
       if(!flag){
-        this.$store.dispatch('addTabs',{route: to.path, name: to.name});
+        this.$store.dispatch('addTabs',{path: to.path, name: to.name});
         this.$store.dispatch('setActiveIndex', to.path);
       }
 

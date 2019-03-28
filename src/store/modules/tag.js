@@ -5,8 +5,8 @@ export default{
   },
   mutations: {
     // 添加tabs
-    add_tabs (state, data) {
-      state.tagOptions.push(data);
+    add_tabs (state, item) {
+      state.tagOptions.push(item);
     },
     // 删除tabs
     delete_tabs (state,index) {
@@ -19,10 +19,10 @@ export default{
   },
   actions: {
     //删除tab并且设置当前activeIndex
-    deleteTab(context, route){
+    deleteTab(context, path){
       let index = 0;
       for (let option of this.state.tag.tagOptions) {
-        if (option.route === route) {
+        if (option.path === path) {
           break;
         }
         index++;
@@ -32,11 +32,11 @@ export default{
       {
         if(index === 0)
         {
-          context.commit('set_active_index', this.state.tag.tagOptions[0].route);
+          context.commit('set_active_index', this.state.tag.tagOptions[0].path);
         }
         else
         {
-          context.commit('set_active_index', this.state.tag.tagOptions[index-1].route);
+          context.commit('set_active_index', this.state.tag.tagOptions[index-1].path);
         }
       }
     },
@@ -44,9 +44,9 @@ export default{
     setActiveIndex(context,index){
       context.commit("set_active_index",index);
     },
-    // 添加tabs
-    addTabs(context, data) {
-      context.commit("add_tabs",data);
+    // 添加tab
+    addTabs(context, item) {
+      context.commit("add_tabs",item);
     }
   },
   getters:{
