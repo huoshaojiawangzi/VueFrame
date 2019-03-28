@@ -13,7 +13,7 @@
         </el-dialog>
         <!-- ///////////////////treeForm============================================== -->
     </div>
-    <el-table :data="list" style="width: 100%" :height="this.tableHeight" ref="table">
+    <el-table :data="list" style="width: 100%" :height="this.$store.getters.getTableHeight" ref="table">
       <el-table-column prop="meetName" label="会议名称"> </el-table-column>
       <el-table-column prop="meetDate" label="会议日期"> </el-table-column>
       <el-table-column prop="checkInTime" label="签到时间"> </el-table-column>
@@ -56,14 +56,6 @@ document.onkeydown = function(e) {
       this.getList();
       this.getdepartments();
     },
-    mounted () {
-      this.$nextTick(() => {
-          this.tableHeight = document.documentElement.clientHeight - 197;
-          window.onresize = () => {
-            this.tableHeight=document.documentElement.clientHeight - 197;
-          }
-        })
-    },
     components: { add,treeAdd },
     methods: {
         addFormChange(status)
@@ -89,7 +81,6 @@ document.onkeydown = function(e) {
                     method:'post',
                     url:'/meeting/find-meet-user'
             }).then((response) =>{
-              console.log(response.data);
                 this.departments = response.data.data;
             }).catch((response) =>{
                 console.log(response.data)
@@ -176,7 +167,6 @@ document.onkeydown = function(e) {
         },
         inputValue:{
         },
-        tableHeight:null,
         page:1,
         limit:10,
         list:null,

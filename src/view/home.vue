@@ -1,5 +1,5 @@
 <template>
-  <div id="parent" :style="this.parentStyle">
+  <div id="parent" :style="parentStyle">
     <div class="el-loading-mask is-fullscreen" style="z-index: 2001;" v-show="$store.state.loading">
       <div class="el-loading-spinner">
         <svg viewBox="25 25 50 50" class="circular">
@@ -23,7 +23,7 @@
         <span>王小虎</span>
       </el-header>
     </el-container>
-    <el-container id="conent" :style="this.contentStyle">
+    <el-container id="conent" :style="contentStyle">
       <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
         <el-menu :default-active="$route.path" class="el-menu-vertical-demo" router >
           <!--树形导航menu-->
@@ -53,10 +53,12 @@ export default {
   name: 'Home',
   components: { ElementUIStyle,navMenu,dynamicTab},
   mounted() {
-    this.changeHeight();
-    window.onresize = function(){
-      this.changeHeight();
-    }
+    this.$nextTick(() => {
+      this.$store.dispatch('setFullHeight', document.documentElement.clientHeight);
+      window.onresize =()=>{
+        this.$store.dispatch('setFullHeight', document.documentElement.clientHeight);
+      }
+    })
   },
   computed: {
     menuList:{
@@ -65,21 +67,33 @@ export default {
       },
       set: function () {
       }
+    },
+    parentStyle:{
+      get: function () {
+        return "height:" +(this.$store.getters.getfullHeight-5)+"px";
+      },
+      set: function () {
+      }
+    },
+    contentStyle:{
+      get: function () {
+        return "height:" +(this.$store.getters.getfullHeight-95)+"px";
+      },
+      set: function () {
+      }
     }
   },
   methods: {
-    changeHeight() {
-      let winHeight = document.documentElement.clientHeight;
-      let parentHeight = winHeight;
-      this.parentStyle = "height:" + parentHeight + "px";
-      this.contentStyle = "height:" + (parentHeight - 90) + "px";
-    }
   },
   data(){
     return{
-      parentStyle:0,
-      contentStyle:0
     }
   }
 }
 </script>
+<style>
+  .el-main{
+    margin: 0px;
+    padding-top: 5px;
+  }
+</style>

@@ -10,7 +10,7 @@
     >
       <el-tab-pane
         :key="item.name"
-        v-for="(item) in this.$store.getters.getTagOptions"
+        v-for="(item) in this.$store.getters.getTabOptions"
         :label="item.name"
         :name="item.path"
       >
@@ -37,7 +37,7 @@
         let promise = this.$store.dispatch('getMenuByPath', {path:to.path,items:this.$store.getters.getMenuList});
         promise.then((menu)=>{
           let flag = false;
-          for(let option of this.$store.state.tag.tagOptions)
+          for(let option of this.$store.getters.getTabOptions)
           {
             if(option.name === menu.name)
             {
@@ -80,7 +80,7 @@
       },
       tabRemove(tabName){
         this.$store.dispatch('deleteTab', tabName);
-        if(this.$store.getters.getTagOptions.length === 0) {
+        if(this.$store.getters.getTabOptions.length === 0) {
           this.$router.push("/");
         }
         else

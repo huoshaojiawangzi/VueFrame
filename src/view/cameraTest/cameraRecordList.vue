@@ -36,7 +36,7 @@
       </el-dialog>
       <!-- ////addFormTest============================================================ -->
     </div>
-    <el-table :data="list" style="width: 100%" :height="this.tableHeight" ref="table" @sort-change="sortChange">
+    <el-table :data="list" style="width: 100%" :height="this.$store.getters.getTableHeight" ref="table" @sort-change="sortChange">
       <el-table-column prop="user.realName" label="用户"> </el-table-column>
       <el-table-column prop="camera.location.name" label="摄像头"> </el-table-column>
       <el-table-column prop="time" sortable='custom' label="时间"> </el-table-column>
@@ -90,14 +90,6 @@ document.onkeydown = function(e) {
       this.getList();
       this.getUserOptions();
     },
-    mounted () {
-    this.$nextTick(() => {
-        this.tableHeight = document.documentElement.clientHeight - 197;
-        window.onresize =()=>{
-          this.tableHeight=document.documentElement.clientHeight - 197;
-        }
-      })
-    },
     watch:{//监听数据
       state:{
          handler(obj){
@@ -124,15 +116,23 @@ document.onkeydown = function(e) {
          deep:true
      }
     },
-    computed: {
-      ...mapState({
-         state:state=>state.cameraRecord
-      })
-    },
     components: {
       add,
       edit,
       radioAdd
+    },
+    computed: {
+      ...mapState({
+        state:state=>state.cameraRecord
+      })
+    /*  tableHeight:{
+        get : function(){
+            let th = this.$store.getters.getfullHeight-197;
+            return th>300 ? th:300
+        },
+        set : function(){
+        }
+      }*/
     },
     methods: {
         showCapture(name)
@@ -273,7 +273,6 @@ document.onkeydown = function(e) {
           endTime:null
         },
         loading:null,
-        tableHeight:0,
         page:1,
         limit:10,
         list:null,

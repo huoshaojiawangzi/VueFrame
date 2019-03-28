@@ -16,7 +16,6 @@
       this.$nextTick(() => {
           window.onresize = function(){
             vm.winHeight=document.documentElement.clientHeight;
-            console.log(this.winHeight);
           }
         })
     },
