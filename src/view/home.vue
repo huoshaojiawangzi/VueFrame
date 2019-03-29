@@ -11,20 +11,25 @@
     </div>
     <ElementUIStyle> </ElementUIStyle>
     <el-container>
-      <el-header style="height:60px;text-align: right; font-size: 12px;background-color:#545c64">
-        <el-dropdown>
-          <i class="el-icon-setting" style="margin-right: 15px"></i>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item>查看</el-dropdown-item>
-            <el-dropdown-item>新增</el-dropdown-item>
-            <el-dropdown-item>删除</el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
-        <span>王小虎</span>
+      <el-header style="height:80px;font-size: 12px;background-color:#3F454B">
+        <div style="margin-right:15px;margin-top:28px;float: right">
+          <span style="color:white;font-size:13px;margin-right: 15px">超级管理员</span>
+          <span style="color:white;font-size:13px;margin-right: 15px">王小虎</span>
+          <el-dropdown>
+            <i class="el-icon-setting" style="color:white"></i>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item>查看</el-dropdown-item>
+              <el-dropdown-item>新增</el-dropdown-item>
+              <el-dropdown-item>删除</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+          <span style="color:white;font-size:13px">设置</span>
+        </div>
+        <div style="margin-top: 20px;margin-left:20px;font-size: 22px;color:white">后台管理系统</div>
       </el-header>
     </el-container>
     <el-container id="conent" :style="contentStyle">
-      <el-aside width="200px" style="background-color:#545c64">
+      <el-aside width="230px" style="background-color:#545c64">
         <el-menu
           :default-active="$route.path"
           class="el-menu-vertical-demo"
@@ -80,14 +85,14 @@ export default {
     },
     parentStyle:{
       get: function () {
-        return "height:" +(this.$store.getters.getfullHeight)+"px";
+        return "height:" +(this.$store.getters.getfullHeight-1)+"px";
       },
       set: function () {
       }
     },
     contentStyle:{
       get: function () {
-        return "height:" +(this.$store.getters.getfullHeight-60)+"px";
+        return "height:" +(this.$store.getters.getfullHeight-81)+"px";
       },
       set: function () {
       }
@@ -103,9 +108,11 @@ export default {
 </script>
 <style scoped>
   .el-main{
-    margin: 0px;
-    padding-top: 0px;
-    padding-bottom: 0px;
+    padding: 10px;
     background-color:#F5F5F5;
+  }
+  body{
+    overflow-y: hidden;
+    overflow-x: hidden;
   }
 </style>
