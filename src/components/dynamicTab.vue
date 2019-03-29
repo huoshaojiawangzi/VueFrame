@@ -91,5 +91,8 @@
     }
   }
 </script>
-<style scoped>
+<style>
+  .el-tabs__nav-scroll{
+    color: #F5F5F5;
+  }
 </style>

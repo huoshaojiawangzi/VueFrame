@@ -51,8 +51,7 @@ export default new vuex.Store({
         iconCls: 'el-icon-message',
         name: '其他测试',
         hidden: false,
-        leaf: true,
-        path: '/userList'
+        leaf: false
       }
     ]
   },
