@@ -11,10 +11,10 @@
     </div>
     <ElementUIStyle> </ElementUIStyle>
     <el-container>
-      <el-header style="height:80px;font-size: 12px;background-color:#3F454B">
-        <div style="margin-right:15px;margin-top:28px;float: right">
-          <span style="color:white;font-size:13px;margin-right: 15px">超级管理员</span>
-          <span style="color:white;font-size:13px;margin-right: 15px">王小虎</span>
+      <el-header style="height:50px;font-size: 12px;" class="box">
+        <div style="margin-right:5px;margin-top:18px;float: right">
+          <span style="color:white;font-size:13px;margin-right: 10px">超级管理员</span>
+          <span style="color:white;font-size:13px;margin-right: 10px">王小虎</span>
           <el-dropdown>
             <i class="el-icon-setting" style="color:white"></i>
             <el-dropdown-menu slot="dropdown">
@@ -25,7 +25,7 @@
           </el-dropdown>
           <span style="color:white;font-size:13px">设置</span>
         </div>
-        <div style="margin-top: 20px;margin-left:20px;font-size: 22px;color:white">后台管理系统</div>
+        <div style="margin-top: 10px;font-size: 22px;color:white"><i class="el-icon-menu"></i><span style="font-weight:bold;font-size: 21px;margin-left: 8px">后台管理系统</span></div>
       </el-header>
     </el-container>
     <el-container id="conent" :style="contentStyle">
@@ -35,7 +35,7 @@
           class="el-menu-vertical-demo"
           background-color="#545c64"
           text-color="#fff"
-          active-text-color="#ffd04b"
+          active-text-color="#5CCDDF"
           router >
           <!--树形导航menu-->
           <navMenu :navMenus="menuList"></navMenu>
@@ -92,7 +92,7 @@ export default {
     },
     contentStyle:{
       get: function () {
-        return "height:" +(this.$store.getters.getfullHeight-81)+"px";
+        return "height:" +(this.$store.getters.getfullHeight-51)+"px";
       },
       set: function () {
       }
@@ -111,8 +111,11 @@ export default {
     padding: 10px;
     background-color:#F5F5F5;
   }
-  body{
-    overflow-y: hidden;
-    overflow-x: hidden;
+  .box {
+    background: #4682B4 linear-gradient(to left, rgba(0,255,0,0), #5CCDDF);
+    transition: background-color .5s;
+  }
+  .box:hover {
+    background-color: palevioletred;
   }
 </style>

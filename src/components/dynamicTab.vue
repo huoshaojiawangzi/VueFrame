@@ -95,4 +95,9 @@
   .el-tabs__nav-scroll{
     color: #F5F5F5;
   }
+  .el-tabs__item{
+  }
+  .is-active{
+    color:#5CCDDF !important;
+  }
 </style>

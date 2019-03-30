@@ -39,7 +39,7 @@ export default new vuex.Store({
       },
       {
         path: "/",
-        iconCls: 'el-icon-message',
+        iconCls: 'el-icon-location',
         name: '会议管理',
         hidden: false,
         leaf: false,
@@ -48,7 +48,7 @@ export default new vuex.Store({
         ]
       },
       {
-        iconCls: 'el-icon-message',
+        iconCls: 'el-icon-star-off',
         name: '其他测试',
         hidden: false,
         leaf: false
@@ -74,7 +74,7 @@ export default new vuex.Store({
       return state.fullHeight;
     },
     getTableHeight(state){
-      let th = state.fullHeight-222;
+      let th = state.fullHeight-197;
       return th>300 ? th:300
     }
   },
