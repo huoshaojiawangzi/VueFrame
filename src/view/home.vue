@@ -23,7 +23,7 @@
               <el-dropdown-item>删除</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
-          <span style="color:white;font-size:13px">设置</span>
+          <span style="color:white;font-size:13px;">设置</span>
         </div>
         <div style="margin-top: 10px;font-size: 22px;color:white"><i class="el-icon-menu"></i><span style="font-weight:bold;font-size: 21px;margin-left: 8px">后台管理系统</span></div>
       </el-header>
@@ -35,14 +35,14 @@
           class="el-menu-vertical-demo"
           background-color="#545c64"
           text-color="#fff"
-          active-text-color="#5CCDDF"
+          active-text-color="#6495ED"
           router >
           <!--树形导航menu-->
           <navMenu :navMenus="menuList"></navMenu>
 				</el-menu>
       </el-aside>
       <el-main>
-        <div style="background-color: white">
+        <div style="background-color: white;box-shadow: 3px 3px 2px #cccccc;">
           <!-- 标签页面-->
           <dynamicTab>
           </dynamicTab>
@@ -112,7 +112,7 @@ export default {
     background-color:#F5F5F5;
   }
   .box {
-    background: #4682B4 linear-gradient(to left, rgba(0,255,0,0), #5CCDDF);
+    background: #4682B4 linear-gradient(to right, rgba(0,255,0,0), #5CCDDF);
     transition: background-color .5s;
   }
   .box:hover {

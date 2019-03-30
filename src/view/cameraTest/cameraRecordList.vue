@@ -15,10 +15,10 @@
         type="datetime"
         placeholder="结束时间">
       </el-date-picker>
-      <el-button type="primary" plain size="small" @click="searchList" id="searchButton" style="margin-left:20px" icon="el-icon-search">搜索
+      <el-button type="primary"  size="small" @click="searchList" id="searchButton" style="margin-left:20px" icon="el-icon-search">搜索
       </el-button>
       <!-- addForm -->
-      <el-button  type="primary" plain @click="state.addShow=true"  size="small" style="margin-left:10px"  icon="el-icon-plus">增加</el-button>
+      <el-button  type="primary"  @click="state.addShow=true"  size="small" style="margin-left:10px"  icon="el-icon-plus">增加</el-button>
       <el-dialog title="增加进出记录" :visible.sync="state.addShow" width="340px">
           <add ref="addForm" v-bind:userOptions="userOptions"  @message="message" @refresh="getList"></add>
       </el-dialog>
@@ -30,7 +30,7 @@
         <img :src="this.capturePath" class="image" style="width:400px;height:400px" alt="">
       </el-dialog>
       <!-- addFormTest============================================================ -->
-      <el-button  type="primary" plain @click="state.radioShow=true" size="small" style="margin-left:10px">radio测试</el-button>
+      <el-button  type="primary"  @click="state.radioShow=true" size="small" style="margin-left:10px">radio测试</el-button>
       <el-dialog title="增加进出记录" :visible.sync="state.radioShow" width="400px">
           <radioAdd ref="radioForm" v-bind:userOptions="userOptions"  @message="message" @refresh="getList"></radioAdd>
       </el-dialog>
@@ -57,7 +57,7 @@
         </template>
        </el-table-column>
     </el-table>
-  <div class="block">
+  <div class="block" style="margin-top: 5px;">
     <el-pagination
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
