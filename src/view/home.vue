@@ -1,5 +1,6 @@
 <template>
   <div id="parent" :style="parentStyle">
+    <ElementUIStyle> </ElementUIStyle>
     <div class="el-loading-mask is-fullscreen" style="z-index: 2001;" v-show="$store.state.loading">
       <div class="el-loading-spinner">
         <svg viewBox="25 25 50 50" class="circular">
@@ -9,28 +10,29 @@
         <p class="el-loading-text">拼命加载中</p>
       </div>
     </div>
-    <ElementUIStyle> </ElementUIStyle>
     <el-container>
-      <el-header style="height:50px;font-size: 12px;" class="box">
-        <div style="margin-right:5px;margin-top:18px;float: right">
-          <span style="color:white;font-size:13px;margin-right: 10px">超级管理员</span>
-          <span style="color:white;font-size:13px;margin-right: 10px">王小虎</span>
-          <el-dropdown>
-            <i class="el-icon-setting" style="color:white"></i>
-            <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item>查看</el-dropdown-item>
-              <el-dropdown-item>新增</el-dropdown-item>
-              <el-dropdown-item>删除</el-dropdown-item>
-            </el-dropdown-menu>
-          </el-dropdown>
-          <span style="color:white;font-size:13px;">设置</span>
-        </div>
-        <div style="margin-top: 10px;font-size: 22px;color:white"><i class="el-icon-menu"></i><span style="font-weight:bold;font-size: 21px;margin-left: 8px">后台管理系统</span></div>
+       <el-header style="height:50px;font-size: 12px;" class="box">
+         <div style="float: right;margin-top: 18px">
+           <el-dropdown>
+             <i class="el-icon-setting" style="color:white;"></i>
+             <el-dropdown-menu slot="dropdown">
+               <el-dropdown-item>查看</el-dropdown-item>
+               <el-dropdown-item>新增</el-dropdown-item>
+               <el-dropdown-item>删除</el-dropdown-item>
+             </el-dropdown-menu>
+           </el-dropdown>
+           <span style="color:white;font-size:13px;">设置</span>
+          </div>
+        <div><span style="color:white;font-size:13px;margin-right: 10px;float: right;margin-top: 18px">王小虎</span></div>
+         <div style='height:30px;width:30px;float: right;border-radius: 50%;margin-right:10px;margin-top: 10px;background: url("/static/image/霞头像.jpg") no-repeat center top;background-size: 100%'> </div>
+          <div> <span style="color:white;font-size:13px;margin-right: 20px;float: right;margin-top: 18px">超级管理员</span></div>
+        <div style="margin-top: 10px;font-size: 22px;color:white"><i class="el-icon-menu" @click="changeCollapse()"></i><span style="font-weight:bold;font-size: 21px;margin-left: 8px">后台管理系统</span></div>
       </el-header>
     </el-container>
     <el-container id="conent" :style="contentStyle">
-      <el-aside width="230px" style="background-color:#545c64">
+      <el-aside width="230px">
         <el-menu
+          :style="menuStyle"
           :default-active="$route.path"
           class="el-menu-vertical-demo"
           background-color="#545c64"
@@ -96,7 +98,15 @@ export default {
       },
       set: function () {
       }
+    },
+    menuStyle:{
+      get: function () {
+        return "height:" +(this.$store.getters.getfullHeight-51)+"px";
+      },
+      set: function () {
+      }
     }
+
   },
   methods: {
   },
@@ -107,10 +117,6 @@ export default {
 }
 </script>
 <style scoped>
-  .el-main{
-    padding: 10px;
-    background-color:#F5F5F5;
-  }
   .box {
     background: #4682B4 linear-gradient(to right, rgba(0,255,0,0), #5CCDDF);
     transition: background-color .5s;

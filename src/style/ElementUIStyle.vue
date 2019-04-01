@@ -1,12 +1,3 @@
-<template lang="html">
-
-</template>
-
-<script>
-export default {
-}
-</script>
-
 <style>
 body {
     padding:0;  /*去除内边距*/
@@ -23,5 +14,12 @@ body {
 }
 .el-dialog__wrapper{
   overflow-y: hidden;
+}
+.el-main{
+  padding:5px 10px 5px 10px;
+  background-color:#F5F5F5;
+}
+.el-tabs__nav-scroll{
+  color: #F5F5F5; /*导航选中颜色*/
 }
 </style>

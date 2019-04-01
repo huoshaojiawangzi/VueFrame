@@ -74,7 +74,7 @@ export default new vuex.Store({
       return state.fullHeight;
     },
     getTableHeight(state){
-      let th = state.fullHeight-197;
+      let th = state.fullHeight-187;
       return th>300 ? th:300
     }
   },
