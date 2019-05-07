@@ -1,11 +1,16 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import Login from '@/view/login'
 import Home from '@/view/home'
 
 
 Vue.use(Router);
 export default new Router({
   routes:[
+    {
+      path:"/login",
+      component:Login
+    },
     {
       path:"/",
       component:Home,
@@ -22,5 +27,5 @@ export default new Router({
       ]
     }],
   mode:"history",
-  base: '/sports/'
+  base: '/home/'
 })

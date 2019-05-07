@@ -51,13 +51,6 @@
         </div>
       </el-main>
     </el-container>
-<!--    <el-container>
-      <div style="height:2px;background-color:#A9A9A9;width:1300px">
-      </div>
-      <el-footer style="height:30px;text-align: center; font-size: 12px;">
-        <div style="margin-top:7px">版权所有</div>
-      </el-footer>
-    </el-container>-->
   </div>
 </template>
 
@@ -69,6 +62,12 @@ import dynamicTab from '@/components/dynamicTab'
 export default {
   name: 'Home',
   components: { ElementUIStyle,navMenu,dynamicTab},
+  created(){
+    if(this.$store.getters.getUserInfo == null)
+    {
+      this.$router.push({ path:"/login"});
+    }
+  },
   mounted() {
     this.$nextTick(() => {
       this.$store.dispatch('setFullHeight', document.documentElement.clientHeight);
