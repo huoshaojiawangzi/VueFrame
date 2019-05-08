@@ -23,9 +23,9 @@
            </el-dropdown>
            <span style="color:white;font-size:13px;">设置</span>
           </div>
-        <div><span style="color:white;font-size:13px;margin-right: 10px;float: right;margin-top: 18px">王小虎</span></div>
+        <div><span style="color:white;font-size:13px;margin-right: 10px;float: right;margin-top: 18px" >{{this.$store.getters.getUserInfo.name}}</span></div>
          <div style='height:30px;width:30px;float: right;border-radius: 50%;margin-right:10px;margin-top: 10px;background: url("/static/image/霞头像.jpg") no-repeat center top;background-size: 100%'> </div>
-          <div> <span style="color:white;font-size:13px;margin-right: 20px;float: right;margin-top: 18px">超级管理员</span></div>
+          <div> <span style="color:white;font-size:13px;margin-right: 20px;float: right;margin-top: 18px">{{this.$store.getters.getUserInfo.roles[this.$store.getters.getUserInfo.roleIndex].name}}</span></div>
         <div style="margin-top: 10px;font-size: 22px;color:white"><i class="el-icon-menu" @click="changeCollapse()"></i><span style="font-weight:bold;font-size: 21px;margin-left: 8px">后台管理系统</span></div>
       </el-header>
     </el-container>
@@ -40,7 +40,7 @@
           active-text-color="#6495ED"
           router >
           <!--树形导航menu-->
-          <navMenu :navMenus="menuList"></navMenu>
+          <navMenu :navMenus="menus"></navMenu>
 				</el-menu>
       </el-aside>
       <el-main>
@@ -67,6 +67,10 @@ export default {
     {
       this.$router.push({ path:"/login"});
     }
+    else
+    {
+      this.getMenusAndPermissions();
+    }
   },
   mounted() {
     this.$nextTick(() => {
@@ -77,9 +81,9 @@ export default {
     })
   },
   computed: {
-    menuList:{
+    menus:{
       get: function () {
-        return this.$store.getters.getMenuList;
+        return this.$store.getters.getMenus;
       },
       set: function () {
       }
@@ -108,6 +112,30 @@ export default {
 
   },
   methods: {
+    getMenusAndPermissions(){
+      this.$axios({
+        method:'get',
+        url:'/getMenusAndPermissions'
+      }).then((response) =>{
+        if(response.data.code === 0)
+        {
+          this.$store.commit("set_menus",response.data.result.menus);
+          this.$store.commit("set_permissions",response.data.result.permissions);
+        }
+        else
+        {
+          this.$message({
+            message: response.data.msg,
+            type: "warning"
+          });
+        }
+      }).catch(() =>{
+        this.$message({
+          message: "请求失败",
+          type: "error"
+        });
+      })
+    }
   },
   data(){
     return{

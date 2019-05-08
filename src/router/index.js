@@ -23,7 +23,7 @@ export default new Router({
         { path: '/meetingList', component: () =>
             import ('@/view/meetingTest/meetingList'),name: 'meetingList'},
         { path: '/userList', component: () =>
-            import ('@/view/test/test'), name: 'userList'}
+            import ('@/view/sys/user/userList'), name: 'userList'}
       ]
     }],
   mode:"history",

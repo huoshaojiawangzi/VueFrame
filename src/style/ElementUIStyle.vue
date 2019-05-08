@@ -1,3 +1,5 @@
+<template>
+</template>
 <style>
 body {
     padding:0;  /*去除内边距*/

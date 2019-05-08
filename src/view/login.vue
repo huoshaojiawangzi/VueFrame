@@ -45,7 +45,7 @@
           if (valid) {
             this.$axios({
               method:'get',
-              url:'/api/login',
+              url:'/login',
               params: {
                 userName:this.loginForm.userName,
                 password: this.loginForm.password
@@ -53,14 +53,22 @@
             }).then((response) =>{
               if(response.data.code === 0)
               {
-                this.$route.push({path:"/"});
+                this.$store.commit("set_user_info",response.data.result);
+                this.$localCache.setObj("set_user_info",response.data.result);
+                this.$router.push({path:"/"});
               }
               else
               {
-                console.log(response.data.msg);
+                this.$message({
+                  message: response.data.msg,
+                  type: "warning"
+                });
               }
             }).catch(() =>{
-              console.log("请求失败");
+              this.$message({
+                message: "请求失败",
+                type: "error"
+              });
             })
           } else {
             return false;

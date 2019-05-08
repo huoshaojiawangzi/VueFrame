@@ -34,11 +34,24 @@ export default{
     {
       let permission = context.dispatch("getPermission", {tag: tag, permissions: this.state.currentUser.permissions});
       return permission != null;
+    },
+    getMenuByPath(context, data) {
+      for (let item of data.items) {
+        if (item.leaf === false && item.path === data.path) {
+          return item;
+        } else if (item.leaf === true) {
+          return context.dispatch("getMenuByPath", {path: data.path, items: item.children});
+        }
+      }
     }
   },
   getters:{
     getUserInfo(state)
     {
+      if(state.userInfo == null)
+      {
+        state.userInfo = JSON.parse(localStorage.getItem("userInfo"));
+      }
       return state.userInfo;
     },
     getMenus(state)

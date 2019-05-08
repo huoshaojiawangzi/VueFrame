@@ -30,11 +30,11 @@
         //判断路由是否已经打开
         //已经打开的 ，将其置为active
         //未打开的，将其放入队列里
-        if(to.path==="/")
+        if(to.path == null||to.path==="/")
         {
           return;
         }
-        let promise = this.$store.dispatch('getMenuByPath', {path:to.path,items:this.$store.getters.getMenuList});
+        let promise = this.$store.dispatch('getMenuByPath', {path:to.path,items:this.$store.getters.getMenus});
         promise.then((menu)=>{
           let flag = false;
           for(let option of this.$store.getters.getTabOptions)

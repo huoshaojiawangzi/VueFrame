@@ -17,47 +17,7 @@ export default new vuex.Store({
   state: {
     loading: false,
     fullHeight: 0,
-    dictionarys:[],
-    menuList: [
-      {
-        path: "/",
-        iconCls: 'el-icon-picture',
-        name: '抓拍管理',
-        hidden: false,
-        leaf: false,
-        children: [
-          {path: '/cameraRecordList', name: '抓拍列表', hidden: false, leaf: true},
-          {
-            name: '树形测试', hidden: false, leaf: false, children: [
-              {path: '/meetingList', name: '会议列表', hidden: false, leaf: true},
-              {
-                iconCls: 'el-icon-message',
-                name: '其他测试',
-                hidden: false,
-                leaf: true,
-                path: '/userList'
-              }
-            ]
-          }
-        ]
-      },
-      {
-        path: "/",
-        iconCls: 'el-icon-location',
-        name: '会议管理',
-        hidden: false,
-        leaf: false,
-        children: [
-          {path: '/meetingList', name: '会议列表', hidden: false, leaf: true}
-        ]
-      },
-      {
-        iconCls: 'el-icon-star-off',
-        name: '其他测试',
-        hidden: false,
-        leaf: false
-      }
-    ]
+    dictionarys:[]
   },
   mutations: {
     set_dictionarys(state,dictionarys){
@@ -74,9 +34,6 @@ export default new vuex.Store({
     }
   },
   getters: {
-    getMenuList(state) {
-      return state.menuList;
-    },
     getfullHeight(state) {
       return state.fullHeight;
     },
@@ -114,15 +71,6 @@ export default new vuex.Store({
     },
     setFullHeight(context, height) {
       context.commit("set_fullHeight", height);
-    },
-    getMenuByPath(context, data) {
-      for (let item of data.items) {
-        if (item.leaf === true && item.path === data.path) {
-          return item;
-        } else if (item.leaf === false) {
-          return context.dispatch("getMenuByPath", {path: data.path, items: item.children});
-        }
-      }
     }
   }
 })
