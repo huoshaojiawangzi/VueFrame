@@ -4,9 +4,9 @@
       <span>登录名</span>
       <el-input size="small" ref="userName" v-model="searchModel.userName"></el-input>
       <span>姓名</span>
-      <el-input size="small" ref="userName" v-model="searchModel.name"></el-input>
+      <el-input size="small" ref="name" v-model="searchModel.name"></el-input>
       <span>所属机构</span>
-      <el-input size="small" ref="userName" v-model="searchModel.officeName"></el-input>
+      <el-input size="small" ref="officeName" v-model="searchModel.officeName"></el-input>
       <el-button type="primary"  size="small" @click="getList(1)" id="searchButton" style="margin-left:20px" icon="el-icon-search">查询
       </el-button>
     </div>
@@ -28,7 +28,7 @@
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="this.searchModel.page"
-        :page-sizes="[10, 20, 30, this.total]"
+        :page-sizes="[10, 20, 30, 50, 100]"
         :page-size= "this.searchModel.limit"
         layout="total, sizes, prev, pager, next, jumper"
         :total="this.total">
@@ -38,13 +38,6 @@
 </template>
 
 <script>
-  document.onkeydown = function(e) {
-    const theEvent = window.event || e;
-    const code = theEvent.keyCode || theEvent.which;
-    if (code === 13) {
-      this.$jquery('#searchButton').click();
-    }
-  };
   export default {
     name:"userList",
     created() {
@@ -131,10 +124,6 @@
     data() {
       return {
         //通用
-        pageSort:{
-          property:null,
-          order:null
-        },
         searchModel:{
           page : 1,
           limit:10,
@@ -143,12 +132,6 @@
           name:null,
           officeName:null
         },
-        inputValue:{
-          userName:null,
-          name:null,
-          officeName:null
-        },
-        loading:null,
         list:null,
         total:0
       }
