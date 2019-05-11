@@ -11,11 +11,11 @@
       </el-button>
     </div>
     <el-table :data="list" style="width: 100%" :height="this.$store.getters.getTableHeight" ref="table" @sort-change="sortChange">
-      <el-table-column prop="user.office.name" label="所属机构"> </el-table-column>
-      <el-table-column prop="user.commonUser.userName" label="登录名"> </el-table-column>
-      <el-table-column prop="user.commonUser.name" sortable='custom' label="姓名"> </el-table-column>
-      <el-table-column prop="user.phone" sortable='custom' label="手机"> </el-table-column>
-      <el-table-column prop="user.commonUser.roles[user.commonUser.roleIndex]" sortable='custom' label="角色"> </el-table-column>
+      <el-table-column prop="office.name" label="所属机构"> </el-table-column>
+      <el-table-column prop="commonUser.userName" label="登录名"> </el-table-column>
+      <el-table-column prop="commonUser.name" sortable='custom' label="姓名"> </el-table-column>
+      <el-table-column prop="phone" sortable='custom' label="手机"> </el-table-column>
+      <el-table-column prop="commonUser.roles[0].name" sortable='custom' label="角色"> </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button type="warning"  size="mini" @click="showEditForm(scope.row)" icon="el-icon-edit" circle></el-button>
@@ -99,17 +99,26 @@
       getList() {
         this.$store.commit('showLoading');
         this.$axios({
+          headers: {
+            'Content-Type': 'application/json'
+          },
           method:'post',
           url:'/user/find-page',
-          data:this.$qs.stringify({
+          transformRequest: [function(data) {
+            data = JSON.stringify(data);
+            return data;
+          }],
+          data:{
             page:this.page,
             limit:this.limit,
             userName:this.searchModel.userName,
             name:this.searchModel.name,
-            officeName:this.searchModel.officeName})
+            officeName:this.searchModel.officeName
+          }
         }).then((response) =>{
-          this.list = response.data.result;
-          this.total = parseInt(response.data.count);
+          console.log(response.data.result);
+          this.list = response.data.result.content;
+          this.total = parseInt(response.data.result.totalElements);
         }).catch((response) =>{
           console.log(response)
         }).finally(()=>{
