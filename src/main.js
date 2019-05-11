@@ -9,7 +9,7 @@ import jquery from 'jquery'
 import store from '@/store'
 
 //封装的全局方法引入
-import localCache from '@/global/localCache'
+import cache from '@/global/cache'
 // noinspection ES6UnusedImports
 
 Vue.use(Element);
@@ -18,7 +18,7 @@ Vue.prototype.$axios= axios;
 Vue.config.productionTip = false;
 axios.defaults.baseURL = process.env.BASE_URL;
 Vue.prototype.$jquery = jquery;
-Vue.prototype.$localCache = localCache;
+Vue.prototype.$cache = cache;
 
 /* eslint-disable no-new */
 new Vue({

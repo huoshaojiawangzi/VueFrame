@@ -50,7 +50,7 @@ export default{
     {
       if(state.userInfo == null)
       {
-        state.userInfo = JSON.parse(localStorage.getItem("userInfo"));
+        state.userInfo = JSON.parse(sessionStorage.getItem("userInfo"));
       }
       return state.userInfo;
     },

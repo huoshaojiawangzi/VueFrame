@@ -2,12 +2,12 @@
   <div>
     <div>
       <span>登录名</span>
-      <el-input size="small" ref="userName" v-model="inputValue.userName"></el-input>
+      <el-input size="small" ref="userName" v-model="searchModel.userName"></el-input>
       <span>姓名</span>
-      <el-input size="small" ref="userName" v-model="inputValue.userName"></el-input>
+      <el-input size="small" ref="userName" v-model="searchModel.name"></el-input>
       <span>所属机构</span>
-      <el-input size="small" ref="userName" v-model="inputValue.officeName"></el-input>
-      <el-button type="primary"  size="small" @click="searchList" id="searchButton" style="margin-left:20px" icon="el-icon-search">查询
+      <el-input size="small" ref="userName" v-model="searchModel.officeName"></el-input>
+      <el-button type="primary"  size="small" @click="getList(1)" id="searchButton" style="margin-left:20px" icon="el-icon-search">查询
       </el-button>
     </div>
     <el-table :data="list" style="width: 100%" :height="this.$store.getters.getTableHeight" ref="table" @sort-change="sortChange">
@@ -27,9 +27,9 @@
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        :current-page="this.page"
+        :current-page="this.searchModel.page"
         :page-sizes="[10, 20, 30, this.total]"
-        :page-size= "this.limit"
+        :page-size= "this.searchModel.limit"
         layout="total, sizes, prev, pager, next, jumper"
         :total="this.total">
       </el-pagination>
@@ -76,27 +76,36 @@
         }).catch(() => {});
       },
       sortChange(column){
-        this.sort.field = column.prop;
-        this.sort.order = column.order === "descending"?"desc" : "asc";
-        this.getList();
+        if(column.prop!=null&&column.order!=null)
+        {
+          let sortItem = {
+            property: column.prop,
+            order: column.order === "descending"?"desc" : "asc"
+          };
+          //如果有相同元素，移除
+          let oldIndex = this.searchModel.pageSorts.findIndex(item => item.property === sortItem.property);
+          if(oldIndex!==-1)
+          {
+            this.searchModel.pageSorts.splice(oldIndex);
+          }
+          this.searchModel.pageSorts.unshift(sortItem);
+          this.getList();
+        }
       },
       handleSizeChange(val) {
-        this.limit=parseInt(`${val}`);
+        this.searchModel.limit=parseInt(`${val}`);
         this.getList();
       },
       handleCurrentChange(val)
       {
-        this.page=parseInt(`${val}`);
+        this.searchModel.page=parseInt(`${val}`);
         this.getList();
       },
-      searchList(){
-        this.page = 1;
-        this.searchModel.userName = this.inputValue.userName;
-        this.searchModel.name = this.inputValue.name;
-        this.searchModel.officeName = this.inputValue.officeName;
-        this.getList();
-      },
-      getList() {
+      getList(page) {
+        if(page!=null)
+        {
+          this.searchModel.page = page;
+        }
         this.$store.commit('showLoading');
         this.$axios({
           headers: {
@@ -108,15 +117,8 @@
             data = JSON.stringify(data);
             return data;
           }],
-          data:{
-            page:this.page,
-            limit:this.limit,
-            userName:this.searchModel.userName,
-            name:this.searchModel.name,
-            officeName:this.searchModel.officeName
-          }
+          data: this.searchModel
         }).then((response) =>{
-          console.log(response.data.result);
           this.list = response.data.result.content;
           this.total = parseInt(response.data.result.totalElements);
         }).catch((response) =>{
@@ -129,11 +131,14 @@
     data() {
       return {
         //通用
-        sort:{
-          field:null,
+        pageSort:{
+          property:null,
           order:null
         },
         searchModel:{
+          page : 1,
+          limit:10,
+          pageSorts:[],
           userName:null,
           name:null,
           officeName:null
@@ -144,8 +149,6 @@
           officeName:null
         },
         loading:null,
-        page:1,
-        limit:10,
         list:null,
         total:0
       }

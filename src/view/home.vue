@@ -23,9 +23,9 @@
            </el-dropdown>
            <span style="color:white;font-size:13px;">设置</span>
           </div>
-        <div><span style="color:white;font-size:13px;margin-right: 10px;float: right;margin-top: 18px" >{{this.$store.getters.getUserInfo.name}}</span></div>
+        <div><span style="color:white;font-size:13px;margin-right: 10px;float: right;margin-top: 18px" v-if="userInfo!=null">{{userInfo.name}}</span></div>
          <div style='height:30px;width:30px;float: right;border-radius: 50%;margin-right:10px;margin-top: 10px;background: url("/static/image/霞头像.jpg") no-repeat center top;background-size: 100%'> </div>
-          <div> <span style="color:white;font-size:13px;margin-right: 20px;float: right;margin-top: 18px">{{this.$store.getters.getUserInfo.roles[this.$store.getters.getUserInfo.roleIndex].name}}</span></div>
+          <div> <span style="color:white;font-size:13px;margin-right: 20px;float: right;margin-top: 18px"  v-if="userInfo!=null">{{userInfo.roles[userInfo.roleIndex].name}}</span></div>
         <div style="margin-top: 10px;font-size: 22px;color:white"><i class="el-icon-menu" @click="changeCollapse()"></i><span style="font-weight:bold;font-size: 21px;margin-left: 8px">后台管理系统</span></div>
       </el-header>
     </el-container>
@@ -81,6 +81,13 @@ export default {
     })
   },
   computed: {
+    userInfo:{
+      get: function () {
+        return this.$store.getters.getUserInfo;
+      },
+      set: function () {
+      }
+    },
     menus:{
       get: function () {
         return this.$store.getters.getMenus;

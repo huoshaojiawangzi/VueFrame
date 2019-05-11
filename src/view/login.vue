@@ -54,7 +54,7 @@
               if(response.data.code === 0)
               {
                 this.$store.commit("set_user_info",response.data.result);
-                this.$localCache.setObj("set_user_info",response.data.result);
+                this.$cache.setSessionObj("userInfo",response.data.result);
                 this.$router.push({path:"/"});
               }
               else
