@@ -89,11 +89,11 @@
         this.searchModel.limit=parseInt(`${val}`);
         this.getList();
       },
-      handleCurrentChange(val)
-      {
+      handleCurrentChange(val) {
         this.searchModel.page=parseInt(`${val}`);
         this.getList();
       },
+      //page:当前页码
       getList(page) {
         if(page!=null)
         {
