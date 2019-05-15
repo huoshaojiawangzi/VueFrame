@@ -87,7 +87,7 @@ document.onkeydown = function(e) {
   export default {
     name:"cameraRecordList",
     created() {
-      this.getList();
+      this.setList();
       this.getUserOptions();
     },
     watch:{//监听数据
@@ -196,7 +196,7 @@ document.onkeydown = function(e) {
                   id:id
                 }
             }).then((response) =>{
-                this.getList();
+                this.setList();
                 this.message(response.data.msg,"success");
             }).catch((response) =>{
                 this.message(response.data.msg,"error");
@@ -206,28 +206,28 @@ document.onkeydown = function(e) {
        sortChange(column){
          this.sort.field = column.prop;
          this.sort.order = column.order === "descending"?"desc" : "asc";
-         this.getList();
+         this.setList();
        },
        handleSizeChange(val) {
          this.limit=parseInt(`${val}`);
-         this.getList();
+         this.setList();
       },
       handleCurrentChange(val)
       {
         this.page=parseInt(`${val}`);
-        this.getList();
+        this.setList();
       },
       searchList(){
         this.page = 1;
         this.searchModel.userName = this.inputValue.userName;
         this.searchModel.startTime = this.inputValue.startTime;
         this.searchModel.endTime = this.inputValue.endTime;
-        this.getList();
+        this.setList();
       },
       test(val){
           return "new"+val;
       },
-      getList() {
+      setList() {
         this.$store.commit('showLoading');
         this.$axios({
             method:'get',

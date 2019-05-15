@@ -6,6 +6,14 @@ body {
     border:0;   /*去除边框*/
     margin:0;   /*去除外边距*/
 }
+::-webkit-scrollbar {/*滚动条长宽*/
+  width: 7px;
+  height: 10px;
+}
+::-webkit-scrollbar-thumb {/*滚动条颜色圆角*/
+  background-color: #a1a3a9;
+  border-radius: 3px;
+}
 .el-dialog__title{
   color:#808080;
   font-size:15px;

@@ -18,10 +18,15 @@
     props: {
       searchModel:{
        required:true
+      },
+      urlPrefix :{
+        required: true
       }
     },
     data() {
-      return {}
+      return {
+        total:0
+      }
     },
     methods: {
       del(id){
@@ -32,18 +37,19 @@
         }).then(() => {
           this.$axios({
             method:'get',
-            url:'/user/delete',
+            url:'/'+this.urlPrefix+'/delete',
             params: {
               id:id
             }
           }).then((response) =>{
-            this.getList();
+            this.setList();
             this.message(response.data.msg,"success");
           }).catch((response) =>{
             this.message(response.data.msg,"error");
           })
         }).catch(() => {});
       },
+      //排序方法，可多个属性排序
       sortChange(column){
         if(column.prop!=null&&column.order!=null)
         {
@@ -58,19 +64,21 @@
             this.searchModel.pageSorts.splice(oldIndex);
           }
           this.searchModel.pageSorts.unshift(sortItem);
-          this.getList();
+          this.setList();
         }
       },
+      //每页数量改变
       handleSizeChange(val) {
         this.searchModel.limit=parseInt(`${val}`);
-        this.getList();
+        this.setList();
       },
+      //当前页码改变
       handleCurrentChange(val) {
         this.searchModel.page=parseInt(`${val}`);
-        this.getList();
+        this.setList();
       },
-      //page:当前页码
-      getList(page) {
+      //获取list，page:当前页码
+      setList(page) {
         if(page!=null)
         {
           this.searchModel.page = page;
@@ -81,14 +89,14 @@
             'Content-Type': 'application/json'
           },
           method:'post',
-          url:'/user/find-page',
+          url:'/'+this.urlPrefix+'/find-page',
           transformRequest: [function(data) {
             data = JSON.stringify(data);
             return data;
           }],
           data: this.searchModel
         }).then((response) =>{
-          this.list = response.data.result.content;
+          this.$emit("setList",response.data.result.content);
           this.total = parseInt(response.data.result.totalElements);
         }).catch((response) =>{
           console.log(response)

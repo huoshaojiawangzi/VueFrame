@@ -23,7 +23,9 @@ export default new Router({
         { path: '/meetingList', component: () =>
             import ('@/view/meetingTest/meetingList'),name: 'meetingList'},
         { path: '/userList', component: () =>
-            import ('@/view/sys/user/userList'), name: 'userList'}
+            import ('@/view/sys/user/userList'), name: 'userList'},
+        { path: '/userForm', component: () =>
+            import ('@/view/sys/user/userForm'), name: 'userForm'}
       ]
     }],
   mode:"history",

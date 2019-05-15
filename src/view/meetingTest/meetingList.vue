@@ -53,7 +53,7 @@ document.onkeydown = function(e) {
   export default {
     name:"meetingList",
     created() {
-      this.getList();
+      this.setList();
       this.getdepartments();
     },
     components: { add,treeAdd },
@@ -102,7 +102,7 @@ document.onkeydown = function(e) {
         },
         refresh()
         {
-          this.getList();
+          this.setList();
         },
         message(value,type) {
          this.$message({
@@ -120,22 +120,22 @@ document.onkeydown = function(e) {
        sortChange(column){
          this.sort.field = column.prop;
          this.sort.order = column.order == "descending"?"desc" : "asc";
-         this.getList();
+         this.setList();
        },
        handleSizeChange(val) {
          this.limit=parseInt(`${val}`);
-         this.getList();
+         this.setList();
       },
       handleCurrentChange(val)
       {
         this.page=parseInt(`${val}`);
-        this.getList();
+        this.setList();
       },
       searchList(){
         this.page = 1;
-        this.getList();
+        this.setList();
       },
-      getList() {
+      setList() {
         this.openFullScreen();
         this.$axios({
             method:'get',
