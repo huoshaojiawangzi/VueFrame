@@ -5,15 +5,12 @@ export default{
     permissions:[]//当前用户权限
   },
   mutations: {
-    // 添加tabs
     set_user_info (state, userInfo) {
       state.userInfo = userInfo;
     },
-    // 添加tabs
     set_menus (state, menus) {
       state.menus = menus;
     },
-    // 设置当前激活的tab
     set_permissions (state, permissions) {
       state.permissions = permissions;
     }

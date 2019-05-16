@@ -1,37 +1,77 @@
 <template>
-  <div class="">
+  <div>
     <el-form :model="form" status-icon :rules="rules2" ref="form" label-width="80px" class="demo-ruleForm">
-      <el-form-item prop="userId" label="用户">
-        <el-select v-model="form.userId" placeholder="请选择">
-          <el-option
-            v-for="item in this.userOptions"
-            :key="item.id"
-            :label="item.realName"
-            :value="item.id">
-          </el-option>
-        </el-select>
+      <el-form-item>
+        <el-col :span="11">
+        <el-form-item prop="userId" label="机构">
+          <elTreeSelect
+            :props="props"
+            :options="this.$store.state.common.officeTree"
+            :accordion="true"
+            @getValue="getValue($event)"/>
+        </el-form-item>
+        </el-col>
+      <el-col :span="11">
+        <el-form-item label="手机 " prop="cameraIp">
+          <el-input  v-model="form.cameraIp" autocomplete="off"></el-input>
+        </el-form-item>
+      </el-col>
       </el-form-item>
-      <el-form-item label="摄像头" prop="cameraIp">
-        <el-input  v-model="form.cameraIp" autocomplete="off"></el-input>
+      <el-form-item>
+        <el-col :span="11">
+        <el-form-item label="姓名" prop="cameraIp">
+          <el-input  v-model="form.cameraIp" autocomplete="off"></el-input>
+        </el-form-item>
+        </el-col>
+        <el-col :span="11">
+        <el-form-item label="登录名" prop="userName">
+          <el-input  autocomplete="off"></el-input>
+        </el-form-item>
+        </el-col>
       </el-form-item>
-      <el-form-item >
-        <el-button type="primary" @click="submitForm('form')"  size="small">提交</el-button>
-        <el-button @click="state.addShow=false" size="small">取消</el-button>
+      <el-form-item>
+        <el-col :span="11">
+          <el-form-item label="密码" prop="cameraIp">
+            <el-input  autocomplete="off" show-password v-model="form.password"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="11">
+          <el-form-item label="确认密码" prop="userName">
+            <el-input   show-password autocomplete="off" v-model="form.password2"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-form-item>
+      <el-form-item>
+        <el-col :span="11">
+          <el-form-item label="用户角色" prop="userName">
+            <el-checkbox-group>
+              <el-checkbox label="复选框 A"></el-checkbox>
+              <el-checkbox label="复选框 B"></el-checkbox>
+              <el-checkbox label="复选框 C"></el-checkbox>
+            </el-checkbox-group>
+          </el-form-item>
+        </el-col>
+      </el-form-item>
+      <el-form-item>
+        <div align="center" style="margin-right: 150px">
+        <el-button type="primary" @click="submitForm('form')"  size="small"  icon="el-icon-check">保存</el-button>
+        </div>
       </el-form-item>
     </el-form>
   </div>
 </template>
 <script>
 import {mapState} from 'vuex'
+import elTreeSelect from '@/components/el-tree-select'
 
 export default {
+  components:{
+    elTreeSelect
+  },
   props:{
-    userOptions:{
-      required:true
-    }
   },
   data() {
-    var validateRequired = (rule, value, callback) => {
+    let validateRequired = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('必填项不可为空!!'));
       } else {
@@ -39,6 +79,12 @@ export default {
       }
     };
     return {
+      props:{               // 配置项（必选）
+        value: 'id',
+        label: 'name',
+        children: 'children',
+        // disabled:true
+      },
       form: {
         userId:'',
         cameraIp:''
@@ -92,16 +138,20 @@ export default {
      },
     clearForm(formName) {
       this.$refs[formName].resetFields();
+    },
+    getValue(value){
+      this.valueId = value
+      console.log(this.valueId);
     }
   }
 }
 </script>
 
 <style scoped>
-.el-input{
-  width:180px;
+  .el-input{
+  width:250px;
 }
 .el-select{
-  width:180px;
+  width:250px;
 }
 </style>

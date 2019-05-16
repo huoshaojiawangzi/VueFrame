@@ -70,6 +70,7 @@ export default {
     else
     {
       this.getMenusAndPermissions();
+      this.getOfficeTree();
     }
   },
   mounted() {
@@ -119,6 +120,7 @@ export default {
 
   },
   methods: {
+    //获取当前用户的菜单以及权限
     getMenusAndPermissions(){
       this.$axios({
         method:'get',
@@ -129,20 +131,29 @@ export default {
           this.$store.commit("set_menus",response.data.result.menus);
           this.$store.commit("set_permissions",response.data.result.permissions);
         }
-        else
+      })},
+    getOfficeTree(){
+      this.$axios({
+        method:'get',
+        url:'/office/find-roots'
+      }).then((response) =>{
+        if(response.data.code === 0)
         {
-          this.$message({
-            message: response.data.msg,
-            type: "warning"
-          });
+          console.log(response.data.result);
+          this.$store.commit("set_office_trre",response.data.result);
         }
-      }).catch(() =>{
-        this.$message({
-          message: "请求失败",
-          type: "error"
-        });
-      })
-    }
+      })},
+    getRoleList(){
+      this.$axios({
+        method:'get',
+        url:'/role/find-all'
+      }).then((response) =>{
+        if(response.data.code === 0)
+        {
+          console.log(response.data.result);
+          this.$store.commit("set_role_list",response.data.result);
+        }
+      })}
   },
   data(){
     return{

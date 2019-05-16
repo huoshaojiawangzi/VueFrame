@@ -3,16 +3,18 @@ import vuex from 'vuex'
 
 Vue.use(vuex);
 
-import cameraRecord from '@/store/modules/cameraRecord.js';
-import tab from '@/store/modules/tab.js';
-import currentUser from '@/store/modules/currentUser.js';
+import cameraRecord from './modules/cameraRecord.js';
+import tab from './modules/tab.js';
+import currentUser from './modules/currentUser.js';
+import common from './modules/common.js';
 
 
 export default new vuex.Store({
   modules: {
     cameraRecord,
     tab,
-    currentUser
+    currentUser,
+    common
   },
   state: {
     loading: false,
