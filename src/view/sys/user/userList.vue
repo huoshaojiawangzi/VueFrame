@@ -20,7 +20,7 @@
       <el-table-column prop="commonUser.roles[0].name" sortable='custom' label="角色"> </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button type="warning"  size="mini" @click="showEditForm(scope.row)" icon="el-icon-edit" circle></el-button>
+          <el-button type="warning"  size="mini" @click="openModify(scope.row)" icon="el-icon-edit" circle></el-button>
           <el-button type="danger"  size="mini" @click="$refs.pageRef.del(scope.row.id)" icon="el-icon-delete" circle></el-button>
         </template>
       </el-table-column>
@@ -42,6 +42,12 @@
       pagination
     },
     methods: {
+      openModify(user){
+        this.$router.push({
+          name:'userModify',
+          params:{user}
+        })
+      },
       clearSearchModel(){
         this.searchModel = new UserSearchModel();
       },

@@ -228,7 +228,7 @@ document.onkeydown = function(e) {
           return "new"+val;
       },
       setList() {
-        this.$store.commit('showLoading');
+        this.$store.commit('set_loading',true);
         this.$axios({
             method:'get',
             url:'/cameraRecord/find-record',
@@ -247,7 +247,7 @@ document.onkeydown = function(e) {
         }).catch((response) =>{
             console.log(response)
         }).finally(()=>{
-          this.$store.commit('hideLoading');
+          this.$store.commit('set_loading',false);
         });
       }
     },

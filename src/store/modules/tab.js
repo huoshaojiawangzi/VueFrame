@@ -27,6 +27,32 @@ export default{
     }
   },
   actions: {
+    //路由变化时，调用此方法
+    routeChange(context,to){
+      //判断路由是否已经打开
+      //已经打开的 ，将其置为active
+      //未打开的，将其放入队列里
+      if(to.path == null||to.path==="/")
+      {
+        return;
+      }
+      let promise = context.dispatch('getMenuByPath', {path:to.path,items:this.state.currentUser.menuTree});
+      promise.then((menu)=>{
+        let flag = false;
+        for(let option of this.state.tab.tabOptions)
+        {
+          if(option.name === menu.name)
+          {
+            flag = true;
+            context.dispatch('setActiveIndex', to.path);
+          }
+        }
+        if(!flag){
+          context.dispatch('addTabs',{path: to.path, name: menu.name, componentName:to.name});
+          context.dispatch('setActiveIndex', to.path);
+        }
+      });
+    },
     //删除tab并且设置当前activeIndex
     deleteTab(context, path){
       let index = 0;

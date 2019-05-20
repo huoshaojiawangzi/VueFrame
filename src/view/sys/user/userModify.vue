@@ -2,7 +2,7 @@
   <div>
     <el-card  shadow="never">
       <div slot="header" class="clearfix">
-        <span style="color:	#808080;">用户录入</span>
+        <span style="color:	#808080;">用户修改</span>
       </div>
       <div>
         <el-form :model="form" :rules="rules" status-icon ref="form" label-position="left">
@@ -31,17 +31,12 @@
               </el-form-item>
             </el-col>
             <el-col :span="11">
-              <el-form-item prop="user.commonUser.userName" label="登录名" :label-width="this.$store.state.global.style.formItem.labelWidth">
-                <el-input v-model="form.user.commonUser.userName" autocomplete="off"></el-input>
-              </el-form-item>
-            </el-col>
-          </el-form-item>
-          <el-form-item>
-            <el-col :span="11">
               <el-form-item prop="user.commonUser.password" label="密码" :label-width="this.$store.state.global.style.formItem.labelWidth">
                 <el-input  v-model="form.user.commonUser.password" autocomplete="off" show-password></el-input>
               </el-form-item>
             </el-col>
+          </el-form-item>
+          <el-form-item>
             <el-col :span="11">
               <el-form-item prop="verifyPassword" label="确认密码" :label-width="this.$store.state.global.style.formItem.labelWidth">
                 <el-input  v-model="form.verifyPassword" show-password autocomplete="off"></el-input>
@@ -71,6 +66,12 @@
 <script>
 export default {
   name:"userForm",
+  created(){
+    this.form.user = this.$route.params.user;
+    this.setFormOfficeIds();
+    this.setFormRoleIds();
+    this.form.verifyPassword = this.form.user.commonUser.password;
+  },
   data() {
     let checkPhone = (rule, value, callback) => {
         const reg = /^1[3|4|5|7|8][0-9]\d{8}$/;
@@ -79,23 +80,6 @@ export default {
         } else {
           return callback(new Error('请输入正确的手机号'));
         }
-    };
-    let duplicateUserName = (rule,value,callback) => {
-      this.$axios({
-        method:'get',
-        url:'/commonUser/find-by-userName',
-        params: {
-          userName:value,
-        }
-      }).then((response) =>{
-        if(response.data.result === null)
-        {
-          callback();
-        }else
-        {
-          return callback(new Error('登录名已存在'));
-        }
-      })
     };
     let duplicatePassword = (rule, value, callback) => {
       if (value === this.form.user.commonUser.password) {
@@ -109,28 +93,13 @@ export default {
         officeIds:[],
         roleIds:[],
         verifyPassword:null,
-        user:{
-          office:{id:null},
-          phone:null,
-          commonUser:{
-            name:null,
-            userName:null,
-            password:null,
-            roles:[],
-          }
-        }
+        user: null
       },
       rules: {
         officeIds:[
           { required: true,message:"必填项不能为空",trigger: 'blur' }],
         'user.phone':[
           { validator: checkPhone,trigger: 'blur' }],
-        'user.commonUser.name':[
-          { required: true,message:"必填项不能为空",trigger: 'blur' },
-          { validator: duplicateUserName,trigger: 'blur' }],
-        'user.commonUser.userName':[
-          { required: true,message:"必填项不能为空",trigger: 'blur' },
-          { validator: duplicateUserName,trigger: 'blur' }],
         'user.commonUser.password':[
           { required: true,message:"必填项不能为空",trigger: 'blur' }],
         verifyPassword:[
@@ -142,7 +111,7 @@ export default {
     };
   },
   methods: {
-     setFormRoles(){
+    setFormRoles(){
       let roles = [];
       for(let roleId of this.form.roleIds)
       {
@@ -153,6 +122,17 @@ export default {
     },
     setFormOfficeId(){
       this.form.user.office.id = this.form.officeIds[this.form.officeIds.length-1]
+    },
+     setFormRoleIds(){
+      let roleIds = [];
+      for(let role of this.form.user.roles)
+      {
+        roleIds.push(role.id)
+      }
+      this.form.roleIds = roleIds;
+    },
+    setFormOfficeIds(){
+      this.form.officeIds.push(this.form.user.office.id);
     },
     submitForm(formName) {
       new Promise((resolve)=>{

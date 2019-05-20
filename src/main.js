@@ -10,6 +10,7 @@ import store from '@/store'
 
 //封装的全局方法引入
 import cache from '@/global/cache'
+import treeUtils from '@/global/treeUtils'
 // noinspection ES6UnusedImports
 
 Vue.use(Element);
@@ -19,6 +20,7 @@ Vue.config.productionTip = false;
 axios.defaults.baseURL = process.env.BASE_URL;
 Vue.prototype.$jquery = jquery;
 Vue.prototype.$cache = cache;
+Vue.prototype.$treeUtils= treeUtils;
 
 /* eslint-disable no-new */
 new Vue({
@@ -27,4 +29,8 @@ new Vue({
   store,
   components: { App },
   template: '<App/>'
-})
+});
+
+router.beforeEach((to,form,next)=>{
+  store.dispatch("routeChange",to).then(next())
+});

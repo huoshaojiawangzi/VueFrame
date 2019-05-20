@@ -43,9 +43,15 @@
             }
           }).then((response) =>{
             this.setList();
-            this.message(response.data.msg,"success");
+            this.$message({
+              message: response.data.msg,
+              type: "success"
+            });
           }).catch((response) =>{
-            this.message(response.data.msg,"error");
+            this.$message({
+              message: response.data.msg,
+              type: "success"
+            });
           })
         }).catch(() => {});
       },
@@ -83,7 +89,7 @@
         {
           this.searchModel.page = page;
         }
-        this.$store.commit('showLoading');
+        this.$store.commit('set_loading',true);
         this.$axios({
           headers: {
             'Content-Type': 'application/json'
@@ -101,7 +107,7 @@
         }).catch((response) =>{
           console.log(response)
         }).finally(()=>{
-          this.$store.commit('hideLoading');
+          this.$store.commit('set_loading',false);
         });
       }
     }

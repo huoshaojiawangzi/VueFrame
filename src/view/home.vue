@@ -1,7 +1,7 @@
 <template>
   <div id="parent" :style="parentStyle">
     <ElementUIStyle> </ElementUIStyle>
-    <div class="el-loading-mask is-fullscreen" style="z-index: 2001;" v-show="$store.state.loading">
+    <div class="el-loading-mask is-fullscreen" style="z-index: 2001;" v-show="$store.state.global.loading">
       <div class="el-loading-spinner">
         <svg viewBox="25 25 50 50" class="circular">
           <circle cx="50" cy="50" r="20" fill="none" class="path">
@@ -40,7 +40,7 @@
           active-text-color="#6495ED"
           router >
           <!--树形导航menu-->
-          <navMenu :navMenus="menus"></navMenu>
+          <navMenu :navMenus="menuTree"></navMenu>
 				</el-menu>
       </el-aside>
       <el-main>
@@ -63,15 +63,9 @@ export default {
   name: 'Home',
   components: { ElementUIStyle,navMenu,dynamicTab},
   created(){
-    if(this.$store.getters.getUserInfo == null)
-    {
-      this.$router.push({ path:"/login"});
-    }
-    else
-    {
       this.getMenusAndPermissions();
       this.getOfficeTree();
-    }
+      this.getRoleList();
   },
   mounted() {
     this.$nextTick(() => {
@@ -89,7 +83,7 @@ export default {
       set: function () {
       }
     },
-    menus:{
+    menuTree:{
       get: function () {
         return this.$store.getters.getMenus;
       },
@@ -122,14 +116,20 @@ export default {
   methods: {
     //获取当前用户的菜单以及权限
     getMenusAndPermissions(){
+      this.$store.commit('set_loading',true);
       this.$axios({
         method:'get',
         url:'/getMenusAndPermissions'
       }).then((response) =>{
         if(response.data.code === 0)
         {
-          this.$store.commit("set_menus",response.data.result.menus);
-          this.$store.commit("set_permissions",response.data.result.permissions);
+          this.$store.commit("set_menu_tree",response.data.result.menuTree);
+          this.$store.commit("set_permission_tree",response.data.result.permissionTree);
+          this.$store.commit('set_loading',false);
+        }
+        else
+        {
+          this.$router.push({ path:"/login"});
         }
       })},
     getOfficeTree(){
@@ -139,8 +139,7 @@ export default {
       }).then((response) =>{
         if(response.data.code === 0)
         {
-          console.log(response.data.result);
-          this.$store.commit("set_office_trre",response.data.result);
+          this.$store.commit("set_office_trre", this.$treeUtils.filterTree(response.data.result));
         }
       })},
     getRoleList(){
@@ -150,7 +149,6 @@ export default {
       }).then((response) =>{
         if(response.data.code === 0)
         {
-          console.log(response.data.result);
           this.$store.commit("set_role_list",response.data.result);
         }
       })}

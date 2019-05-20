@@ -7,6 +7,7 @@ import cameraRecord from './modules/cameraRecord.js';
 import tab from './modules/tab.js';
 import currentUser from './modules/currentUser.js';
 import common from './modules/common.js';
+import global from './modules/global';
 
 
 export default new vuex.Store({
@@ -14,35 +15,18 @@ export default new vuex.Store({
     cameraRecord,
     tab,
     currentUser,
-    common
+    common,
+    global
   },
   state: {
-    loading: false,
-    fullHeight: 0,
     dictionarys:[]
   },
   mutations: {
     set_dictionarys(state,dictionarys){
       state.dictionarys = dictionarys;
-    },
-    showLoading(state) {
-      state.loading = true
-    },
-    hideLoading(state) {
-      state.loading = false
-    },
-    set_fullHeight(state, height) {
-      state.fullHeight = height;
     }
   },
   getters: {
-    getfullHeight(state) {
-      return state.fullHeight;
-    },
-    getTableHeight(state){
-      let th = state.fullHeight-187;
-      return th>300 ? th:300
-    }
   },
   actions: {
     //通过type以及value来获取字典的label值
@@ -70,9 +54,6 @@ export default new vuex.Store({
         }
       }
       return data.default;
-    },
-    setFullHeight(context, height) {
-      context.commit("set_fullHeight", height);
     }
   }
 })

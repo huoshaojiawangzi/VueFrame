@@ -22,10 +22,12 @@ export default new Router({
             import ('@/view/cameraTest/cameraRecordList'), name: 'cameraRecordList'},
         { path: '/meetingList', component: () =>
             import ('@/view/meetingTest/meetingList'),name: 'meetingList'},
-        { path: '/userList', component: () =>
+        { path: '/user/list', component: () =>
             import ('@/view/sys/user/userList'), name: 'userList'},
-        { path: '/userForm', component: () =>
-            import ('@/view/sys/user/userForm'), name: 'userForm'}
+        { path: '/user/form', component: () =>
+            import ('@/view/sys/user/userForm'), name: 'userForm'},
+        { path: '/user/modify', component: () =>
+            import ('@/view/sys/user/userModify'), name: 'userModify'}
       ]
     }],
   mode:"history",
