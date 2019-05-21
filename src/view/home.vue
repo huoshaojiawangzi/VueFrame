@@ -37,8 +37,7 @@
           class="el-menu-vertical-demo"
           background-color="#545c64"
           text-color="#fff"
-          active-text-color="#6495ED"
-          router >
+          active-text-color="#6495ED">
           <!--树形导航menu-->
           <navMenu :navMenus="menuTree"></navMenu>
 				</el-menu>

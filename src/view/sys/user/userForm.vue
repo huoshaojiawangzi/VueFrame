@@ -2,20 +2,20 @@
   <div>
     <el-card  shadow="never">
       <div slot="header" class="clearfix">
-        <span style="color:	#808080;">用户录入</span>
+        <span style="color:	#808080;">录入用户</span>
       </div>
       <div>
         <el-form :model="form" :rules="rules" status-icon ref="form" label-position="left">
           <el-form-item>
             <el-col :span="11">
-              <el-form-item  prop="officeIds" label="机构" :label-width="this.$store.state.global.style.formItem.labelWidth">
-                <el-cascader
-                  v-model="form.officeIds"
+              <el-form-item  prop="user.office.id" label="机构" :label-width="this.$store.state.global.style.formItem.labelWidth">
+                <cascader
+                  width="290px"
+                  v-model="form.user.office"
                   :props="this.$store.state.global.props"
                   :options="this.$store.state.common.officeTree"
-                  :change-on-select="true"
-                  expand-trigger="hover">
-                </el-cascader>
+                  :changeOnSelect="true">
+                </cascader>
               </el-form-item>
             </el-col>
             <el-col :span="11">
@@ -50,10 +50,8 @@
           </el-form-item>
           <el-form-item>
             <el-col :span="22">
-              <el-form-item prop="roleIds" label="用户角色" :label-width="this.$store.state.global.style.formItem.labelWidth">
-                <el-checkbox-group  v-model="form.roleIds" :max="3">
-                  <el-checkbox v-for="item in this.$store.state.common.roleList" :key="item.id" :label="item.id">{{item.name}}</el-checkbox>
-                </el-checkbox-group>
+              <el-form-item prop="user.commonUser.roles" label="用户角色" :label-width="this.$store.state.global.style.formItem.labelWidth">
+                <checkboxGroup :options="this.$store.state.common.roleList" v-model="form.user.commonUser.roles" :max="3"></checkboxGroup>
               </el-form-item>
             </el-col>
           </el-form-item>
@@ -69,30 +67,31 @@
   </div>
 </template>
 <script>
+import cascader from '@/components/cascader'
+import checkboxGroup from '@/components/checkboxGroup'
 export default {
   name:"userForm",
-  data() {
+  components:{cascader,checkboxGroup},
+  data: function () {
     let checkPhone = (rule, value, callback) => {
-        const reg = /^1[3|4|5|7|8][0-9]\d{8}$/;
-        if (value == null||reg.test(value)) {
+      const reg = /^1[3|4|5|7|8][0-9]\d{8}$/;
+      if (value == null || reg.test(value)) {
+        callback();
+      } else {
+        return callback(new Error('请输入正确的手机号'));
+      }
+    };
+    let duplicateUserName = (rule, value, callback) => {
+      this.$axios({
+        method: 'get',
+        url: '/commonUser/find-by-userName',
+        params: {
+          userName: value,
+        }
+      }).then((response) => {
+        if (response.data.result === null) {
           callback();
         } else {
-          return callback(new Error('请输入正确的手机号'));
-        }
-    };
-    let duplicateUserName = (rule,value,callback) => {
-      this.$axios({
-        method:'get',
-        url:'/commonUser/find-by-userName',
-        params: {
-          userName:value,
-        }
-      }).then((response) =>{
-        if(response.data.result === null)
-        {
-          callback();
-        }else
-        {
           return callback(new Error('登录名已存在'));
         }
       })
@@ -106,60 +105,41 @@ export default {
     };
     return {
       form: {
-        officeIds:[],
-        roleIds:[],
-        verifyPassword:null,
-        user:{
-          office:{id:null},
-          phone:null,
-          commonUser:{
-            name:null,
-            userName:null,
-            password:null,
-            roles:[],
+        verifyPassword: null,
+        user: {
+          office: {id: null},
+          phone: null,
+          commonUser: {
+            name: null,
+            userName: null,
+            password: null,
+            roles: [],
           }
         }
       },
       rules: {
-        officeIds:[
-          { required: true,message:"必填项不能为空",trigger: 'blur' }],
-        'user.phone':[
-          { validator: checkPhone,trigger: 'blur' }],
-        'user.commonUser.name':[
-          { required: true,message:"必填项不能为空",trigger: 'blur' },
-          { validator: duplicateUserName,trigger: 'blur' }],
-        'user.commonUser.userName':[
-          { required: true,message:"必填项不能为空",trigger: 'blur' },
-          { validator: duplicateUserName,trigger: 'blur' }],
-        'user.commonUser.password':[
-          { required: true,message:"必填项不能为空",trigger: 'blur' }],
-        verifyPassword:[
-          { required: true,message:"必填项不能为空",trigger: 'blur' },
-          { validator: duplicatePassword,trigger: 'blur' }],
-        roleIds:[
-          { required: true,message:"必填项不能为空",trigger: 'blur' }]
+        'user.office.id': [
+          {required: true, message: "必填项不能为空", trigger: 'blur'}],
+        'user.phone': [
+          {validator: checkPhone, trigger: 'blur'}],
+        'user.commonUser.name': [
+          {required: true, message: "必填项不能为空", trigger: 'blur'},
+          {validator: duplicateUserName, trigger: 'blur'}],
+        'user.commonUser.userName': [
+          {required: true, message: "必填项不能为空", trigger: 'blur'},
+          {validator: duplicateUserName, trigger: 'blur'}],
+        'user.commonUser.password': [
+          {required: true, message: "必填项不能为空", trigger: 'blur'}],
+        verifyPassword: [
+          {required: true, message: "必填项不能为空", trigger: 'blur'},
+          {validator: duplicatePassword, trigger: 'blur'}],
+        'user.commonUser.roles': [
+          {required: true, message: "必填项不能为空", trigger: 'blur'}]
       }
     };
   },
   methods: {
-     setFormRoles(){
-      let roles = [];
-      for(let roleId of this.form.roleIds)
-      {
-        let role = {id:roleId};
-        roles.push(role)
-      }
-      this.form.user.commonUser.roles = roles;
-    },
-    setFormOfficeId(){
-      this.form.user.office.id = this.form.officeIds[this.form.officeIds.length-1]
-    },
     submitForm(formName) {
-      new Promise((resolve)=>{
-        this.setFormRoles();
-        this.setFormOfficeId();
-        resolve();
-      }).then(()=>{
         this.$refs[formName].validate((valid) => {
           if (valid) {
             this.$store.commit('set_loading',true);
@@ -198,7 +178,6 @@ export default {
             });
           }
         });
-      })
      }
   }
 }
@@ -211,7 +190,7 @@ export default {
 .el-select{
   width:290px;
 }
-.el-cascader {
+.el-cascader{
   width:290px;
 }
 </style>

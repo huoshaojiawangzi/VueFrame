@@ -16,6 +16,9 @@
   export default {
     name:"pagination",
     props: {
+      value:{
+        type:Array
+      },
       searchModel:{
        required:true
       },
@@ -102,7 +105,7 @@
           }],
           data: this.searchModel
         }).then((response) =>{
-          this.$emit("setList",response.data.result.content);
+          this.$emit("input",response.data.result.content);
           this.total = parseInt(response.data.result.totalElements);
         }).catch((response) =>{
           console.log(response)

@@ -25,7 +25,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <pagination ref="pageRef" :urlPrefix="urlPrefix" :searchModel="searchModel" @setList="setList">
+    <pagination ref="pageRef" :urlPrefix="urlPrefix" :searchModel="searchModel" v-model="list">
     </pagination>
   </div>
 </template>
@@ -43,17 +43,16 @@
     },
     methods: {
       openModify(user){
-        this.$router.push({
-          name:'userModify',
-          params:{user}
+        this.$store.dispatch("deleteTabAndLive","/user/modify").then(()=>{
+          this.$router.push({
+            name:'userModify',
+            params:{user}
+          })
         })
       },
       clearSearchModel(){
         this.searchModel = new UserSearchModel();
       },
-      setList(val){
-        this.list = val;
-      }
     },
     data() {
       return {

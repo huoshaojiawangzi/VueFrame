@@ -33,7 +33,6 @@ export default{
       return permission != null;
     },
     getMenuByPath(context, data) {
-      console.log(data);
       for (let item of data.items) {
         if (item.leaf === false && item.path === data.path) {
           return item;

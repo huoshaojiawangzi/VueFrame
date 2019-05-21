@@ -51,14 +51,15 @@
         this.$router.push(tab.name);
       },
       tabRemove(tabName){
-        this.$store.dispatch('deleteTab', tabName);
-        if(this.$store.getters.getTabOptions.length === 0) {
-          this.$router.push("/");
-        }
-        else
-        {
-          this.$router.push(this.activeIndex);
-        }
+        this.$store.dispatch('deleteTab', tabName).then(()=>{
+          if(this.$store.getters.getTabOptions.length === 0) {
+            this.$router.push("/");
+          }
+          else
+          {
+            this.$router.push(this.activeIndex);
+          }
+        })
       }
     }
   }

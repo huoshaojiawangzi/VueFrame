@@ -38,23 +38,53 @@ export default{
       }
       let promise = context.dispatch('getMenuByPath', {path:to.path,items:this.state.currentUser.menuTree});
       promise.then((menu)=>{
-        let flag = false;
-        for(let option of this.state.tab.tabOptions)
+        if(menu!=null)
         {
-          if(option.name === menu.name)
+          let flag = false;
+          for(let option of this.state.tab.tabOptions)
           {
-            flag = true;
+            if(option.name === menu.name)
+            {
+              flag = true;
+              context.dispatch('setActiveIndex', to.path);
+            }
+          }
+          if(!flag){
+            context.dispatch('addTabAndLive',{path: to.path, name: menu.name, componentName:to.name});
             context.dispatch('setActiveIndex', to.path);
           }
-        }
-        if(!flag){
-          context.dispatch('addTabs',{path: to.path, name: menu.name, componentName:to.name});
-          context.dispatch('setActiveIndex', to.path);
         }
       });
     },
     //删除tab并且设置当前activeIndex
     deleteTab(context, path){
+      let promise = context.dispatch('deleteTabAndLive', path);
+      promise.then((index)=>{
+        //设置当前active页面
+        if(this.state.tab.tabOptions.length>0)
+        {
+          if(index === 0)
+          {
+            context.commit('set_active_index', this.state.tab.tabOptions[0].path);
+          }
+          else
+          {
+            context.commit('set_active_index', this.state.tab.tabOptions[index-1].path);
+          }
+        }
+      });
+    },
+    // 设置当前activeIndex
+    setActiveIndex(context,index){
+      context.commit("set_active_index",index);
+    },
+    // 添加tab以及keeplives缓存
+    addTabAndLive(context, item) {
+      context.commit("add_tabs",item);
+      context.commit("add_lives",item.componentName);
+    },
+    //删除tab以及keeplives缓存
+    deleteTabAndLive(context, path){
       let index = 0;
       for (let option of this.state.tab.tabOptions) {
         if (option.path === path) {
@@ -62,30 +92,9 @@ export default{
         }
         index++;
       }
-      context.commit('delete_tabs', index);
-      //删除keeplives缓存
       context.commit('delete_lives', index);
-      //设置当前active页面
-      if(this.state.tab.tabOptions.length>0)
-      {
-        if(index === 0)
-        {
-          context.commit('set_active_index', this.state.tab.tabOptions[0].path);
-        }
-        else
-        {
-          context.commit('set_active_index', this.state.tab.tabOptions[index-1].path);
-        }
-      }
-    },
-    // 设置当前activeIndex
-    setActiveIndex(context,index){
-      context.commit("set_active_index",index);
-    },
-    // 添加tab以及keeplives缓存
-    addTabs(context, item) {
-      context.commit("add_tabs",item);
-      context.commit("add_lives",item.componentName);
+      context.commit('delete_tabs', index);
+      return index;
     }
   },
   getters:{
