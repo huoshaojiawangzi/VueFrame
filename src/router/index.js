@@ -27,7 +27,9 @@ export default new Router({
         { path: '/user/form', component: () =>
             import ('@/view/sys/user/userForm'), name: 'userForm'},
         { path: '/user/modify', component: () =>
-            import ('@/view/sys/user/userModify'), name: 'userModify'}
+            import ('@/view/sys/user/userModify'), name: 'userModify'},
+        { path: '/user/info', component: () =>
+            import ('@/view/sys/user/userInfo'), name: 'userInfo'}
       ]
     }],
   mode:"history",

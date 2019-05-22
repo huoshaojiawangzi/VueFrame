@@ -1,6 +1,6 @@
 <template>
   <div>
-    <template v-for="(item) in navMenus" v-if="!item.hidden&&item.leaf">
+    <template v-for="item in navMenus" v-if="!item.hidden&&item.leaf">
       <el-submenu :index="item.name">
         <template slot="title"><i :class='item.iconCls==null?"el-icon-menu":item.iconCls'></i>{{item.name}}</template>
         <navMenu :navMenus="item.children"></navMenu>

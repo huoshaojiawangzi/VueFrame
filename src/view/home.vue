@@ -1,6 +1,6 @@
 <template>
   <div id="parent" :style="parentStyle">
-    <ElementUIStyle> </ElementUIStyle>
+    <golbal-style> </golbal-style>
     <div class="el-loading-mask is-fullscreen" style="z-index: 2001;" v-show="$store.state.global.loading">
       <div class="el-loading-spinner">
         <svg viewBox="25 25 50 50" class="circular">
@@ -54,13 +54,13 @@
 </template>
 
 <script>
-import ElementUIStyle from '@/style/ElementUIStyle'
+import golbalStyle from '@/style/globalStyle'
 import navMenu from '@/components/navMenu'
 import dynamicTab from '@/components/dynamicTab'
 
 export default {
   name: 'Home',
-  components: { ElementUIStyle,navMenu,dynamicTab},
+  components: { golbalStyle,navMenu,dynamicTab},
   created(){
       this.getMenusAndPermissions();
       this.getOfficeTree();
@@ -122,6 +122,7 @@ export default {
       }).then((response) =>{
         if(response.data.code === 0)
         {
+          console.log(response.data);
           this.$store.commit("set_menu_tree",response.data.result.menuTree);
           this.$store.commit("set_permission_tree",response.data.result.permissionTree);
           this.$store.commit('set_loading',false);

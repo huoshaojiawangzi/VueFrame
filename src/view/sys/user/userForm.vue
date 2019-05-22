@@ -2,7 +2,7 @@
   <div>
     <el-card  shadow="never">
       <div slot="header" class="clearfix">
-        <span style="color:	#808080;">录入用户</span>
+        <span style="color:	#808080;">用户录入</span>
       </div>
       <div>
         <el-form :model="form" :rules="rules" status-icon ref="form" label-position="left">
@@ -14,7 +14,7 @@
                   v-model="form.user.office"
                   :props="this.$store.state.global.props"
                   :options="this.$store.state.common.officeTree"
-                  :changeOnSelect="true">
+                  :change-on-select="true">
                 </cascader>
               </el-form-item>
             </el-col>
@@ -51,7 +51,7 @@
           <el-form-item>
             <el-col :span="22">
               <el-form-item prop="user.commonUser.roles" label="用户角色" :label-width="this.$store.state.global.style.formItem.labelWidth">
-                <checkboxGroup :options="this.$store.state.common.roleList" v-model="form.user.commonUser.roles" :max="3"></checkboxGroup>
+                <checkbox-group :options="this.$store.state.common.roleList" v-model="form.user.commonUser.roles" :max="3"></checkbox-group>
               </el-form-item>
             </el-col>
           </el-form-item>

@@ -12,12 +12,25 @@
       <el-button type="primary" size="small" @click="clearSearchModel()" style="margin-left:20px" icon="el-icon-refresh">重置
       </el-button>
     </div>
-    <el-table :data="list" style="width: 100%" :height="this.$store.getters.getTableHeight" @sort-change="$refs.pageRef.sortChange()">
+    <el-table :data="list" style="width: 100%" :height="this.$store.getters.getTableHeight" @sort-change="sortChange">
       <el-table-column prop="office.name" label="所属机构"> </el-table-column>
-      <el-table-column prop="commonUser.userName" label="登录名"> </el-table-column>
+      <el-table-column label="登录名">
+        <template slot-scope="scope">
+          <div class="pointer" @click="openInfo(scope.row)">
+            {{ scope.row.commonUser.userName}}
+          </div>
+        </template>
+      </el-table-column>
       <el-table-column prop="commonUser.name" sortable='custom' label="姓名"> </el-table-column>
       <el-table-column prop="phone" sortable='custom' label="手机"> </el-table-column>
-      <el-table-column prop="commonUser.roles[0].name" sortable='custom' label="角色"> </el-table-column>
+      <el-table-column label="角色">
+        <template slot-scope="scope">
+          <div style="float: left" v-for="(role,index) in scope.row.commonUser.roles">
+            <div v-if="index === 0">{{role.name}}</div>
+            <div v-else>,{{role.name}}</div>
+          </div>
+        </template>
+      </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button type="warning"  size="mini" @click="openModify(scope.row)" icon="el-icon-edit" circle></el-button>
@@ -38,10 +51,19 @@
     mounted() {
       this.$refs.pageRef.setList();
     },
-    components: {
-      pagination
-    },
+    components: {pagination},
     methods: {
+      sortChange(column){
+        this.$refs.pageRef.sortChange(column);
+      },
+      openInfo(user){
+        this.$store.dispatch("deleteTabAndLive","/user/info").then(()=>{
+          this.$router.push({
+            name:'userInfo',
+            params:{user}
+          })
+        })
+      },
       openModify(user){
         this.$store.dispatch("deleteTabAndLive","/user/modify").then(()=>{
           this.$router.push({
