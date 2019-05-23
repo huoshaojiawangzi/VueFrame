@@ -46,7 +46,7 @@
   import pagination from '@/components/pagination'
   import {UserSearchModel} from '@/class/searchModel/impl/UserSearchModel';
   export default {
-    name:"userList",
+    name:"officeList",
     mounted() {
       this.$refs.pageRef.setList();
     },

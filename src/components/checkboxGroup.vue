@@ -17,6 +17,16 @@
     created(){
       this.setFormRoleIds();
     },
+    watch:{
+      value:{
+        handler(val){
+          if(val.length<1){
+            this.ids = [];
+          }
+        },
+        deep:true
+      },
+    },
     data() {
       return {
         ids:[]

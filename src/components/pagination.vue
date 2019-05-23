@@ -28,7 +28,8 @@
     },
     data() {
       return {
-        total:0
+        total:0,
+        list:[]
       }
     },
     methods: {
@@ -45,7 +46,13 @@
               id:id
             }
           }).then((response) =>{
-            this.setList();
+            new Promise((resolve)=>{
+              if(this.list.length<2&&this.searchModel.page>1)
+              {
+                this.searchModel.page = this.searchModel.page-1;
+              }
+              resolve();
+            }).then(()=>{this.setList()});
             this.$message({
               message: response.data.msg,
               type: "success"
@@ -105,7 +112,8 @@
           }],
           data: this.searchModel
         }).then((response) =>{
-          this.$emit("input",response.data.result.content);
+          this.list = response.data.result.content;
+          this.$emit("input",this.list);
           this.total = parseInt(response.data.result.totalElements);
         }).catch((response) =>{
           console.log(response)

@@ -40,21 +40,24 @@ export default{
       promise.then((menu)=>{
         if(menu!=null)
         {
-          let flag = false;
-          for(let option of this.state.tab.tabOptions)
-          {
-            if(option.name === menu.name)
-            {
-              flag = true;
-              context.dispatch('setActiveIndex', to.path);
-            }
-          }
-          if(!flag){
-            context.dispatch('addTabAndLive',{path: to.path, name: menu.name, componentName:to.name});
-            context.dispatch('setActiveIndex', to.path);
-          }
+          context.dispatch('handlerRoute',{tagName:menu.name,route:to})
         }
       });
+    },
+    handlerRoute(context,params){
+      let flag = false;
+      for(let option of this.state.tab.tabOptions)
+      {
+        if(option.name === params.tagName)
+        {
+          flag = true;
+          context.dispatch('setActiveIndex', params.route.path);
+        }
+      }
+      if(!flag){
+        context.dispatch('addTabAndLive',{path: params.route.path, name: params.tagName, componentName:params.route.name});
+        context.dispatch('setActiveIndex', params.route.path);
+      }
     },
     //删除tab并且设置当前activeIndex
     deleteTab(context, path){

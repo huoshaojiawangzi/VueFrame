@@ -32,4 +32,12 @@ body {
 .el-tabs__nav-scroll{
   color: #F5F5F5; /*导航选中颜色*/
 }
+.el-card__header{
+  background-color: rgba(176,224,230,0.1);
+  color:#87CEEB;
+  font-weight:bold;
+}
+.el-form-item__label{/*表单每项label样式*/
+  width: 80px;
+}
 </style>

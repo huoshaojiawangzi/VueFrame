@@ -26,6 +26,16 @@
       this.style = "width:"+this.width;
       this.setFormOfficeIds(this.options);
     },
+    watch:{
+      value:{
+        handler(val){
+          if(val.id == null){
+            this.ids = [];
+          }
+        },
+        deep:true
+      },
+    },
     data() {
       return {
         style:null,

@@ -122,7 +122,6 @@ export default {
       }).then((response) =>{
         if(response.data.code === 0)
         {
-          console.log(response.data);
           this.$store.commit("set_menu_tree",response.data.result.menuTree);
           this.$store.commit("set_permission_tree",response.data.result.permissionTree);
           this.$store.commit('set_loading',false);
