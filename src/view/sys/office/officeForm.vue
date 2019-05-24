@@ -71,7 +71,7 @@ import cascader from '@/components/cascader'
 import checkboxGroup from '@/components/checkboxGroup'
 export default {
   inject:['reload'],
-  name:"userForm",
+  name:"officeForm",
   components:{cascader,checkboxGroup},
   data: function () {
     let checkPhone = (rule, value, callback) => {

@@ -1,3 +1,5 @@
+import userUtils from '@/global/userUtils'
+
 export default{
   state: {
     tabOptions:[],//所有打开的路由,参数:path-路由路径;name-标签名,componentsName-组件名
@@ -36,13 +38,11 @@ export default{
       {
         return;
       }
-      let promise = context.dispatch('getMenuByPath', {path:to.path,items:this.state.currentUser.menuTree});
-      promise.then((menu)=>{
-        if(menu!=null)
-        {
-          context.dispatch('handlerRoute',{tagName:menu.name,route:to})
-        }
-      });
+      let menu = userUtils.getMenuByPath(to.path);
+      if(menu!=null)
+      {
+        context.dispatch('handlerRoute',{tagName:menu.name,route:to})
+      }
     },
     handlerRoute(context,params){
       let flag = false;

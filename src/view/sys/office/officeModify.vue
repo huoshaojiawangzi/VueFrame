@@ -65,7 +65,7 @@
 import cascader from '@/components/cascader'
 import checkboxGroup from '@/components/checkboxGroup'
 export default {
-  name:"userModify",
+  name:"officeModify",
   components:{cascader,checkboxGroup},
   created(){
     this.form.user = this.$route.params.user;

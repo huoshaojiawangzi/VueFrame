@@ -52,7 +52,7 @@
 </template>
 <script>
 export default {
-  name:"userInfo",
+  name:"officeInfo",
   created(){
     this.form.user = this.$route.params.user;
   },

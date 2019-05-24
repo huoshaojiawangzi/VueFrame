@@ -32,8 +32,8 @@ export default{//全局数据
       return state.fullHeight;
     },
     getTableHeight(state){
-      let th = state.fullHeight-187;
-      return th>300 ? th:300
+      let th = state.fullHeight-207;
+      return th>280 ? th:280
     }
   }
 }

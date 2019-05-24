@@ -1,67 +1,43 @@
 <template>
   <div>
-    <div>
-      <span>登录名</span>
-      <el-input size="small" ref="userName" v-model="searchModel.userName"></el-input>
-      <span>姓名</span>
-      <el-input size="small" ref="name" v-model="searchModel.name"></el-input>
-      <span>所属机构</span>
-      <el-input size="small" ref="officeName" v-model="searchModel.officeName"></el-input>
-      <el-button type="primary" size="small" @click="$refs.pageRef.setList(1)" id="searchButton" style="margin-left:20px" icon="el-icon-search">查询
-      </el-button>
-      <el-button type="primary" size="small" @click="clearSearchModel()" style="margin-left:20px" icon="el-icon-refresh">重置
-      </el-button>
-    </div>
-    <el-table :data="list" style="width: 100%" :height="this.$store.getters.getTableHeight" @sort-change="sortChange">
-      <el-table-column prop="office.name" label="所属机构"> </el-table-column>
-      <el-table-column label="登录名">
-        <template slot-scope="scope">
-          <div class="pointer" @click="openInfo(scope.row)">
-            {{ scope.row.commonUser.userName}}
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column prop="commonUser.name" sortable='custom' label="姓名"> </el-table-column>
-      <el-table-column prop="phone" sortable='custom' label="手机"> </el-table-column>
-      <el-table-column label="角色">
-        <template slot-scope="scope">
-          <div style="float: left" v-for="(role,index) in scope.row.commonUser.roles">
-            <div v-if="index === 0">{{role.name}}</div>
-            <div v-else>/{{role.name}}</div>
-          </div>
-        </template>
-      </el-table-column>
+    <el-table :data="tree" style="width: 100%" :height="this.$store.getters.getTableHeight" border row-key="id">
+      <el-table-column prop="name" label="机构名称"> </el-table-column>
+      <el-table-column prop="manager"  label="机构负责人"> </el-table-column>
+      <el-table-column prop="phone" sortable='custom' label="机构电话"> </el-table-column>
+      <el-table-column prop="address" sortable='custom' label="机构地址"> </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button type="danger"  size="mini" @click="$refs.pageRef.del(scope.row.id)" icon="el-icon-delete" circle></el-button>
         </template>
       </el-table-column>
     </el-table>
-    <pagination ref="pageRef" :urlPrefix="urlPrefix" :searchModel="searchModel" v-model="list">
-    </pagination>
   </div>
 </template>
 
 <script>
-  import pagination from '@/components/pagination'
-  import {UserSearchModel} from '@/class/searchModel/impl/UserSearchModel';
   export default {
     name:"officeList",
-    mounted() {
-      this.$refs.pageRef.setList();
+    created() {
+      this.setTree();
     },
-    components: {pagination},
     data() {
       return {
-        //通用
-        searchModel:new UserSearchModel(),
-        list:null,
-        urlPrefix:"user"
+        tree:[]
       }
     },
     methods: {
-      sortChange(column){
-        this.$refs.pageRef.sortChange(column);
+      setTree(){
+        this.$store.commit('set_loading',true);
+        this.$axios({
+          method:'post',
+          url:'/office/find-roots'
+        }).then((response) =>{
+          this.tree = response.data.result;
+        }).catch((response) =>{
+          console.log(response)
+        }).finally(()=>{
+          this.$store.commit('set_loading',false);
+        });
       },
       openInfo(user){
         this.$store.dispatch("deleteTabAndLive","/user/info").then(()=>{
@@ -72,10 +48,7 @@
             }
           })
         })
-      },
-      clearSearchModel(){
-        this.searchModel = new UserSearchModel();
-      },
+      }
     }
   }
 </script>
@@ -85,17 +58,8 @@
     font-size:14px;
     margin-left:10px
   }
-
-  .el-input{
-    margin-left:8px;
-    width:100px;
-  }
-
   .bottom {
     margin-top: 13px;
     line-height: 12px;
-  }
-  .image {
-    width: 100%;
   }
 </style>

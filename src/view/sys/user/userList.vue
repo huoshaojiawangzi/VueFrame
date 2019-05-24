@@ -12,7 +12,7 @@
       <el-button type="primary" size="small" @click="clearSearchModel()" style="margin-left:20px" icon="el-icon-refresh">重置
       </el-button>
     </div>
-    <el-table :data="list" style="width: 100%" :height="this.$store.getters.getTableHeight" @sort-change="sortChange">
+    <el-table :data="list" style="width: 100%;margin-top: 20px" :height="this.$store.getters.getTableHeight" @sort-change="sortChange" border>
       <el-table-column prop="office.name" label="所属机构"> </el-table-column>
       <el-table-column label="登录名">
         <template slot-scope="scope">

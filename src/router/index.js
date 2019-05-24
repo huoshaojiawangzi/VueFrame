@@ -13,9 +13,6 @@ export default new Router({
     {
       path:"/",
       component:Home,
-      index:'1',
-      iconCls: 'el-icon-message',
-      name: '首页',
       children: [
         ...sys
       ]

@@ -84,7 +84,7 @@ export default {
     },
     menuTree:{
       get: function () {
-        return this.$store.getters.getMenus;
+        return this.$store.getters.getMenuTree;
       },
       set: function () {
       }

@@ -11,6 +11,7 @@ import store from '@/store'
 //封装的全局方法引入
 import cache from '@/global/cache'
 import treeUtils from '@/global/treeUtils'
+import userUtils from '@/global/userUtils'
 // noinspection ES6UnusedImports
 
 Vue.use(Element);
@@ -21,6 +22,7 @@ axios.defaults.baseURL = process.env.BASE_URL;
 Vue.prototype.$jquery = jquery;
 Vue.prototype.$cache = cache;
 Vue.prototype.$treeUtils= treeUtils;
+Vue.prototype.$userUtils= userUtils;
 
 /* eslint-disable no-new */
 new Vue({
