@@ -70,7 +70,6 @@
 import cascader from '@/components/cascader'
 import checkboxGroup from '@/components/checkboxGroup'
 export default {
-  inject:['reload'],
   name:"userForm",
   components:{cascader,checkboxGroup},
   data: function () {
@@ -118,19 +117,6 @@ export default {
           }
         }
       },
-      originalForm: {
-        verifyPassword: null,
-        user: {
-          office: {id: null},
-          phone: null,
-          commonUser: {
-            name: null,
-            userName: null,
-            password: null,
-            roles: [],
-          }
-        }
-      },
       rules: {
         'user.office.id': [
           {required: true, message: "必填项不能为空", trigger: 'blur'}],
@@ -161,12 +147,25 @@ export default {
       })
     },
     clearForm() {
-      this.form = this.originalForm;
+      this.form = {
+        verifyPassword: null,
+        user: {
+          office: {id: null},
+          phone: null,
+          commonUser: {
+            name: null,
+            userName: null,
+            password: null,
+            roles: [],
+          }
+        }
+      };
       this.$refs['userForm'].resetFields();
     },
     submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
+            console.log(this.form.user);
             this.$store.commit('set_loading',true);
             this.$axios({
               headers: {

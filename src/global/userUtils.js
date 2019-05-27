@@ -2,9 +2,9 @@ import store from '@/store'
 
 function loopGetMenuByPath(menuTree,path){
   for (let item of menuTree) {
-    if (item.leaf === false && item.path === path) {
+    if ((item.children === undefined||item.children.length === 0)&& item.path === path) {
       return item;
-    } else if (item.leaf === true) {
+    } else if (item.children !== undefined && item.children.length>0) {
       let result = loopGetMenuByPath(item.children,path);
       if(result!==undefined){
         return result
@@ -19,9 +19,9 @@ function getMenuByPath(path){
 
 function loopGetPermissionByTag(PermissionTree,tag){
   for (let item of PermissionTree) {
-    if (item.leaf === false && item.path === tag) {
+    if ((item.children === undefined||item.children.length === 0) && item.path === tag) {
       return item;
-    } else if (item.leaf === true) {
+    } else if (item.children !== undefined && item.children.length>0) {
       let result = loopGetMenuByPath(item.children,tag);
       if(result!==undefined){
         return result

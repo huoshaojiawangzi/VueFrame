@@ -42,12 +42,18 @@
           }
         }
       },
+      getRoleById(id){
+        for(let item of this.options){
+          if(id === item.id){
+            return item;
+          }
+        }
+      },
       handleCheckedCitiesChange(value){
         let roles = [];
         for(let roleId of value)
         {
-          let role = {id:roleId};
-          roles.push(role)
+          roles.push(this.getRoleById(roleId))
         }
         this.$emit('input',roles);
       }
