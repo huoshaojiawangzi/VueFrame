@@ -109,9 +109,9 @@ export default {
   },
   methods: {
     openInfo(user){
-      this.$store.dispatch("deleteTabAndLive","/user/info").then(()=>{
+      this.$store.dispatch("deleteTabAndLive","/user/list").then(()=>{
         this.$router.push({
-          name:'userInfo',
+          name:'userList',
           params:{user}
         })
       })

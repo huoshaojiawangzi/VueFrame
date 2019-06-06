@@ -12,6 +12,9 @@ export default{//全局数据
       value: 'id',
       label: 'name',
       children: 'children',
+      checkStrictly:true,
+      emitPath:false,
+      expandTrigger:'hover'
     }
   },
   mutations: {
@@ -33,6 +36,10 @@ export default{//全局数据
     },
     getTableHeight(state){
       let th = state.fullHeight-207;
+      return th>280 ? th:280
+    },
+    getTreeTableHeight(state){
+      let th = state.fullHeight-117;
       return th>280 ? th:280
     }
   }

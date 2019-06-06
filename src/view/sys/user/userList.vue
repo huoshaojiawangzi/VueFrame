@@ -33,6 +33,7 @@
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
+          <el-button type="warning"  size="mini" @click="openModify(scope.row)" icon="el-icon-edit" circle></el-button>
           <el-button type="danger"  size="mini" @click="$refs.pageRef.del(scope.row.id)" icon="el-icon-delete" circle></el-button>
         </template>
       </el-table-column>
@@ -62,6 +63,14 @@
     methods: {
       sortChange(column){
         this.$refs.pageRef.sortChange(column);
+      },
+      openModify(user){
+          this.$router.push({
+            name:'userModify',
+            params:{
+              user
+            }
+          })
       },
       openInfo(user){
         this.$store.dispatch("deleteTabAndLive","/user/info").then(()=>{

@@ -13,8 +13,7 @@
                   width="290px"
                   v-model="form.user.office"
                   :props="this.$store.state.global.props"
-                  :options="this.$store.state.common.officeTree"
-                  :change-on-select="true">
+                  :options="this.$store.state.common.officeTree">
                 </cascader>
               </el-form-item>
             </el-col>
@@ -165,7 +164,6 @@ export default {
     submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            console.log(this.form.user);
             this.$store.commit('set_loading',true);
             this.$axios({
               headers: {

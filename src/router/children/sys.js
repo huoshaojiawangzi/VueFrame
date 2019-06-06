@@ -15,9 +15,7 @@ const officeRoute = [
   { path: '/office/form', component: () =>
       import ('@/view/sys/office/officeForm'), name: 'officeForm'},
   { path: '/office/modify', component: () =>
-      import ('@/view/sys/office/officeModify'), name: 'officeModify'},
-  { path: '/office/info', component: () =>
-      import ('@/view/sys/office/officeInfo'), name: 'officeInfo'}
+      import ('@/view/sys/office/officeModify'), name: 'officeModify'}
 ];
 export default [
   ...userRoute,

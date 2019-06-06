@@ -65,13 +65,11 @@ export default {
   },
   methods: {
     openModify(user){
-      this.$store.dispatch("deleteTabAndLive","/user/modify").then(()=>{
         this.$router.push({
           name:'userModify',
           params:{
             user
           }
-        })
       })
     },
   }

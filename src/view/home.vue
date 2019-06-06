@@ -63,8 +63,6 @@ export default {
   components: { golbalStyle,navMenu,dynamicTab},
   created(){
       this.getMenusAndPermissions();
-      this.getOfficeTree();
-      this.getRoleList();
   },
   mounted() {
     this.$nextTick(() => {
@@ -122,9 +120,11 @@ export default {
       }).then((response) =>{
         if(response.data.code === 0)
         {
-          this.$store.commit("set_menu_tree",response.data.result.menuTree);
-          this.$store.commit("set_permission_tree",response.data.result.permissionTree);
+          this.$store.commit("set_menu_tree",this.$treeUtils.filterTree(response.data.result.menuTree));
+          this.$store.commit("set_permission_tree",this.$treeUtils.filterTree(response.data.result.permissionTree));
           this.$store.commit('set_loading',false);
+          this.getOfficeTree();
+          this.getRoleList();
         }
         else
         {

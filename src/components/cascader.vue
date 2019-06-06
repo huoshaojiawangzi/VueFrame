@@ -2,12 +2,11 @@
   <div>
     <el-cascader
       :style="this.style"
-      v-model="ids"
+      v-model="id"
       :props="this.props"
       :options="this.options"
-      :change-on-select="changeOnSelect"
-      expand-trigger="hover"
-      @change="cascaderChange">
+      @change="cascaderChange"
+      filterable>
     </el-cascader>
   </div>
 </template>
@@ -19,18 +18,20 @@
       value: {},
       props: {},
       options: {required: true},
-      changeOnSelect: {},
-      width: {type: String}
+      width: {type: String},
+      exclude:{}
     },
     created() {
       this.style = "width:" + this.width;
-      this.setFormOfficeIds(this.options);
+      if (this.value.id != null) {
+        this.id = this.value.id
+      }
     },
     watch: {
       value: {
         handler(val) {
           if (val === undefined || val.id == null) {
-            this.ids = [];
+            this.id = null;
           }
         },
         deep: true
@@ -38,42 +39,38 @@
     },
     data() {
       return {
+        cascaderOptions:null,
         style: null,
-        ids: []
+        id:null
       }
     },
     methods: {
-      setFormOfficeIds(options) {
-        if (this.value.id != null) {
-          for (let o of options) {
-            if (o.id === this.value.id) {
-              this.ids.unshift(o.id);
-              return true
-            } else if (o.children != null) {
-              if (this.setFormOfficeIds(o.children)) {
-                this.ids.unshift(o.id);
-                return true;
-              } else {
-                return false;
-              }
-            }
+      setCascaderOptions(){
+          if(this.exclude!=null){
+
+          }
+      },
+      excludeItem(tree,exclude){
+        for(let item of tree){
+          if(item.id === exclude.id){
+
           }
         }
       },
       loopGetItemById(tree, id) {
         for (let item of tree) {
           if (item.id === id) {
-            return item;
+            return Object.assign({}, item);
           } else if (item.children !== undefined&&item.children.length>0) {
             let result = this.loopGetItemById(item.children, id);
             if (result !== undefined) {
-              return result
+              return Object.assign({}, result);
             }
           }
         }
       },
       cascaderChange(value) {
-        this.$emit('input', this.loopGetItemById(this.options, value[value.length - 1]));
+        this.$emit('input', this.loopGetItemById(this.options, value));
       }
     }
   }

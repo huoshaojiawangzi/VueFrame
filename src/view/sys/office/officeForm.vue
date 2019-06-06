@@ -2,7 +2,7 @@
   <div>
     <el-card  shadow="never">
       <div slot="header" class="clearfix">
-        <span>用户录入</span>
+        <span>机构录入</span>
       </div>
       <div>
         <el-form :model="form" :rules="rules" status-icon ref="officeForm" label-position="left">
@@ -13,8 +13,7 @@
                   width="290px"
                   v-model="form.office.parent"
                   :props="this.$store.state.global.props"
-                  :options="this.$store.state.common.officeTree"
-                  :change-on-select="true">
+                  :options="this.$store.state.common.officeTree">
                 </cascader>
               </el-form-item>
             </el-col>
@@ -100,18 +99,16 @@ export default {
     clearForm() {
       this.form = {
         office: {
-          phone: null,
-          name: null,
           parent: {id:null},
-          address: null,
-          manager: [],
+          name: null,
+          manager: null,
+          phone: null,
+          address: null
         }
       };
       this.$refs['officeForm'].resetFields();
     },
     submitForm(formName) {
-      console.log("***************************************");
-        console.log(this.form.office);
         this.$refs[formName].validate((valid) => {
           if (valid) {
             this.$store.commit('set_loading',true);
