@@ -26,6 +26,7 @@
       if (this.value.id != null) {
         this.id = this.value.id
       }
+      this.setCascaderOptions();
     },
     watch: {
       value: {
@@ -47,13 +48,16 @@
     methods: {
       setCascaderOptions(){
           if(this.exclude!=null){
-
+            this.excludeItem(this.options,this.exclude);
           }
       },
       excludeItem(tree,exclude){
         for(let item of tree){
           if(item.id === exclude.id){
-
+            tree.splice(tree.findIndex(item => item.id === exclude.id), 1);
+            return;
+          }else{
+            this.excludeItem(item.children,exclude);
           }
         }
       },

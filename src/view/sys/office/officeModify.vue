@@ -13,7 +13,8 @@
                   width="290px"
                   v-model="form.office.parent"
                   :props="this.$store.state.global.props"
-                  :options="this.$store.state.common.officeTree">
+                  :options="this.$store.state.common.officeTree"
+                  :exclude="form.office">
                 </cascader>
               </el-form-item>
             </el-col>
@@ -62,7 +63,6 @@ export default {
   created(){
     this.form.office = this.$route.params.office;
     this.cascaderOptions = this.$store.state.common.officeTree;
-    this.setCascaderOptions();
   },
   data: function () {
     let checkPhone = (rule, value, callback) => {
