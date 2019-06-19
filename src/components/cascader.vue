@@ -4,7 +4,7 @@
       :style="this.style"
       v-model="id"
       :props="this.props"
-      :options="this.options"
+      :options="this.caOptions"
       @change="cascaderChange"
       filterable>
     </el-cascader>
@@ -22,6 +22,7 @@
       exclude:{}
     },
     created() {
+      this.$treeUtils.copy(this.options,this.caOptions);
       this.style = "width:" + this.width;
       if (this.value.id != null) {
         this.id = this.value.id
@@ -40,6 +41,7 @@
     },
     data() {
       return {
+        caOptions:[],
         cascaderOptions:null,
         style: null,
         id:null
@@ -48,7 +50,7 @@
     methods: {
       setCascaderOptions(){
           if(this.exclude!=null){
-            this.excludeItem(this.options,this.exclude);
+            this.excludeItem(this.caOptions,this.exclude);
           }
       },
       excludeItem(tree,exclude){
@@ -74,7 +76,7 @@
         }
       },
       cascaderChange(value) {
-        this.$emit('input', this.loopGetItemById(this.options, value));
+        this.$emit('input', this.loopGetItemById(this.caOptions, value));
       }
     }
   }

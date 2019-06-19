@@ -17,4 +17,17 @@ function filterTree(data,parent){//将数据中的空children设置为null
   }
   return data;
 }
-export default {filterTree}
+function copy(originalData,resultData) {
+  for(let item of originalData){
+    resultData.push();
+  }
+}
+
+function copyObj(obj) {
+  let newObj = Object.assign({}, obj);;
+  if(newObj.children instanceof Array && newObj.children.length>0){
+    for(let item of newObj.children)
+  }
+}
+
+export default {filterTree,copy}
