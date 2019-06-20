@@ -44,27 +44,24 @@
         this.$refs[formName].validate((valid) => {
           if (valid) {
             this.$axios({
-              method:'get',
-              url:'/login',
+              method: 'get',
+              url: '/login',
               params: {
-                userName:this.loginForm.userName,
+                userName: this.loginForm.userName,
                 password: this.loginForm.password
               }
-            }).then((response) =>{
-              if(response.data.code === 0)
-              {
-                this.$store.commit("set_user_info",response.data.result);
-                this.$cache.setSessionObj("userInfo",response.data.result);
-                this.$router.push({path:"/"});
-              }
-              else
-              {
+            }).then((response) => {
+              if (response.data.code === 0) {
+                this.$store.commit("set_user_info", response.data.result);
+                this.$cache.setSessionObj("userInfo", response.data.result);
+                this.$router.push({path: "/"});
+              } else {
                 this.$message({
                   message: response.data.msg,
                   type: "warning"
                 });
               }
-            }).catch(() =>{
+            }).catch(() => {
               this.$message({
                 message: "请求失败",
                 type: "error"

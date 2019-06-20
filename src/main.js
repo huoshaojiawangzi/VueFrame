@@ -16,23 +16,25 @@ import userUtils from '@/global/userUtils'
 
 Vue.use(Element);
 Vue.prototype.$qs = qs;
-Vue.prototype.$axios= axios;
+Vue.prototype.$axios = axios;
 Vue.config.productionTip = false;
 axios.defaults.baseURL = process.env.BASE_URL;
 Vue.prototype.$jquery = jquery;
 Vue.prototype.$cache = cache;
-Vue.prototype.$treeUtils= treeUtils;
-Vue.prototype.$userUtils= userUtils;
+Vue.prototype.$treeUtils = treeUtils;
+Vue.prototype.$userUtils = userUtils;
+//允许浏览器debug
+Vue.config.devtools = true;
 
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
   router,
   store,
-  components: { App },
+  components: {App},
   template: '<App/>'
 });
 
-router.beforeEach((to,form,next)=>{
-  store.dispatch("routeChange",to).then(next())
+router.beforeEach((to, form, next) => {
+  store.dispatch("routeChange", to).then(next())
 });

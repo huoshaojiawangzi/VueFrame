@@ -6,27 +6,29 @@
         <navMenu :navMenus="item.children"></navMenu>
       </el-submenu>
     </template>
-    <template  v-else-if ="!item.hidden&&!item.leaf">
-      <el-menu-item  :index="item.path"  @click="linkTo(item.path)" ><template slot="title"><i :class='item.iconCls==null?"el-icon-menu":item.iconCls'></i>{{item.name}}</template></el-menu-item>
+    <template v-else-if="!item.hidden&&!item.leaf">
+      <el-menu-item :index="item.path" @click="linkTo(item.path)">
+        <template slot="title"><i :class='item.iconCls==null?"el-icon-menu":item.iconCls'></i>{{item.name}}</template>
+      </el-menu-item>
     </template>
   </div>
 </template>
 
 <script>
   export default {
-    name:"navMenu",
+    name: "navMenu",
     props: {
-      navMenus:{
-       required:true
+      navMenus: {
+        required: true
       }
     },
     data() {
       return {}
     },
     methods: {
-      linkTo(path){
-          this.$router.push({
-            path:path
+      linkTo(path) {
+        this.$router.push({
+          path: path
         })
       }
     }

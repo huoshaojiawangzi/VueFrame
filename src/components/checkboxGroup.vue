@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-checkbox-group  v-model="ids" :max="this.max" @change="handleCheckedCitiesChange">
+    <el-checkbox-group v-model="ids" :max="this.max" @change="handleCheckedCitiesChange">
       <el-checkbox v-for="item in this.options" :key="item.id" :label="item.id">{{item.name}}</el-checkbox>
     </el-checkbox-group>
   </div>
@@ -8,54 +8,51 @@
 
 <script>
   export default {
-    name:"checkboxGroup",
+    name: "checkboxGroup",
     props: {
-      value:{},
-      max:{type:Number},
-      options:{type:Array,required:true},
+      value: {},
+      max: {type: Number},
+      options: {type: Array, required: true},
     },
-    created(){
+    created() {
       this.setFormRoleIds();
     },
-    watch:{
-      value:{
-        handler(val){
-          if(val.length<1){
+    watch: {
+      value: {
+        handler(val) {
+          if (val.length < 1) {
             this.ids = [];
           }
         },
-        deep:true
+        deep: true
       },
     },
     data() {
       return {
-        ids:[]
+        ids: []
       }
     },
     methods: {
-      setFormRoleIds(){
-        if(this.value.length>0)
-        {
-          for(let role of this.value)
-          {
+      setFormRoleIds() {
+        if (this.value.length > 0) {
+          for (let role of this.value) {
             this.ids.push(role.id)
           }
         }
       },
-      getRoleById(id){
-        for(let item of this.options){
-          if(id === item.id){
+      getRoleById(id) {
+        for (let item of this.options) {
+          if (id === item.id) {
             return item;
           }
         }
       },
-      handleCheckedCitiesChange(value){
+      handleCheckedCitiesChange(value) {
         let roles = [];
-        for(let roleId of value)
-        {
+        for (let roleId of value) {
           roles.push(this.getRoleById(roleId))
         }
-        this.$emit('input',roles);
+        this.$emit('input', roles);
       }
     }
   }

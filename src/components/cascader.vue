@@ -19,10 +19,9 @@
       props: {},
       options: {required: true},
       width: {type: String},
-      exclude:{}
+      exclude: {}
     },
     created() {
-      this.$treeUtils.copy(this.options,this.caOptions);
       this.style = "width:" + this.width;
       if (this.value.id != null) {
         this.id = this.value.id
@@ -41,25 +40,30 @@
     },
     data() {
       return {
-        caOptions:[],
-        cascaderOptions:null,
+        caOptions: [],
+        cascaderOptions: null,
         style: null,
-        id:null
+        id: null
       }
     },
     methods: {
-      setCascaderOptions(){
-          if(this.exclude!=null){
-            this.excludeItem(this.caOptions,this.exclude);
-          }
+      setCascaderOptions() {
+        if (this.exclude != null) {
+          Promise.resolve(this.$treeUtils.getCopyArray(this.options)).then((resultArray) => {
+            this.caOptions = resultArray;
+            this.excludeItem(this.caOptions, this.exclude);
+          });
+        } else {
+          this.caOptions = this.options;
+        }
       },
-      excludeItem(tree,exclude){
-        for(let item of tree){
-          if(item.id === exclude.id){
+      excludeItem(tree, exclude) {
+        for (let item of tree) {
+          if (item.id === exclude.id) {
             tree.splice(tree.findIndex(item => item.id === exclude.id), 1);
             return;
-          }else{
-            this.excludeItem(item.children,exclude);
+          } else if (item.children instanceof Array && item.children.length > 0) {
+            this.excludeItem(item.children, exclude);
           }
         }
       },
@@ -67,7 +71,7 @@
         for (let item of tree) {
           if (item.id === id) {
             return Object.assign({}, item);
-          } else if (item.children !== undefined&&item.children.length>0) {
+          } else if (item.children !== undefined && item.children.length > 0) {
             let result = this.loopGetItemById(item.children, id);
             if (result !== undefined) {
               return Object.assign({}, result);

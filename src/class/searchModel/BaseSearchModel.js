@@ -3,4 +3,5 @@ class BaseSearchModel {
   limit = 10;
   pageSorts = [];
 }
+
 export {BaseSearchModel};

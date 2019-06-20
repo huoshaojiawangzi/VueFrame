@@ -1,7 +1,7 @@
 export default {
-    state:{
-        addShow:false,
-        editShow:false,
-        radioShow:false
-    }
+  state: {
+    addShow: false,
+    editShow: false,
+    radioShow: false
+  }
 }
