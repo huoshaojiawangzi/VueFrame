@@ -1,10 +1,18 @@
 export default {
   state: {
+    allMenuTree:[],
+    allPermissionTree:[],
     officeTree: [],
     userList: [],
     roleList: []
   },
   mutations: {
+    set_all_menu_tree(state, allMenuTree) {
+      state.allMenuTree = allMenuTree;
+    },
+    set_all_permisssion_tree(state, allPermissionTree) {
+      state.allPermissionTree = allPermissionTree;
+    },
     set_office_trre(state, officeTree) {
       state.officeTree = officeTree;
     },
@@ -17,6 +25,12 @@ export default {
   },
   actions: {},
   getters: {
+    getAllMenuTree(state) {
+      return state.allMenuTree;
+    },
+    getAllPermissionTree(state) {
+      return state.allPermissionTree;
+    },
     getOfficeTree(state) {
       return state.officeTree;
     },

@@ -31,6 +31,12 @@ export default {//全局数据
     }
   },
   getters: {
+    getLoading(state) {
+      return state.loading;
+    },
+    getProps(state) {
+      return state.props;
+    },
     getfullHeight(state) {
       return state.fullHeight;
     },

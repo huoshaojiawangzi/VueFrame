@@ -12,8 +12,7 @@
                 <cascader
                   width="290px"
                   v-model="form.user.office"
-                  :props="this.$store.state.global.props"
-                  :options="this.$store.state.common.officeTree"
+                  :options="this.$store.getters.getOfficeTree"
                   :change-on-select="true">
                 </cascader>
               </el-form-item>
@@ -46,7 +45,7 @@
           <el-form-item>
             <el-col :span="22">
               <el-form-item prop="user.commonUser.roles" label="用户角色">
-                <checkbox-group :options="this.$store.state.common.roleList" v-model="form.user.commonUser.roles"
+                <checkbox-group :options="this.$store.getters.getRoleList" v-model="form.user.commonUser.roles"
                                 :max="3"></checkbox-group>
               </el-form-item>
             </el-col>
@@ -110,7 +109,7 @@
       };
     },
     methods: {
-      openInfo(user) {
+      openList(user) {
         this.$store.dispatch("deleteTabAndLive", "/user/list").then(() => {
           this.$router.push({
             name: 'userList',
@@ -139,7 +138,7 @@
                   message: response.data.msg,
                   type: "success"
                 });
-                this.openInfo(this.form.user);
+                this.openList(this.form.user);
               } else {
                 this.$message({
                   message: response.data.msg,

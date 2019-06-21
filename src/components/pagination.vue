@@ -46,20 +46,28 @@
               id:id
             }
           }).then((response) =>{
-            new Promise((resolve)=>{
-              if(this.list.length<2&&this.searchModel.page>1)
-              {
-                this.searchModel.page = this.searchModel.page-1;
-              }
-              resolve();
-            }).then(()=>{this.setList()});
+            if(response.data.code === 0){
+              new Promise((resolve)=>{
+                if(this.list.length<2&&this.searchModel.page>1)
+                {
+                  this.searchModel.page = this.searchModel.page-1;
+                }
+                resolve();
+              }).then(()=>{this.setList()});
+              this.$message({
+                message: response.data.msg,
+                type: "success"
+              });
+            }
+            else {
+              this.$message({
+                message: response.data.msg,
+                type: "warning"
+              });
+            }
+          }).catch(() =>{
             this.$message({
-              message: response.data.msg,
-              type: "success"
-            });
-          }).catch((response) =>{
-            this.$message({
-              message: response.data.msg,
+              message: "出现未知错误",
               type: "success"
             });
           })

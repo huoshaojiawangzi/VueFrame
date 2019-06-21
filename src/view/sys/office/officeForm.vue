@@ -12,8 +12,7 @@
                 <cascader
                   width="290px"
                   v-model="form.office.parent"
-                  :props="this.$store.state.global.props"
-                  :options="this.$store.state.common.officeTree">
+                  :options="this.$store.getters.getOfficeTree">
                 </cascader>
               </el-form-item>
             </el-col>
@@ -93,22 +92,11 @@
     methods: {
       openList() {
         this.$store.dispatch("deleteTabAndLive", "/office/list").then(() => {
+          this.$store.dispatch("clearPageCache", "/office/form").catch();
           this.$router.push({
             name: 'officeList'
           })
         })
-      },
-      clearForm() {
-        this.form = {
-          office: {
-            parent: {id: null},
-            name: null,
-            manager: null,
-            phone: null,
-            address: null
-          }
-        };
-        this.$refs['officeForm'].resetFields();
       },
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
@@ -127,14 +115,11 @@
               data: this.form.office
             }).then((response) => {
               if (response.data.code === 0) {
-                Promise.resolve(this.clearForm()).then(() => {
-                    this.$message({
-                      message: response.data.msg,
-                      type: "success"
-                    });
-                    this.openList()
-                  }
-                )
+                this.openList();
+                this.$message({
+                  message: response.data.msg,
+                  type: "success"
+                });
               } else {
                 this.$message({
                   message: response.data.msg,

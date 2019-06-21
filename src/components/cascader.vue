@@ -3,7 +3,7 @@
     <el-cascader
       :style="this.style"
       v-model="id"
-      :props="this.props"
+      :props="this.$store.getters.getProps"
       :options="this.caOptions"
       @change="cascaderChange"
       filterable>
@@ -16,7 +16,6 @@
     name: "cascader",
     props: {
       value: {},
-      props: {},
       options: {required: true},
       width: {type: String},
       exclude: {}

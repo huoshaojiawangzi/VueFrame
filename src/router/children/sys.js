@@ -31,8 +31,24 @@ const officeRoute = [
       import ('@/view/sys/office/officeModify'), name: 'officeModify'
   }
 ];
+
+const menuRoute = [
+  {
+    path: '/menu/list', component: () =>
+      import ('@/view/sys/menu/menuList'), name: 'menuList'
+  },
+  {
+    path: '/menu/form', component: () =>
+      import ('@/view/sys/menu/menuForm'), name: 'menuForm'
+  },
+  {
+    path: '/menu/modify', component: () =>
+      import ('@/view/sys/menu/menuModify'), name: 'menuModify'
+  }
+];
 export default [
   ...userRoute,
-  ...officeRoute
+  ...officeRoute,
+  ...menuRoute
 ]
 

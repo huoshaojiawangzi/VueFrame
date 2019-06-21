@@ -1,7 +1,7 @@
 <template>
   <div id="parent" :style="parentStyle">
     <golbal-style></golbal-style>
-    <div class="el-loading-mask is-fullscreen" style="z-index: 2001;" v-show="$store.state.global.loading">
+    <div class="el-loading-mask is-fullscreen" style="z-index: 2001;" v-show="this.$store.getters.getLoading">
       <div class="el-loading-spinner">
         <svg viewBox="25 25 50 50" class="circular">
           <circle cx="50" cy="50" r="20" fill="none" class="path">
@@ -70,9 +70,9 @@
     },
     mounted() {
       this.$nextTick(() => {
-        this.$store.dispatch('setFullHeight', document.documentElement.clientHeight);
+        this.$store.dispatch('setFullHeight', document.documentElement.clientHeight).catch();
         window.onresize = () => {
-          this.$store.dispatch('setFullHeight', document.documentElement.clientHeight);
+          this.$store.dispatch('setFullHeight', document.documentElement.clientHeight).catch();
         }
       })
     },
@@ -86,7 +86,10 @@
       },
       menuTree: {
         get: function () {
-          return this.$store.getters.getMenuTree;
+          if(this.$store.getters.getMenuTree.length>0)
+          {
+            return this.$store.getters.getMenuTree[0].children;
+          }
         },
         set: function () {
         }
@@ -128,9 +131,18 @@
             this.$store.commit('set_loading', false);
             this.getOfficeTree();
             this.getRoleList();
+            this.getAllMenuTree();
           } else {
             this.$router.push({path: "/login"});
           }
+        })
+      },
+      getAllMenuTree() {
+        this.$axios({
+          method: 'post',
+          url: '/menu/find-roots'
+        }).then((response) => {
+            this.$store.commit("set_all_menu_tree", this.$treeUtils.filterTree(response.data.result));
         })
       },
       getOfficeTree() {

@@ -94,6 +94,17 @@ export default {
       context.commit('delete_lives', index);
       context.commit('delete_tabs', index);
       return index;
+    },
+    //删除已打开的标签页面缓存
+    clearPageCache(context,path) {
+      let index = 0;
+      for (let option of this.state.tab.tabOptions) {
+        if (option.path === path) {
+          break;
+        }
+        index++;
+      }
+      context.commit('delete_lives', index);
     }
   },
   getters: {

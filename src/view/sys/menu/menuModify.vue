@@ -2,50 +2,55 @@
   <div>
     <el-card shadow="never">
       <div slot="header" class="clearfix">
-        <span>机构修改</span>
+        <span>菜单修改</span>
       </div>
       <div>
-        <el-form :model="form" :rules="rules" status-icon ref="officeForm" label-position="left">
+        <el-form :model="form" :rules="rules" status-icon ref="menuForm" label-position="left">
           <el-form-item>
             <el-col :span="11">
-              <el-form-item prop="office.parent.id" label="上级机构">
+              <el-form-item prop="menu.parent.id" label="上级菜单">
                 <cascader
                   width="290px"
-                  v-model="form.office.parent"
-                  :options="this.$store.getters.getOfficeTree"
-                  :exclude="form.office">
+                  v-model="form.menu.parent"
+                  :options="this.$store.getters.getAllMenuTree">
                 </cascader>
               </el-form-item>
             </el-col>
             <el-col :span="11">
-              <el-form-item prop="office.name" label="机构名称">
-                <el-input v-model="form.office.name" autocomplete="off"></el-input>
+              <el-form-item prop="menu.name" label="菜单名称">
+                <el-input v-model="form.menu.name" autocomplete="off"></el-input>
               </el-form-item>
             </el-col>
 
           </el-form-item>
           <el-form-item>
             <el-col :span="11">
-              <el-form-item prop="office.manager" label="负责人">
-                <el-input v-model="form.office.manager" autocomplete="off"></el-input>
+              <el-form-item prop="menu.path" label="链接">
+                <el-input v-model="form.menu.path" autocomplete="off"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="11">
-              <el-form-item prop="office.phone" label="机构电话">
-                <el-input v-model="form.office.phone" autocomplete="off"></el-input>
+              <el-form-item prop="menu.iconCls" label="图标">
+                <el-input v-model="form.menu.iconCls" autocomplete="off"></el-input>
               </el-form-item>
             </el-col>
           </el-form-item>
           <el-form-item>
-            <el-col :span="22">
-              <el-form-item prop="office.address" label="机构地址">
-                <el-input v-model="form.office.address" autocomplete="off"></el-input>
+            <el-col :span="11">
+              <el-form-item prop="menu.hidden" label="可见">
+                <el-radio v-model="form.menu.hidden" :label="false">显示</el-radio>
+                <el-radio v-model="form.menu.hidden" :label="true">隐藏</el-radio>
+              </el-form-item>
+            </el-col>
+            <el-col :span="11">
+              <el-form-item prop="menu.sort" label="排序">
+                <el-input v-model="form.menu.sort" autocomplete="off"></el-input>
               </el-form-item>
             </el-col>
           </el-form-item>
           <el-form-item>
             <div align="center">
-              <el-button type="primary" @click="submitForm('officeForm')" size="small" icon="el-icon-check">保存
+              <el-button type="primary" @click="submitForm('menuForm')" size="small" icon="el-icon-check">保存
               </el-button>
             </div>
           </el-form-item>
@@ -59,71 +64,82 @@
   import cascader from '@/components/cascader'
 
   export default {
-    name: "officeModify",
+    name: "menuModify",
     components: {cascader},
     created() {
-      this.form.office = this.$route.params.office;
+      this.form.menu = this.$route.params.menu;
+      console.log(this.$route.params.menu);
     },
     data: function () {
-      let checkPhone = (rule, value, callback) => {
-        const reg = /^1[3|4|5|7|8][0-9]\d{8}$/;
+      let checkNum = (rule, value, callback) => {
+        const reg = /^\d+$/;
         if (value == null || value === "" || reg.test(value)) {
-          callback();
+          callback()
         } else {
-          return callback(new Error('请输入正确的手机号'));
+          callback(new Error('请输入正整数'))
         }
       };
       return {
         form: {
-          office: {
+          menu: null
+        },
+        rules: {
+          'menu.parent.id': [
+            {required: true, message: "必填项不能为空", trigger: 'blur'}],
+          'menu.name': [
+            {required: true, message: "必填项不能为空", trigger: 'blur'}],
+          'menu.hidden': [
+            {required: true, message: "必填项不能为空", trigger: 'blur'}],
+          'menu.sort': [
+            {validator: checkNum, trigger: 'blur'}
+          ]
+        }
+      };
+    },
+    methods: {
+      openList() {
+        this.$store.dispatch("deleteTabAndLive", "/menu/list").then(() => {
+          this.$store.dispatch("clearPageCache", "/menu/form").catch();
+          this.$router.push({
+            name: 'menuList'
+          })
+        })
+      },
+      clearForm() {
+        this.form = {
+          menu: {
             parent: {id: null},
             name: null,
             manager: null,
             phone: null,
             address: null
           }
-        },
-        rules: {
-          'office.parent.id': [
-            {required: true, message: "必填项不能为空", trigger: 'blur'}],
-          'office.name': [
-            {required: true, message: "必填项不能为空", trigger: 'blur'}],
-          'office.phone': [
-            {validator: checkPhone, trigger: 'blur'}]
-        }
-      };
-    },
-    methods: {
-      openList() {
-        this.$store.dispatch("deleteTabAndLive", "/office/list").then(() => {
-          this.$router.push({
-            name: 'officeList'
-          })
-        })
+        };
+        this.$refs['menuForm'].resetFields();
       },
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
+            console.log(this.form.menu);
             this.$store.commit('set_loading', true);
             this.$axios({
               headers: {
                 'Content-Type': 'application/json'
               },
-              url: '/office/save',
+              url: '/menu/save',
               method: 'post',
               transformRequest: [function (data) {
                 data = JSON.stringify(data);
                 return data;
               }],
-              data: this.form.office
+              data: this.form.menu
             }).then((response) => {
               if (response.data.code === 0) {
+                this.openList();
                 this.$message({
                   message: response.data.msg,
                   type: "success"
                 });
-                this.$store.dispatch("clearPageCache", "/office/form").catch();
-                this.openList();
               } else {
                 this.$message({
                   message: response.data.msg,

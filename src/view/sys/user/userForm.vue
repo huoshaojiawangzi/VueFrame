@@ -12,8 +12,7 @@
                 <cascader
                   width="290px"
                   v-model="form.user.office"
-                  :props="this.$store.state.global.props"
-                  :options="this.$store.state.common.officeTree">
+                  :options="this.$store.getters.getOfficeTree">
                 </cascader>
               </el-form-item>
             </el-col>
@@ -50,7 +49,7 @@
           <el-form-item>
             <el-col :span="22">
               <el-form-item prop="user.commonUser.roles" label="用户角色">
-                <checkbox-group :options="this.$store.state.common.roleList" v-model="form.user.commonUser.roles"
+                <checkbox-group :options="this.$store.getters.getRoleList" v-model="form.user.commonUser.roles"
                                 :max="3"></checkbox-group>
               </el-form-item>
             </el-col>
@@ -142,26 +141,11 @@
     methods: {
       openList() {
         this.$store.dispatch("deleteTabAndLive", "/user/list").then(() => {
+          this.$store.dispatch("clearPageCache", "/user/form").catch();
           this.$router.push({
             name: 'userList'
           })
         })
-      },
-      clearForm() {
-        this.form = {
-          verifyPassword: null,
-          user: {
-            office: {id: null},
-            phone: null,
-            commonUser: {
-              name: null,
-              userName: null,
-              password: null,
-              roles: [],
-            }
-          }
-        };
-        this.$refs['userForm'].resetFields();
       },
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
@@ -180,14 +164,11 @@
               data: this.form.user
             }).then((response) => {
               if (response.data.code === 0) {
-                Promise.resolve(this.clearForm()).then(() => {
-                    this.$message({
-                      message: response.data.msg,
-                      type: "success"
-                    });
-                    this.openList()
-                  }
-                )
+                this.openList();
+                this.$message({
+                  message: response.data.msg,
+                  type: "success"
+                });
               } else {
                 this.$message({
                   message: response.data.msg,

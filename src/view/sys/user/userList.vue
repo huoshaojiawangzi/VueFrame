@@ -15,7 +15,7 @@
       </el-button>
     </div>
     <el-table :data="list" style="width: 100%;margin-top: 20px" :height="this.$store.getters.getTableHeight"
-              @sort-change="sortChange" border>
+              @sort-change="sortChange" border stripe :header-cell-style="{background:'#FCFCFC'}">
       <el-table-column prop="office.name" label="所属机构"></el-table-column>
       <el-table-column label="登录名">
         <template slot-scope="scope">
@@ -24,8 +24,8 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="commonUser.name" sortable='custom' label="姓名"></el-table-column>
-      <el-table-column prop="phone" sortable='custom' label="手机"></el-table-column>
+      <el-table-column prop="commonUser.name" label="姓名"></el-table-column>
+      <el-table-column prop="phone" label="手机"></el-table-column>
       <el-table-column label="角色">
         <template slot-scope="scope">
           <div style="float: left" v-for="(role,index) in scope.row.commonUser.roles">
@@ -34,11 +34,10 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column label="操作">
+      <el-table-column label="操作" width="150">
         <template slot-scope="scope">
-          <el-button type="warning" size="mini" @click="openModify(scope.row)" icon="el-icon-edit" circle></el-button>
-          <el-button type="danger" size="mini" @click="$refs.pageRef.del(scope.row.id)" icon="el-icon-delete"
-                     circle></el-button>
+          <el-button type="warning" size="mini" @click="openModify(scope.row)" plain>修改</el-button>
+          <el-button type="danger" size="mini" @click="$refs.pageRef.del(scope.row.id)" plain>删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -78,7 +77,7 @@
         })
       },
       openInfo(user) {
-        this.$store.dispatch("deleteTabAndLive", "/user/info").then(() => {
+        this.$store.dispatch("clearPageCache", "/user/info").then(() => {
           this.$router.push({
             name: 'userInfo',
             params: {
