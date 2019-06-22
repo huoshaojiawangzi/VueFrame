@@ -4,7 +4,7 @@
               :default-expand-all="true" stripe :header-cell-style="{background:'#FCFCFC'}">
       <el-table-column prop="name" label="权限名称" width="200">
       </el-table-column>
-      <el-table-column prop="path" label="URL"></el-table-column>
+      <el-table-column prop="url" label="URL"></el-table-column>
       <el-table-column prop="tag" label="标识"></el-table-column>
       <el-table-column label="操作" width="250">
         <template slot-scope="scope">

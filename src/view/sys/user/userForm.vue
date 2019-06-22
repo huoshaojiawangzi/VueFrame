@@ -84,12 +84,13 @@
       let duplicateUserName = (rule, value, callback) => {
         this.$axios({
           method: 'get',
-          url: '/commonUser/find-by-userName',
+          url: '/commonUser/find-by-filed',
           params: {
-            userName: value
+            filed:"userName",
+            value:value
           }
         }).then((response) => {
-          if (response.data.result === null) {
+          if (response.data.result.length === 0) {
             callback();
           } else {
             return callback(new Error('登录名已存在'));

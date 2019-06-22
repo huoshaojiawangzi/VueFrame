@@ -57,6 +57,33 @@
         this.form.permission = this.$route.params.permission;
     },
     data: function () {
+      let duplicateUrl = (rule, value, callback) => {
+        if(value === ""||value===null) {
+          callback();
+        }else {
+          this.$axios({
+            method: 'get',
+            url: '/permission/find-by-filed',
+            params: {
+              filed:"url",
+              value:value
+            }
+          }).then((response) => {
+            if (response.data.result.length === 0) {
+              callback();
+            } else if(response.data.result.length === 1){
+              let result = response.data.result[0];
+              if(result.id === this.form.permission.id){
+                callback();
+              }else{
+                return callback(new Error('url已存在'));
+              }
+            }else{
+              return callback(new Error('url已存在'));
+            }
+          })
+        }
+      };
       return {
         form: {
           permission: null
@@ -65,7 +92,8 @@
           'permission.parent.id': [
             {required: true, message: "必填项不能为空", trigger: 'blur'}],
           'permission.name': [
-            {required: true, message: "必填项不能为空", trigger: 'blur'}]
+            {required: true, message: "必填项不能为空", trigger: 'blur'}],
+          'permission.url': [{validator:duplicateUrl,tigger:"blur"}]
         }
       };
     },
@@ -81,7 +109,6 @@
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            console.log(this.form.permission);
             this.$store.commit('set_loading', true);
             this.$axios({
               headers: {

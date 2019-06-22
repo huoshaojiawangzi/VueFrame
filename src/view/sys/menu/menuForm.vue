@@ -80,6 +80,26 @@
           callback(new Error('请输入正整数'))
         }
       };
+      let duplicatePath = (rule, value, callback) => {
+        if(value === ""||value===null) {
+          callback();
+        }else{
+          this.$axios({
+            method: 'get',
+            url: '/menu/find-by-filed',
+            params: {
+              filed:"path",
+              value:value
+            }
+          }).then((response) => {
+            if (response.data.result.length === 0) {
+              callback();
+            } else {
+              return callback(new Error('链接已存在'));
+            }
+          })
+        }
+      };
       return {
         form: {
           menu: {
@@ -98,9 +118,8 @@
             {required: true, message: "必填项不能为空", trigger: 'blur'}],
           'menu.hidden': [
             {required: true, message: "必填项不能为空", trigger: 'blur'}],
-          'menu.sort': [
-            {validator: checkNum, trigger: 'blur'}
-          ]
+          'menu.sort': [{validator: checkNum, trigger: 'blur'}],
+          'menu.path': [{validator: duplicatePath, trigger: 'blur'}]
         }
       };
     },
@@ -116,7 +135,6 @@
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            console.log(this.form.menu);
             this.$store.commit('set_loading', true);
             this.$axios({
               headers: {

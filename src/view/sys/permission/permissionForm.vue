@@ -25,7 +25,7 @@
           </el-form-item>
           <el-form-item>
             <el-col :span="11">
-              <el-form-item prop="permission.url" label="链接">
+              <el-form-item prop="permission.url" label="URL">
                 <el-input v-model="form.permission.url" autocomplete="off"></el-input>
               </el-form-item>
             </el-col>
@@ -59,6 +59,26 @@
       }
     },
     data: function () {
+      let duplicateUrl = (rule, value, callback) => {
+        if(value === ""||value===null) {
+          callback();
+        }else{
+          this.$axios({
+            method: 'get',
+            url: '/permission/find-by-filed',
+            params: {
+              filed:"url",
+              value:value
+            }
+          }).then((response) => {
+            if (response.data.result.length === 0) {
+              callback();
+            } else {
+              return callback(new Error('URL已存在'));
+            }
+          })
+        }
+      };
       return {
         form: {
           permission: {
@@ -72,7 +92,9 @@
           'permission.parent.id': [
             {required: true, message: "必填项不能为空", trigger: 'blur'}],
           'permission.name': [
-            {required: true, message: "必填项不能为空", trigger: 'blur'}]
+            {required: true, message: "必填项不能为空", trigger: 'blur'}],
+          'permission.url': [{validator:duplicateUrl,tigger:"blur"}]
+
         }
       };
     },
@@ -88,7 +110,6 @@
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            console.log(this.form.permission);
             this.$store.commit('set_loading', true);
             this.$axios({
               headers: {
