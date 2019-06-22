@@ -46,9 +46,42 @@ const menuRoute = [
       import ('@/view/sys/menu/menuModify'), name: 'menuModify'
   }
 ];
+
+const permissionRoute = [
+  {
+    path: '/permission/list', component: () =>
+      import ('@/view/sys/permission/permissionList'), name: 'permissionList'
+  },
+  {
+    path: '/permission/form', component: () =>
+      import ('@/view/sys/permission/permissionForm'), name: 'permissionForm'
+  },
+  {
+    path: '/menu/modify', component: () =>
+      import ('@/view/sys/permission/permissionModify'), name: 'permissionModify'
+  }
+];
+
+const roleRoute = [
+  {
+    path: '/role/list', component: () =>
+      import ('@/view/sys/role/roleList'), name: 'roleList'
+  },
+  {
+    path: '/role/form', component: () =>
+      import ('@/view/sys/role/roleForm'), name: 'roleForm'
+  },
+  {
+    path: '/menu/modify', component: () =>
+      import ('@/view/sys/role/roleModify'), name: 'roleModify'
+  }
+];
+
 export default [
   ...userRoute,
   ...officeRoute,
-  ...menuRoute
+  ...menuRoute,
+  ...permissionRoute,
+  ...roleRoute
 ]
 

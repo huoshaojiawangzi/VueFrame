@@ -10,7 +10,7 @@ export default {
     set_all_menu_tree(state, allMenuTree) {
       state.allMenuTree = allMenuTree;
     },
-    set_all_permisssion_tree(state, allPermissionTree) {
+    set_all_permission_tree(state, allPermissionTree) {
       state.allPermissionTree = allPermissionTree;
     },
     set_office_trre(state, officeTree) {

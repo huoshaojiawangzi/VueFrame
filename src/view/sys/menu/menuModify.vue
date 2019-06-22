@@ -68,7 +68,6 @@
     components: {cascader},
     created() {
       this.form.menu = this.$route.params.menu;
-      console.log(this.$route.params.menu);
     },
     data: function () {
       let checkNum = (rule, value, callback) => {
@@ -99,7 +98,7 @@
     methods: {
       openList() {
         this.$store.dispatch("deleteTabAndLive", "/menu/list").then(() => {
-          this.$store.dispatch("clearPageCache", "/menu/form").catch();
+          this.$store.dispatch("deleteTabAndLive", "/menu/form").catch();
           this.$router.push({
             name: 'menuList'
           })

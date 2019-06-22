@@ -2,13 +2,13 @@
   <div>
     <el-table :data="tree" style="width: 100%" :height="this.$store.getters.getTreeTableHeight" border row-key="id"
               :default-expand-all="true" stripe :header-cell-style="{background:'#FCFCFC'}">
-      <el-table-column prop="name" label="机构名称">
+      <el-table-column prop="name" label="权限名称" width="200">
       </el-table-column>
-      <el-table-column prop="manager" label="机构负责人"></el-table-column>
-      <el-table-column prop="phone" label="机构电话"></el-table-column>
-      <el-table-column prop="address" label="机构地址"></el-table-column>
-      <el-table-column label="操作">
+      <el-table-column prop="path" label="URL"></el-table-column>
+      <el-table-column prop="tag" label="标识"></el-table-column>
+      <el-table-column label="操作" width="250">
         <template slot-scope="scope">
+          <el-button type="primary" size="mini" @click="openNext(scope.row)"  plain>添加下级</el-button>
           <el-button type="warning" size="mini" @click="openModify(scope.row)" plain>修改</el-button>
           <el-button type="danger" size="mini" @click="del(scope.row.id)" plain>删除</el-button>
         </template>
@@ -19,7 +19,7 @@
 
 <script>
   export default {
-    name: "officeList",
+    name: "permissionList",
     created() {
       this.setTree();
     },
@@ -33,11 +33,12 @@
         this.$store.commit('set_loading', true);
         this.$axios({
           method: 'post',
-          url: '/office/find-roots'
+          url: '/permission/find-roots'
         }).then((response) => {
           if(response.data.result.length>0){
+            console.log(response);
             this.tree = response.data.result[0].children;
-            this.$store.commit("set_office_trre", this.$treeUtils.filterTree(response.data.result));
+            this.$store.commit("set_all_permission_tree", this.$treeUtils.filterTree(response.data.result));
           }
         }).catch((response) => {
           console.log(response)
@@ -45,12 +46,22 @@
           this.$store.commit('set_loading', false);
         });
       },
-      openModify(office) {
+      openModify(permission) {
         this.$router.push({
-          name: 'officeModify',
+          name: 'permissionModify',
           params: {
-            office
+            permission
           }
+        })
+      },
+      openNext(permission) {
+        this.$store.dispatch("deleteTabAndLive", "/permission/form").then(()=>{
+          this.$router.push({
+            name: 'permissionForm',
+            params: {
+              parent:permission
+            }
+          })
         })
       },
       del(id) {
@@ -61,29 +72,21 @@
         }).then(() => {
           this.$axios({
             method: 'get',
-            url: '/office/delete',
+            url: '/permission/delete',
             params: {
               id: id
             }
           }).then((response) => {
-            if(response.data.code === 0){
-              this.$message({
-                message: response.data.msg,
-                type: "success"
-              });
-              this.$store.dispatch("deleteTabAndLive", "/office/form").catch();
-              this.setTree();
-            }
-            else {
-              this.$message({
-                message: response.data.msg,
-                type: "warning"
-              });
-            }
-          }).catch(()=>{
             this.$message({
-              message: "出现未知错误",
-              type: "error"
+              message: response.data.msg,
+              type: "success"
+            });
+            this.$store.dispatch("deleteTabAndLive", "/permission/form").catch();
+            this.setTree();
+          }).catch((response)=>{
+            this.$message({
+              message: response.data.msg,
+              type: "success"
             });
           })
         }).catch(() => {

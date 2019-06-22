@@ -77,7 +77,7 @@
         })
       },
       openInfo(user) {
-        this.$store.dispatch("clearPageCache", "/user/info").then(() => {
+        this.$store.dispatch("deleteTabAndLive", "/user/info").then(() => {
           this.$router.push({
             name: 'userInfo',
             params: {

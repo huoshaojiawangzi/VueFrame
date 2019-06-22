@@ -13,7 +13,7 @@
       </el-table-column>
       <el-table-column label="操作" width="250">
         <template slot-scope="scope">
-          <el-button type="primary" size="mini" plain>添加下级</el-button>
+          <el-button type="primary" size="mini" @click="openNext(scope.row)"  plain>添加下级</el-button>
           <el-button type="warning" size="mini" @click="openModify(scope.row)" plain>修改</el-button>
           <el-button type="danger" size="mini" @click="del(scope.row.id)" plain>删除</el-button>
         </template>
@@ -58,6 +58,16 @@
           }
         })
       },
+      openNext(menu) {
+        this.$store.dispatch("deleteTabAndLive", "/menu/form").then(()=>{
+          this.$router.push({
+            name: 'menuForm',
+            params: {
+              parent:menu
+            }
+          })
+        })
+      },
       del(id) {
         this.$confirm('此操作将永久删除该记录, 是否继续?', '提示', {
           confirmButtonText: '确定',
@@ -75,7 +85,7 @@
               message: response.data.msg,
               type: "success"
             });
-            this.$store.dispatch("clearPageCache", "/menu/form").catch();
+            this.$store.dispatch("deleteTabAndLive", "/menu/form").catch();
             this.setTree();
           }).catch((response)=>{
             this.$message({

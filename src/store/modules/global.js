@@ -40,12 +40,19 @@ export default {//全局数据
     getfullHeight(state) {
       return state.fullHeight;
     },
+    //包含搜索项表格高度
     getTableHeight(state) {
       let th = state.fullHeight - 207;
       return th > 280 ? th : 280
     },
+    //树状表格高度
     getTreeTableHeight(state) {
       let th = state.fullHeight - 117;
+      return th > 280 ? th : 280
+    },
+    //不含搜索项表格高度
+    getNoSearchTableHeight(state) {
+      let th = state.fullHeight - 157;
       return th > 280 ? th : 280
     }
   }

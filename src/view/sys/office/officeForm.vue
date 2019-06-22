@@ -92,7 +92,7 @@
     methods: {
       openList() {
         this.$store.dispatch("deleteTabAndLive", "/office/list").then(() => {
-          this.$store.dispatch("clearPageCache", "/office/form").catch();
+          this.$store.dispatch("deleteTabAndLive", "/office/form").catch();
           this.$router.push({
             name: 'officeList'
           })

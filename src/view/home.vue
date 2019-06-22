@@ -128,21 +128,35 @@
           if (response.data.code === 0) {
             this.$store.commit("set_menu_tree", this.$treeUtils.filterTree(response.data.result.menuTree));
             this.$store.commit("set_permission_tree", this.$treeUtils.filterTree(response.data.result.permissionTree));
-            this.$store.commit('set_loading', false);
-            this.getOfficeTree();
-            this.getRoleList();
-            this.getAllMenuTree();
+            Promise.resolve(this.initData()).then(()=>{
+              this.$store.commit('set_loading', false);
+            })
           } else {
             this.$router.push({path: "/login"});
           }
         })
+      },
+      //初始化页面的公用数据
+      initData(){
+        this.getAllMenuTree();
+        this.getAllPermissionTree();
+        this.getOfficeTree();
+        this.getRoleList();
       },
       getAllMenuTree() {
         this.$axios({
           method: 'post',
           url: '/menu/find-roots'
         }).then((response) => {
-            this.$store.commit("set_all_menu_tree", this.$treeUtils.filterTree(response.data.result));
+          this.$store.commit("set_all_menu_tree", this.$treeUtils.filterTree(response.data.result));
+        })
+      },
+      getAllPermissionTree() {
+        this.$axios({
+          method: 'post',
+          url: '/permission/find-roots'
+        }).then((response) => {
+            this.$store.commit("set_all_permission_tree", this.$treeUtils.filterTree(response.data.result));
         })
       },
       getOfficeTree() {
