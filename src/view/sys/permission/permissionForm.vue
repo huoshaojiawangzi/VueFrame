@@ -60,24 +60,10 @@
     },
     data: function () {
       let duplicateUrl = (rule, value, callback) => {
-        if(value === ""||value===null) {
-          callback();
-        }else{
-          this.$axios({
-            method: 'get',
-            url: '/permission/find-by-filed',
-            params: {
-              filed:"url",
-              value:value
-            }
-          }).then((response) => {
-            if (response.data.result.length === 0) {
-              callback();
-            } else {
-              return callback(new Error('URL已存在'));
-            }
-          })
-        }
+        this.$validator.duplicateFiled('permission',"url",value,null,callback,"url已存在");
+      };
+      let duplicateTag = (rule, value, callback) => {
+        this.$validator.duplicateFiled('permission',"tag",value,null,callback,"标识已存在");
       };
       return {
         form: {
@@ -93,56 +79,16 @@
             {required: true, message: "必填项不能为空", trigger: 'blur'}],
           'permission.name': [
             {required: true, message: "必填项不能为空", trigger: 'blur'}],
-          'permission.url': [{validator:duplicateUrl,tigger:"blur"}]
-
+          'permission.url': [{validator:duplicateUrl,tigger:"blur"}],
+          'permission.tag': [{validator:duplicateTag,tigger:"blur"}]
         }
       };
     },
     methods: {
-      openList() {
-        this.$store.dispatch("deleteTabAndLive", "/permission/list").then(() => {
-          this.$store.dispatch("deleteTabAndLive", "/permission/form").catch();
-          this.$router.push({
-            name: 'permissionList'
-          })
-        })
-      },
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            this.$store.commit('set_loading', true);
-            this.$axios({
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              url: '/permission/save',
-              method: 'post',
-              transformRequest: [function (data) {
-                data = JSON.stringify(data);
-                return data;
-              }],
-              data: this.form.permission
-            }).then((response) => {
-              if (response.data.code === 0) {
-                this.openList();
-                this.$message({
-                  message: response.data.msg,
-                  type: "success"
-                });
-              } else {
-                this.$message({
-                  message: response.data.msg,
-                  type: "warning"
-                });
-              }
-            }).catch((response) => {
-              this.$message({
-                message: response.data.msg,
-                type: "error"
-              });
-            }).finally(() => {
-              this.$store.commit('set_loading', false);
-            });
+            this.$actionUtils.saveAndForward("permission",this.form.permission,this.$router)
           }
         });
       }

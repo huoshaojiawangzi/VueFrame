@@ -4,7 +4,7 @@
       <el-table-column prop="name" label="角色名称"></el-table-column>
       <el-table-column label="操作" width="150">
         <template slot-scope="scope">
-          <el-button type="warning" size="mini" @click="openModify(scope.row)" plain>修改</el-button>
+          <el-button type="warning" size="mini" @click="openModify(scope.row.id)" plain>修改</el-button>
           <el-button type="danger" size="mini" @click="$refs.pageRef.del(scope.row.id)" plain>删除</el-button>
         </template>
       </el-table-column>
@@ -33,12 +33,27 @@
       }
     },
     methods: {
-      openModify(role) {
-        this.$router.push({
-          name: 'roleModify',
+      getRole(id){
+        return this.$axios({
+          method: 'get',
+          url: '/role/get',
           params: {
-            role
+            id: id
           }
+        }).then((response) => {
+          if(response.data.code === 0){
+            return response.data.result;
+          }
+        })
+      },
+      openModify(id) {
+        this.getRole(id).then((role)=>{
+          this.$router.push({
+            name: 'roleModify',
+            params: {
+              role
+            }
+          })
         })
       }
     }

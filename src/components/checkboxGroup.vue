@@ -15,7 +15,7 @@
       options: {type: Array, required: true},
     },
     created() {
-      this.setFormRoleIds();
+      this.setIds();
     },
     watch: {
       value: {
@@ -33,14 +33,14 @@
       }
     },
     methods: {
-      setFormRoleIds() {
+      setIds() {
         if (this.value.length > 0) {
-          for (let role of this.value) {
-            this.ids.push(role.id)
+          for (let item of this.value) {
+            this.ids.push(item.id)
           }
         }
       },
-      getRoleById(id) {
+      getItemById(id) {
         for (let item of this.options) {
           if (id === item.id) {
             return item;
@@ -48,11 +48,11 @@
         }
       },
       handleCheckedCitiesChange(value) {
-        let roles = [];
-        for (let roleId of value) {
-          roles.push(this.getRoleById(roleId))
+        let items = [];
+        for (let id of value) {
+          items.push(this.getItemById(id))
         }
-        this.$emit('input', roles);
+        this.$emit('input', items);
       }
     }
   }

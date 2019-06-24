@@ -66,12 +66,7 @@
     },
     data: function () {
       let checkPhone = (rule, value, callback) => {
-        const reg = /^1[3|4|5|7|8][0-9]\d{8}$/;
-        if (value == null || value === "" || reg.test(value)) {
-          callback();
-        } else {
-          return callback(new Error('请输入正确的手机号'));
-        }
+        this.$validator.checkPhone(value,callback);
       };
       return {
         form: {
@@ -94,50 +89,10 @@
       };
     },
     methods: {
-      openList() {
-        this.$store.dispatch("deleteTabAndLive", "/office/list").then(() => {
-          this.$router.push({
-            name: 'officeList'
-          })
-        })
-      },
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            this.$store.commit('set_loading', true);
-            this.$axios({
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              url: '/office/save',
-              method: 'post',
-              transformRequest: [function (data) {
-                data = JSON.stringify(data);
-                return data;
-              }],
-              data: this.form.office
-            }).then((response) => {
-              if (response.data.code === 0) {
-                this.$message({
-                  message: response.data.msg,
-                  type: "success"
-                });
-                this.$store.dispatch("deleteTabAndLive", "/office/form").catch();
-                this.openList();
-              } else {
-                this.$message({
-                  message: response.data.msg,
-                  type: "warning"
-                });
-              }
-            }).catch((response) => {
-              this.$message({
-                message: response.data.msg,
-                type: "error"
-              });
-            }).finally(() => {
-              this.$store.commit('set_loading', false);
-            });
+            this.$actionUtils.saveAndForward("office",this.form.office,this.$router)
           }
         });
       }

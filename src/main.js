@@ -12,6 +12,8 @@ import store from '@/store'
 import cache from '@/global/cache'
 import treeUtils from '@/global/treeUtils'
 import userUtils from '@/global/userUtils'
+import validator from '@/global/validator'
+import actionUtils from '@/global/actionUtils'
 // noinspection ES6UnusedImports
 
 Vue.use(Element);
@@ -23,6 +25,8 @@ Vue.prototype.$jquery = jquery;
 Vue.prototype.$cache = cache;
 Vue.prototype.$treeUtils = treeUtils;
 Vue.prototype.$userUtils = userUtils;
+Vue.prototype.$validator = validator;
+Vue.prototype.$actionUtils = actionUtils;
 //允许浏览器debug
 Vue.config.devtools = true;
 

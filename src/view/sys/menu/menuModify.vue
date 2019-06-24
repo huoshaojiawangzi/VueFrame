@@ -71,39 +71,10 @@
     },
     data: function () {
       let checkNum = (rule, value, callback) => {
-        const reg = /^\d+$/;
-        if (value == null || value === "" || reg.test(value)) {
-          callback()
-        } else {
-          callback(new Error('请输入正整数'))
-        }
+        this.$validator.checkNum(value,callback);
       };
       let duplicatePath = (rule, value, callback) => {
-        if(value === ""||value===null) {
-          callback();
-        }else {
-          this.$axios({
-            method: 'get',
-            url: '/menu/find-by-filed',
-            params: {
-              filed:"path",
-              value:value
-            }
-          }).then((response) => {
-            if (response.data.result.length === 0) {
-              callback();
-            } else if(response.data.result.length === 1){
-              let result = response.data.result[0];
-              if(result.id === this.form.menu.id){
-                callback();
-              }else{
-                return callback(new Error('链接已存在'));
-              }
-            }else{
-              return callback(new Error('链接已存在'));
-            }
-          })
-        }
+        this.$validator.duplicateFiled('menu',"path",value,this.form.menu.id,callback,"链接已存在");
       };
       return {
         form: {
@@ -122,63 +93,10 @@
       };
     },
     methods: {
-      openList() {
-        this.$store.dispatch("deleteTabAndLive", "/menu/list").then(() => {
-          this.$store.dispatch("deleteTabAndLive", "/menu/form").catch();
-          this.$router.push({
-            name: 'menuList'
-          })
-        })
-      },
-      clearForm() {
-        this.form = {
-          menu: {
-            parent: {id: null},
-            name: null,
-            manager: null,
-            phone: null,
-            address: null
-          }
-        };
-        this.$refs['menuForm'].resetFields();
-      },
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            console.log(this.form.menu);
-            this.$store.commit('set_loading', true);
-            this.$axios({
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              url: '/menu/save',
-              method: 'post',
-              transformRequest: [function (data) {
-                data = JSON.stringify(data);
-                return data;
-              }],
-              data: this.form.menu
-            }).then((response) => {
-              if (response.data.code === 0) {
-                this.openList();
-                this.$message({
-                  message: response.data.msg,
-                  type: "success"
-                });
-              } else {
-                this.$message({
-                  message: response.data.msg,
-                  type: "warning"
-                });
-              }
-            }).catch((response) => {
-              this.$message({
-                message: response.data.msg,
-                type: "error"
-              });
-            }).finally(() => {
-              this.$store.commit('set_loading', false);
-            });
+            this.$actionUtils.saveAndForward("menu",this.form.menu,this.$router)
           }
         });
       }

@@ -34,44 +34,17 @@
     },
     methods: {
       del(id){
-        this.$confirm('此操作将永久删除该记录, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.$axios({
-            method:'get',
-            url:'/'+this.urlPrefix+'/delete',
-            params: {
-              id:id
-            }
-          }).then((response) =>{
-            if(response.data.code === 0){
-              new Promise((resolve)=>{
-                if(this.list.length<2&&this.searchModel.page>1)
-                {
-                  this.searchModel.page = this.searchModel.page-1;
-                }
-                resolve();
-              }).then(()=>{this.setList()});
-              this.$message({
-                message: response.data.msg,
-                type: "success"
-              });
-            }
-            else {
-              this.$message({
-                message: response.data.msg,
-                type: "warning"
-              });
-            }
-          }).catch(() =>{
-            this.$message({
-              message: "出现未知错误",
-              type: "success"
-            });
-          })
-        }).catch(() => {});
+        this.$actionUtils.del(this.urlPrefix,id).then((code)=>{
+          if(code === 0){
+            new Promise((resolve)=>{
+              if(this.list.length<2&&this.searchModel.page>1)
+              {
+                this.searchModel.page = this.searchModel.page-1;
+              }
+              resolve();
+            }).then(()=>{this.setList()});
+          }
+        }).catch()
       },
       //排序方法，可多个属性排序
       sortChange(column){

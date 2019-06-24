@@ -74,12 +74,7 @@
     },
     data() {
       let checkPhone = (rule, value, callback) => {
-        const reg = /^1[3|4|5|7|8][0-9]\d{8}$/;
-        if (value == null || reg.test(value)) {
-          callback();
-        } else {
-          return callback(new Error('请输入正确的手机号'));
-        }
+        this.$validator.checkPhone(value,callback);
       };
       let duplicatePassword = (rule, value, callback) => {
         if (value === this.form.user.commonUser.password) {
@@ -109,50 +104,10 @@
       };
     },
     methods: {
-      openList(user) {
-        this.$store.dispatch("deleteTabAndLive", "/user/list").then(() => {
-          this.$router.push({
-            name: 'userList',
-            params: {user}
-          })
-        })
-      },
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            this.$store.commit('set_loading', true);
-            this.$axios({
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              method: 'post',
-              url: '/user/save',
-              transformRequest: [function (data) {
-                data = JSON.stringify(data);
-                return data;
-              }],
-              data: this.form.user
-            }).then((response) => {
-              if (response.data.code === 0) {
-                this.$message({
-                  message: response.data.msg,
-                  type: "success"
-                });
-                this.openList(this.form.user);
-              } else {
-                this.$message({
-                  message: response.data.msg,
-                  type: "warning"
-                });
-              }
-            }).catch((response) => {
-              this.$message({
-                message: response.data.msg,
-                type: "error"
-              });
-            }).finally(() => {
-              this.$store.commit('set_loading', false);
-            });
+            this.$actionUtils.saveAndForward("user",this.form.user,this.$router)
           }
         });
       }

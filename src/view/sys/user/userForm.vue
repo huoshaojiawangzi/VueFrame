@@ -74,28 +74,10 @@
     components: {cascader, checkboxGroup},
     data: function () {
       let checkPhone = (rule, value, callback) => {
-        const reg = /^1[3|4|5|7|8][0-9]\d{8}$/;
-        if (value == null || value === "" || reg.test(value)) {
-          callback();
-        } else {
-          return callback(new Error('请输入正确的手机号'));
-        }
+        this.$validator.checkPhone(value,callback);
       };
       let duplicateUserName = (rule, value, callback) => {
-        this.$axios({
-          method: 'get',
-          url: '/commonUser/find-by-filed',
-          params: {
-            filed:"userName",
-            value:value
-          }
-        }).then((response) => {
-          if (response.data.result.length === 0) {
-            callback();
-          } else {
-            return callback(new Error('登录名已存在'));
-          }
-        })
+        this.$validator.duplicateFiled('commonUser',"userName",value,null,callback,"登录名已存在");
       };
       let duplicatePassword = (rule, value, callback) => {
         if (value === this.form.user.commonUser.password) {
@@ -140,50 +122,10 @@
       };
     },
     methods: {
-      openList() {
-        this.$store.dispatch("deleteTabAndLive", "/user/list").then(() => {
-          this.$store.dispatch("deleteTabAndLive", "/user/form").catch();
-          this.$router.push({
-            name: 'userList'
-          })
-        })
-      },
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            this.$store.commit('set_loading', true);
-            this.$axios({
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              method: 'post',
-              url: '/user/save',
-              transformRequest: [function (data) {
-                data = JSON.stringify(data);
-                return data;
-              }],
-              data: this.form.user
-            }).then((response) => {
-              if (response.data.code === 0) {
-                this.openList();
-                this.$message({
-                  message: response.data.msg,
-                  type: "success"
-                });
-              } else {
-                this.$message({
-                  message: response.data.msg,
-                  type: "warning"
-                });
-              }
-            }).catch((response) => {
-              this.$message({
-                message: response.data.msg,
-                type: "error"
-              });
-            }).finally(() => {
-              this.$store.commit('set_loading', false);
-            });
+            this.$actionUtils.saveAndForward("user",this.form.user,this.$router)
           }
         });
       }

@@ -54,39 +54,11 @@
         })
       },
       del(id) {
-        this.$confirm('此操作将永久删除该记录, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.$axios({
-            method: 'get',
-            url: '/office/delete',
-            params: {
-              id: id
-            }
-          }).then((response) => {
-            if(response.data.code === 0){
-              this.$message({
-                message: response.data.msg,
-                type: "success"
-              });
-              this.$store.dispatch("deleteTabAndLive", "/office/form").catch();
-              this.setTree();
-            }
-            else {
-              this.$message({
-                message: response.data.msg,
-                type: "warning"
-              });
-            }
-          }).catch(()=>{
-            this.$message({
-              message: "出现未知错误",
-              type: "error"
-            });
-          })
-        }).catch(() => {
+        this.$actionUtils.del("office",id).then((code)=>{
+          if(code === 0) {
+            this.$store.dispatch("deleteTabAndLive", "/office/form").catch();
+            this.setTree();
+          }
         });
       },
     }
