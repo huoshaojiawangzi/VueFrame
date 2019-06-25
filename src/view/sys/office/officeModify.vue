@@ -104,12 +104,4 @@
   .el-input {
     width: 290px;
   }
-
-  .el-select {
-    width: 290px;
-  }
-
-  .el-cascader {
-    width: 290px;
-  }
 </style>

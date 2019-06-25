@@ -77,7 +77,7 @@
         this.$validator.checkPhone(value,callback);
       };
       let duplicateUserName = (rule, value, callback) => {
-        this.$validator.duplicateFiled('commonUser',"userName",value,null,callback,"登录名已存在");
+        this.$validator.duplicateFileds('commonUser',{userName:value},null,callback,"登录名已存在");
       };
       let duplicatePassword = (rule, value, callback) => {
         if (value === this.form.user.commonUser.password) {
@@ -135,14 +135,6 @@
 
 <style scoped>
   .el-input {
-    width: 290px;
-  }
-
-  .el-select {
-    width: 290px;
-  }
-
-  .el-cascader {
     width: 290px;
   }
 </style>

@@ -60,10 +60,10 @@
     },
     data: function () {
       let duplicateUrl = (rule, value, callback) => {
-        this.$validator.duplicateFiled('permission',"url",value,null,callback,"url已存在");
+        this.$validator.duplicateFileds('permission',{url:value},null,callback,"url已存在");
       };
       let duplicateTag = (rule, value, callback) => {
-        this.$validator.duplicateFiled('permission',"tag",value,null,callback,"标识已存在");
+        this.$validator.duplicateFileds('permission',{tag:value},null,callback,"标识已存在");
       };
       return {
         form: {
@@ -98,14 +98,6 @@
 
 <style scoped>
   .el-input {
-    width: 290px;
-  }
-
-  .el-select {
-    width: 290px;
-  }
-
-  .el-cascader {
     width: 290px;
   }
 </style>

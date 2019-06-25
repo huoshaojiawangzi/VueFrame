@@ -2,7 +2,7 @@
   <div>
     <el-card shadow="never">
       <div slot="header" class="clearfix">
-        <span>.角色录入</span>
+        <span>角色修改</span>
       </div>
       <div>
         <el-form :model="form" :rules="rules" status-icon ref="roleForm" label-position="left">
@@ -37,19 +37,17 @@
   </div>
 </template>
 <script>
-  import cascader from '@/components/cascader'
-  import checkboxGroup from '@/components/checkboxGroup'
   import tree from '@/components/tree'
 
   export default {
     name: "roleForm",
-    components: {cascader, checkboxGroup,tree},
+    components: {tree},
     created(){
       this.form.role =this.$route.params.role;
     },
     data: function () {
       let duplicateName = (rule, value, callback) => {
-        this.$validator.duplicateFiled('role',"name",value,this.form.role.id,callback,"角色名已存在");
+        this.$validator.duplicateFileds('role',{name:value},this.form.role.id,callback,"角色名已存在");
       };
       return {
         form: {
@@ -76,14 +74,6 @@
 
 <style scoped>
   .el-input {
-    width: 290px;
-  }
-
-  .el-select {
-    width: 290px;
-  }
-
-  .el-cascader {
     width: 290px;
   }
 </style>

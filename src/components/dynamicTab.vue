@@ -5,6 +5,7 @@
         v-model="activeIndex"
         type="card"
         closable
+        v-show="this.$store.getters.getTabOptions.length>0"
         @tab-click="tabClick"
         @tab-remove="tabRemove">
         <el-tab-pane

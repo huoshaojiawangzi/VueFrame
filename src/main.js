@@ -5,7 +5,6 @@ import axios from 'axios'
 import qs from 'qs'
 import Element from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
-import jquery from 'jquery'
 import store from '@/store'
 
 //封装的全局方法引入
@@ -21,7 +20,7 @@ Vue.prototype.$qs = qs;
 Vue.prototype.$axios = axios;
 Vue.config.productionTip = false;
 axios.defaults.baseURL = process.env.BASE_URL;
-Vue.prototype.$jquery = jquery;
+
 Vue.prototype.$cache = cache;
 Vue.prototype.$treeUtils = treeUtils;
 Vue.prototype.$userUtils = userUtils;
@@ -37,6 +36,16 @@ new Vue({
   store,
   components: {App},
   template: '<App/>'
+});
+axios.interceptors.response.use(function (response) {
+  console.log("11111111111111");
+  console.log(response.data);
+  return response;
+} ,function (error) {
+  // 对响应错误做点什么
+  console.log("22222222222222");
+  console.log(error);
+  return Promise.reject(error);
 });
 
 router.beforeEach((to, form, next) => {

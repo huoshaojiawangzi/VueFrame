@@ -77,11 +77,27 @@ const roleRoute = [
   }
 ];
 
+const dictionaryRoute = [
+  {
+    path: '/dictionary/list', component: () =>
+      import ('@/view/sys/dictionary/dictionaryList'), name: 'dictionaryList'
+  },
+  {
+    path: '/dictionary/form', component: () =>
+      import ('@/view/sys/dictionary/dictionaryForm'), name: 'dictionaryForm'
+  },
+  {
+    path: '/menu/modify', component: () =>
+      import ('@/view/sys/dictionary/dictionaryModify'), name: 'dictionaryModify'
+  }
+];
+
 export default [
   ...userRoute,
   ...officeRoute,
   ...menuRoute,
   ...permissionRoute,
-  ...roleRoute
+  ...roleRoute,
+  ...dictionaryRoute
 ]
 

@@ -2,11 +2,11 @@
   <div>
     <div>
       <span>登录名</span>
-      <el-input size="small" ref="userName" v-model="searchModel.userName"></el-input>
+      <el-input size="small" v-model="searchModel.userName"></el-input>
       <span>姓名</span>
-      <el-input size="small" ref="name" v-model="searchModel.name"></el-input>
+      <el-input size="small" v-model="searchModel.name"></el-input>
       <span>所属机构</span>
-      <el-input size="small" ref="officeName" v-model="searchModel.officeName"></el-input>
+      <el-input size="small" v-model="searchModel.officeName"></el-input>
       <el-button type="primary" size="small" @click="$refs.pageRef.setList(1)" id="searchButton"
                  style="margin-left:20px" icon="el-icon-search">查询
       </el-button>
@@ -24,7 +24,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="commonUser.name" label="姓名"></el-table-column>
+      <el-table-column sortable prop="commonUser.name" label="姓名"></el-table-column>
       <el-table-column prop="phone" label="手机"></el-table-column>
       <el-table-column label="角色">
         <template slot-scope="scope">
@@ -66,6 +66,7 @@
     },
     methods: {
       sortChange(column) {
+        console.log(column);
         this.$refs.pageRef.sortChange(column);
       },
       openModify(user) {

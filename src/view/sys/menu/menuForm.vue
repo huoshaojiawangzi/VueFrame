@@ -76,7 +76,7 @@
         this.$validator.checkNum(value,callback);
       };
       let duplicatePath = (rule, value, callback) => {
-        this.$validator.duplicateFiled('menu',"path",value,null,callback,"链接已存在");
+        this.$validator.duplicateFileds('menu',{path:value},null,callback,"链接已存在");
       };
       return {
         form: {
@@ -115,14 +115,6 @@
 
 <style scoped>
   .el-input {
-    width: 290px;
-  }
-
-  .el-select {
-    width: 290px;
-  }
-
-  .el-cascader {
     width: 290px;
   }
 </style>

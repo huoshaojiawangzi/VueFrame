@@ -23,7 +23,7 @@ function loopGetPermissionByTag(PermissionTree, tag) {
     if ((item.children === undefined || item.children.length === 0) && item.path === tag) {
       return item;
     } else if (item.children !== undefined && item.children.length > 0) {
-      let result = loopGetMenuByPath(item.children, tag);
+      let result = loopGetPermissionByTag(item.children, tag);
       if (result !== undefined) {
         return result
       }
@@ -38,7 +38,7 @@ function getPermissoinByTag(tag) {
 
 //判断用户是否拥有某权限
 function hasPermissoin(tag) {
-  return getPermissoinByTag(store.getters.getPermissionTree, tag) != null;
+  return getPermissoinByTag(tag) != null;
 }
 
 export default {getMenuByPath, hasPermissoin}
