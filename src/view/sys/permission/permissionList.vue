@@ -66,7 +66,7 @@
       del(id) {
         this.$actionUtils.del("permission",id).then((code)=>{
           if(code === 0) {
-            this.$store.dispatch("deleteTabAndLive", "/permission/form").catch();
+            this.$store.dispatch("deleteTabAndLive", "/permission/form").catch(()=>{});
             this.setTree();
           }
         })

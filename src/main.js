@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import App from '@/App'
+import Router from "vue-router";
 import router from '@/router'
 import axios from 'axios'
 import qs from 'qs'
@@ -16,6 +17,7 @@ import actionUtils from '@/global/actionUtils'
 // noinspection ES6UnusedImports
 
 Vue.use(Element);
+Vue.use(Router);
 Vue.prototype.$qs = qs;
 Vue.prototype.$axios = axios;
 Vue.config.productionTip = false;
@@ -29,7 +31,13 @@ Vue.prototype.$actionUtils = actionUtils;
 //允许浏览器debug
 Vue.config.devtools = true;
 
-/* eslint-disable no-new */
+axios.interceptors.response.use(function (response) {
+  return response;
+} ,function (error) {
+  // 对响应错误做点什么
+  return Promise.reject(error);
+});
+
 new Vue({
   el: '#app',
   router,
@@ -37,17 +45,9 @@ new Vue({
   components: {App},
   template: '<App/>'
 });
-axios.interceptors.response.use(function (response) {
-  console.log("11111111111111");
-  console.log(response.data);
-  return response;
-} ,function (error) {
-  // 对响应错误做点什么
-  console.log("22222222222222");
-  console.log(error);
-  return Promise.reject(error);
-});
 
+/* 在起始页之后监听*/
 router.beforeEach((to, form, next) => {
   store.dispatch("routeChange", to).then(next())
 });
+

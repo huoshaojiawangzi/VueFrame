@@ -12,23 +12,21 @@
     </div>
     <el-container>
       <el-header style="height:50px;font-size: 12px;" class="box">
-        <div style="float: right;margin-top: 18px">
-          <el-dropdown>
-            <i class="el-icon-setting" style="color:white;"></i>
-            <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item>查看</el-dropdown-item>
-              <el-dropdown-item>新增</el-dropdown-item>
-              <el-dropdown-item>删除</el-dropdown-item>
-            </el-dropdown-menu>
-          </el-dropdown>
-          <span style="color:white;font-size:13px;">设置</span>
+        <div style="float: right;margin-top: 18px" class="pointer" @click="loginOut">
+            <i class="el-icon-switch-button" style="color:white;"></i>
+          <span style="color:white;font-size:13px;">退出</span>
         </div>
-        <div><span style="color:white;font-size:13px;margin-right: 10px;float: right;margin-top: 18px"
+        <div><span style="color:white;font-size:13px;margin-right: 20px;float: right;margin-top: 18px" class="pointer"
                    v-if="userInfo!=null">{{userInfo.name}}</span></div>
-        <div
-          style='height:30px;width:30px;float: right;border-radius: 50%;margin-right:10px;margin-top: 10px;background: url("/static/image/霞头像.jpg") no-repeat center top;background-size: 100%'></div>
-        <div><span style="color:white;font-size:13px;margin-right: 20px;float: right;margin-top: 18px"
-                   v-if="userInfo!=null">{{userInfo.roles[userInfo.roleIndex].name}}</span></div>
+        <div style='height:30px;width:30px;float: right;border-radius: 50%;margin-right:5px;margin-top: 10px;background: url("/static/image/霞头像.jpg") no-repeat center top;background-size: 100%'></div>
+        <el-dropdown style="margin-right: 20px;float: right;margin-top: 18px" trigger="click" v-if="userInfo!=null">
+            <span style="color:white;font-size:13px;" class="pointer">{{userInfo.roles[userInfo.roleIndex].name}}</span>
+          <el-dropdown-menu slot="dropdown" v-if="userInfo.roles.length>1">
+            <template v-for="(item,roleIndex) in userInfo.roles" v-if="item!==userInfo.roles[userInfo.roleIndex]">
+              <el-dropdown-item @click.native="roleSwitch(roleIndex)">{{item.name}}</el-dropdown-item>
+            </template>
+          </el-dropdown-menu>
+        </el-dropdown>
         <div style="margin-top: 10px;font-size: 22px;color:white"><i class="el-icon-menu" @click="changeCollapse()"></i><span
           style="font-weight:bold;font-size: 21px;margin-left: 8px">后台管理系统</span></div>
       </el-header>
@@ -66,13 +64,13 @@
     name: 'Home',
     components: {golbalStyle, navMenu, dynamicTab},
     created() {
-      this.getMenusAndPermissions();
+      this.iniaData();
     },
     mounted() {
       this.$nextTick(() => {
-        this.$store.dispatch('setFullHeight', document.documentElement.clientHeight).catch();
+        this.$store.dispatch('setFullHeight', document.documentElement.clientHeight).catch(()=>{});
         window.onresize = () => {
-          this.$store.dispatch('setFullHeight', document.documentElement.clientHeight).catch();
+          this.$store.dispatch('setFullHeight', document.documentElement.clientHeight).catch(()=>{});
         }
       })
     },
@@ -118,32 +116,74 @@
 
     },
     methods: {
-      //获取当前用户的菜单以及权限
-      getMenusAndPermissions() {
+      loginOut() {
+        this.$confirm('确认要退出系统吗?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(()=>{
+          this.$axios({
+            method: 'get',
+            url: '/logout'
+          }).then(() => {
+            this.$router.push({path: "/login"});
+          })
+        }).catch(()=>{})
+      },
+      roleSwitch(roleIndex) {
+        this.$confirm('确认要切换角色吗?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(()=>{
+          this.$axios({
+            method: 'get',
+            url: '/role-switch',
+            params: {
+              roleIndex:roleIndex
+            }
+          }).then(() => {
+            this.userInfo.roleIndex = roleIndex;
+            this.iniaData();
+          })
+        }).catch(()=>{})
+      },
+      //初始化数据
+      iniaData(){
         this.$store.commit('set_loading', true);
-        this.$axios({
+        this.setMenusAndPermissions().then((code)=>{
+            if(code === 0)
+            {
+              //在此切换首页
+              this.$router.push("/user/list");
+              this.initCommonData()
+            }
+        }).then(()=>{
+          this.$store.commit('set_loading', false);})
+      },
+      //获取当前用户的菜单以及权限
+      setMenusAndPermissions() {
+        return this.$axios({
           method: 'get',
           url: '/getMenusAndPermissions'
         }).then((response) => {
           if (response.data.code === 0) {
             this.$store.commit("set_menu_tree", this.$treeUtils.filterTree(response.data.result.menuTree));
             this.$store.commit("set_permission_tree", this.$treeUtils.filterTree(response.data.result.permissionTree));
-            Promise.resolve(this.initData()).then(()=>{
-              this.$store.commit('set_loading', false);
-            })
           } else {
             this.$router.push({path: "/login"});
           }
+          return response.data.code;
         })
       },
       //初始化页面的公用数据
-      initData(){
-        this.getAllMenuTree();
-        this.getAllPermissionTree();
-        this.getOfficeTree();
-        this.getRoleList();
+      initCommonData(){
+        this.setAllMenuTree();
+        this.setAllPermissionTree();
+        this.setOfficeTree();
+        this.setRoleList();
       },
-      getAllMenuTree() {
+      setAllMenuTree() {
         this.$axios({
           method: 'post',
           url: '/menu/find-roots'
@@ -151,7 +191,7 @@
           this.$store.commit("set_all_menu_tree", this.$treeUtils.filterTree(response.data.result));
         })
       },
-      getAllPermissionTree() {
+      setAllPermissionTree() {
         this.$axios({
           method: 'post',
           url: '/permission/find-roots'
@@ -159,7 +199,7 @@
             this.$store.commit("set_all_permission_tree", this.$treeUtils.filterTree(response.data.result));
         })
       },
-      getOfficeTree() {
+      setOfficeTree() {
         this.$axios({
           method: 'get',
           url: '/office/find-roots'
@@ -169,7 +209,7 @@
           }
         })
       },
-      getRoleList() {
+      setRoleList() {
         this.$axios({
           method: 'get',
           url: '/role/find-all'

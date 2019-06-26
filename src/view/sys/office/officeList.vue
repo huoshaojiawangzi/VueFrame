@@ -56,7 +56,7 @@
       del(id) {
         this.$actionUtils.del("office",id).then((code)=>{
           if(code === 0) {
-            this.$store.dispatch("deleteTabAndLive", "/office/form").catch();
+            this.$store.dispatch("deleteTabAndLive", "/office/form").catch(()=>{});
             this.setTree();
           }
         });

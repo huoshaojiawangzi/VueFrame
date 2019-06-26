@@ -44,7 +44,7 @@
               resolve();
             }).then(()=>{this.setList()});
           }
-        }).catch()
+        }).catch(()=>{})
       },
       //排序方法，可多个属性排序
       sortChange(column){

@@ -71,7 +71,7 @@
       del(id) {
         this.$actionUtils.del("menu",id).then((code)=>{
           if(code === 0) {
-            this.$store.dispatch("deleteTabAndLive", "/menu/form").catch();
+            this.$store.dispatch("deleteTabAndLive", "/menu/form").catch(()=>{});
             this.setTree();
           }
         })

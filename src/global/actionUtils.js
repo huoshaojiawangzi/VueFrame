@@ -85,7 +85,7 @@ function saveAndForward(name,data,route){
 //跳转到list页面
 function  openList(name,route) {
   store.dispatch("deleteTabAndLive", "/"+name+"/list").then(() => {
-    store.dispatch("deleteTabAndLive", "/"+name+"/form").catch();
+    store.dispatch("deleteTabAndLive", "/"+name+"/form").catch(()=>{});
     route.push({
       name: name+'List'
     })
