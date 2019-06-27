@@ -21,8 +21,9 @@
       <el-table-column sortable prop="value" label="键值"></el-table-column>
       <el-table-column prop="remarks" label="描述"></el-table-column>
       <el-table-column sortable prop="sort" label="排序"></el-table-column>
-      <el-table-column label="操作" width="150">
+      <el-table-column label="操作" width="250">
         <template slot-scope="scope">
+          <el-button type="primary" size="mini" @click="openNext(scope.row)"  plain>添加标签</el-button>
           <el-button type="warning" size="mini" @click="openModify(scope.row)" plain>修改</el-button>
           <el-button type="danger" size="mini" @click="$refs.pageRef.del(scope.row.id)" plain>删除</el-button>
         </template>
@@ -58,6 +59,16 @@
     methods: {
       sortChange(column) {
         this.$refs.pageRef.sortChange(column);
+      },
+      openNext(dictionary) {
+        this.$store.dispatch("deleteTabAndLive", "/dictionary/form").then(()=>{
+          this.$router.push({
+            name: 'dictionaryForm',
+            params: {
+              dictionary
+            }
+          })
+        })
       },
       openModify(dictionary) {
         this.$router.push({

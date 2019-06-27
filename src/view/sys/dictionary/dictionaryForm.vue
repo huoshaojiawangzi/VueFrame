@@ -51,6 +51,12 @@
 <script>
   export default {
     name: "dictionaryForm",
+    created() {
+      if(this.$route.params.dictionary!==undefined){
+        this.form.dictionary.type = this.$route.params.dictionary.type;
+        this.form.dictionary.remarks = this.$route.params.dictionary.remarks;
+      }
+    },
     data: function () {
       let duplicateValue = (rule, value, callback) => {
         this.$validator.duplicateFileds('dictionary',{type:this.form.dictionary.type,value:value},null,callback,"该类型下键值已存在");
