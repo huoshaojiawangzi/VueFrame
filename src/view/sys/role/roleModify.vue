@@ -42,12 +42,12 @@
   export default {
     name: "roleForm",
     components: {tree},
-    created(){
-      this.form.role =this.$route.params.role;
+    created() {
+      this.form.role = this.$route.params.role;
     },
     data: function () {
       let duplicateName = (rule, value, callback) => {
-        this.$validator.duplicateFileds('role',{name:value},this.form.role.id,callback,"角色名已存在");
+        this.$validator.duplicateFileds('role', {name: value}, this.form.role.id, callback, "角色名已存在");
       };
       return {
         form: {

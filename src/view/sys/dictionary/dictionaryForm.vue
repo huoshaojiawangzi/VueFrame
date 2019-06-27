@@ -39,7 +39,8 @@
           </el-form-item>
           <el-form-item>
             <div align="center">
-              <el-button type="primary" @click="submitForm('dictionaryForm')" size="small" icon="el-icon-check">保存</el-button>
+              <el-button type="primary" @click="submitForm('dictionaryForm')" size="small" icon="el-icon-check">保存
+              </el-button>
             </div>
           </el-form-item>
         </el-form>
@@ -52,23 +53,26 @@
   export default {
     name: "dictionaryForm",
     created() {
-      if(this.$route.params.dictionary!==undefined){
+      if (this.$route.params.dictionary !== undefined) {
         this.form.dictionary.type = this.$route.params.dictionary.type;
         this.form.dictionary.remarks = this.$route.params.dictionary.remarks;
       }
     },
     data: function () {
       let duplicateValue = (rule, value, callback) => {
-        this.$validator.duplicateFileds('dictionary',{type:this.form.dictionary.type,value:value},null,callback,"该类型下键值已存在");
+        this.$validator.duplicateFileds('dictionary', {
+          type: this.form.dictionary.type,
+          value: value
+        }, null, callback, "该类型下键值已存在");
       };
       return {
         form: {
           dictionary: {
-            type:null,
-            label:null,
-            value:null,
-            sort:null,
-            remarks:null
+            type: null,
+            label: null,
+            value: null,
+            sort: null,
+            remarks: null
           }
         },
         rules: {
@@ -90,7 +94,7 @@
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            this.$actionUtils.saveAndForward("dictionary",this.form.dictionary,this.$router)
+            this.$actionUtils.saveAndForward("dictionary", this.form.dictionary, this.$router)
           }
         });
       }

@@ -15,8 +15,8 @@
   export default {
     name: "tree",
     props: {
-      value:{},
-      options: {type: Array,required: true}
+      value: {},
+      options: {type: Array, required: true}
     },
     mounted() {
       if (this.value instanceof Array && this.value.length > 0) {
@@ -24,14 +24,13 @@
       }
     },
     data() {
-      return {
-      }
+      return {}
     },
     methods: {
-      filterNodes(){
+      filterNodes() {
         let filterNodes = [];
-        for(let item of this.value){
-          if(item.children.length === 0){
+        for (let item of this.value) {
+          if (item.children.length === 0) {
             filterNodes.push(item);
           }
         }
@@ -39,8 +38,8 @@
       },
       handleCheck() {
         let items = [];
-        for(let id of this.$refs.tree.getCheckedKeys().concat(this.$refs.tree.getHalfCheckedKeys())){
-          items.push({id:id});
+        for (let id of this.$refs.tree.getCheckedKeys().concat(this.$refs.tree.getHalfCheckedKeys())) {
+          items.push({id: id});
         }
         this.$emit('input', items);
       }

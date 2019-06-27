@@ -5,7 +5,7 @@
       @current-change="handleCurrentChange"
       :current-page="this.searchModel.page"
       :page-sizes="[10, 20, 30, 50, 100]"
-      :page-size= "this.searchModel.limit"
+      :page-size="this.searchModel.limit"
       layout="total, sizes, prev, pager, next, jumper"
       :total="this.total">
     </el-pagination>
@@ -14,50 +14,50 @@
 
 <script>
   export default {
-    name:"pagination",
+    name: "pagination",
     props: {
-      value:{
-        type:Array
+      value: {
+        type: Array
       },
-      searchModel:{
-       required:true
+      searchModel: {
+        required: true
       },
-      urlPrefix :{
+      urlPrefix: {
         required: true
       }
     },
     data() {
       return {
-        total:0,
-        list:[]
+        total: 0,
+        list: []
       }
     },
     methods: {
-      del(id){
-        this.$actionUtils.del(this.urlPrefix,id).then((code)=>{
-          if(code === 0){
-            new Promise((resolve)=>{
-              if(this.list.length<2&&this.searchModel.page>1)
-              {
-                this.searchModel.page = this.searchModel.page-1;
+      del(id) {
+        this.$actionUtils.del(this.urlPrefix, id).then((code) => {
+          if (code === 0) {
+            new Promise((resolve) => {
+              if (this.list.length < 2 && this.searchModel.page > 1) {
+                this.searchModel.page = this.searchModel.page - 1;
               }
               resolve();
-            }).then(()=>{this.setList()});
+            }).then(() => {
+              this.setList()
+            });
           }
-        }).catch(()=>{})
+        }).catch(() => {
+        })
       },
       //排序方法，可多个属性排序
-      sortChange(column){
-        if(column.prop!=null&&column.order!=null)
-        {
+      sortChange(column) {
+        if (column.prop != null && column.order != null) {
           let sortItem = {
             property: column.prop,
-            order: column.order === "descending"?"desc" : "asc"
+            order: column.order === "descending" ? "desc" : "asc"
           };
           //如果有相同元素，移除
           let oldIndex = this.searchModel.pageSorts.findIndex(item => item.property === sortItem.property);
-          if(oldIndex!==-1)
-          {
+          if (oldIndex !== -1) {
             this.searchModel.pageSorts.splice(oldIndex);
           }
           this.searchModel.pageSorts.unshift(sortItem);
@@ -66,40 +66,39 @@
       },
       //每页数量改变
       handleSizeChange(val) {
-        this.searchModel.limit=parseInt(`${val}`);
+        this.searchModel.limit = parseInt(`${val}`);
         this.setList();
       },
       //当前页码改变
       handleCurrentChange(val) {
-        this.searchModel.page=parseInt(`${val}`);
+        this.searchModel.page = parseInt(`${val}`);
         this.setList();
       },
       //获取list，page:当前页码
       setList(page) {
-        if(page!=null)
-        {
+        if (page != null) {
           this.searchModel.page = page;
         }
-        this.$store.commit('set_loading',true);
+        this.$store.commit('set_loading', true);
         this.$axios({
           headers: {
             'Content-Type': 'application/json'
           },
-          method:'post',
-          url:'/'+this.urlPrefix+'/find-page',
-          transformRequest: [function(data) {
+          method: 'post',
+          url: '/' + this.urlPrefix + '/find-page',
+          transformRequest: [function (data) {
             data = JSON.stringify(data);
             return data;
           }],
           data: this.searchModel
-        }).then((response) =>{
+        }).then((response) => {
           this.list = response.data.result.content;
-          this.$emit("input",this.list);
+          this.$emit("input", this.list);
           this.total = parseInt(response.data.result.totalElements);
-        }).catch((response) =>{
+        }).catch((response) => {
           console.log(response)
-        }).finally(()=>{
-          this.$store.commit('set_loading',false);
+        }).finally(() => {
+          this.$store.commit('set_loading', false);
         });
       }
     }

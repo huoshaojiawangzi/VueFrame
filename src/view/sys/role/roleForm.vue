@@ -44,14 +44,14 @@
     components: {tree},
     data: function () {
       let duplicateName = (rule, value, callback) => {
-        this.$validator.duplicateFileds('role',{name:value},null,callback,"角色名已存在");
+        this.$validator.duplicateFileds('role', {name: value}, null, callback, "角色名已存在");
       };
       return {
         form: {
           role: {
-            name:null,
-            permissions:[],
-            menus:[]
+            name: null,
+            permissions: [],
+            menus: []
           }
         },
         rules: {
@@ -65,7 +65,7 @@
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            this.$actionUtils.saveAndForward("role",this.form.role,this.$router)
+            this.$actionUtils.saveAndForward("role", this.form.role, this.$router)
           }
         });
       }

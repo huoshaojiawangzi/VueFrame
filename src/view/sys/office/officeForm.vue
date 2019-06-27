@@ -62,7 +62,7 @@
     components: {cascader},
     data: function () {
       let checkPhone = (rule, value, callback) => {
-        this.$validator.checkPhone(value,callback);
+        this.$validator.checkPhone(value, callback);
       };
       return {
         form: {
@@ -88,7 +88,7 @@
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            this.$actionUtils.saveAndForward("office",this.form.office,this.$router)
+            this.$actionUtils.saveAndForward("office", this.form.office, this.$router)
           }
         });
       }

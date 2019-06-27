@@ -35,7 +35,7 @@
           method: 'post',
           url: '/office/find-roots'
         }).then((response) => {
-          if(response.data.result.length>0){
+          if (response.data.result.length > 0) {
             this.tree = response.data.result[0].children;
             this.$store.commit("set_office_trre", this.$treeUtils.filterTree(response.data.result));
           }
@@ -54,9 +54,10 @@
         })
       },
       del(id) {
-        this.$actionUtils.del("office",id).then((code)=>{
-          if(code === 0) {
-            this.$store.dispatch("deleteTabAndLive", "/office/form").catch(()=>{});
+        this.$actionUtils.del("office", id).then((code) => {
+          if (code === 0) {
+            this.$store.dispatch("deleteTabAndLive", "/office/form").catch(() => {
+            });
             this.setTree();
           }
         });

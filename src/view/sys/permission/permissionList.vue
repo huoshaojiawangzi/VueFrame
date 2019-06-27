@@ -8,7 +8,7 @@
       <el-table-column prop="tag" label="标识"></el-table-column>
       <el-table-column label="操作" width="250">
         <template slot-scope="scope">
-          <el-button type="primary" size="mini" @click="openNext(scope.row)"  plain>添加下级</el-button>
+          <el-button type="primary" size="mini" @click="openNext(scope.row)" plain>添加下级</el-button>
           <el-button type="warning" size="mini" @click="openModify(scope.row)" plain>修改</el-button>
           <el-button type="danger" size="mini" @click="del(scope.row.id)" plain>删除</el-button>
         </template>
@@ -35,7 +35,7 @@
           method: 'post',
           url: '/permission/find-roots'
         }).then((response) => {
-          if(response.data.result.length>0){
+          if (response.data.result.length > 0) {
             this.tree = response.data.result[0].children;
             this.$store.commit("set_all_permission_tree", this.$treeUtils.filterTree(response.data.result));
           }
@@ -54,19 +54,20 @@
         })
       },
       openNext(permission) {
-        this.$store.dispatch("deleteTabAndLive", "/permission/form").then(()=>{
+        this.$store.dispatch("deleteTabAndLive", "/permission/form").then(() => {
           this.$router.push({
             name: 'permissionForm',
             params: {
-              parent:permission
+              parent: permission
             }
           })
         })
       },
       del(id) {
-        this.$actionUtils.del("permission",id).then((code)=>{
-          if(code === 0) {
-            this.$store.dispatch("deleteTabAndLive", "/permission/form").catch(()=>{});
+        this.$actionUtils.del("permission", id).then((code) => {
+          if (code === 0) {
+            this.$store.dispatch("deleteTabAndLive", "/permission/form").catch(() => {
+            });
             this.setTree();
           }
         })

@@ -2,29 +2,29 @@ import axios from 'axios'
 
 //此方法用来验证不可重复字段
 //name：实体名称 map：[{userName:"super"}]形式的json数组 id：实体类id，没有填null callback：返回的callback  msg：验证重复后的错误信息
-function duplicateFileds(name,map,id, callback, msg) {
-    axios({
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      method: 'post',
-      url: '/'+name+'/find-by-filed',
-      transformRequest: [function (data) {
-        data = JSON.stringify(data);
-        return data;
-      }],
-      data: map
-    }).then((response) => {
-      if (response.data.result.length === 0) {
+function duplicateFileds(name, map, id, callback, msg) {
+  axios({
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    method: 'post',
+    url: '/' + name + '/find-by-filed',
+    transformRequest: [function (data) {
+      data = JSON.stringify(data);
+      return data;
+    }],
+    data: map
+  }).then((response) => {
+    if (response.data.result.length === 0) {
+      return callback();
+    } else if (response.data.result.length === 1) {
+      let result = response.data.result[0];
+      if (result.id === id) {
         return callback();
-      } else if (response.data.result.length === 1) {
-        let result = response.data.result[0];
-        if (result.id === id) {
-          return callback();
-        }
       }
-      return callback(new Error(msg));
-    })
+    }
+    return callback(new Error(msg));
+  })
 }
 
 function checkPhone(value, callback) {
@@ -36,7 +36,7 @@ function checkPhone(value, callback) {
   }
 }
 
-function checkNum (value, callback) {
+function checkNum(value, callback) {
   const reg = /^\d+$/;
   if (value == null || value === "" || reg.test(value)) {
     callback()
@@ -45,4 +45,4 @@ function checkNum (value, callback) {
   }
 };
 
-export default{duplicateFileds,checkPhone,checkNum}
+export default {duplicateFileds, checkPhone, checkNum}

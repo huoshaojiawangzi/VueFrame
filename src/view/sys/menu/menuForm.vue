@@ -67,16 +67,16 @@
     name: "menuForm",
     components: {cascader},
     created() {
-      if(this.$route.params.parent!==undefined){
+      if (this.$route.params.parent !== undefined) {
         this.form.menu.parent = this.$route.params.parent;
       }
     },
     data: function () {
       let checkNum = (rule, value, callback) => {
-        this.$validator.checkNum(value,callback);
+        this.$validator.checkNum(value, callback);
       };
       let duplicatePath = (rule, value, callback) => {
-        this.$validator.duplicateFileds('menu',{path:value},null,callback,"链接已存在");
+        this.$validator.duplicateFileds('menu', {path: value}, null, callback, "链接已存在");
       };
       return {
         form: {
@@ -105,7 +105,7 @@
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            this.$actionUtils.saveAndForward("menu",this.form.menu,this.$router)
+            this.$actionUtils.saveAndForward("menu", this.form.menu, this.$router)
           }
         });
       }

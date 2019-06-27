@@ -1,6 +1,7 @@
 <template>
   <div>
-    <el-table :data="list" style="width: 100%" :height="this.$store.getters.getNoSearchTableHeight" border stripe :header-cell-style="{background:'#FCFCFC'}">
+    <el-table :data="list" style="width: 100%" :height="this.$store.getters.getNoSearchTableHeight" border stripe
+              :header-cell-style="{background:'#FCFCFC'}">
       <el-table-column prop="name" label="角色名称"></el-table-column>
       <el-table-column label="操作" width="150">
         <template slot-scope="scope">
@@ -33,7 +34,7 @@
       }
     },
     methods: {
-      getRole(id){
+      getRole(id) {
         return this.$axios({
           method: 'get',
           url: '/role/get',
@@ -41,13 +42,13 @@
             id: id
           }
         }).then((response) => {
-          if(response.data.code === 0){
+          if (response.data.code === 0) {
             return response.data.result;
           }
         })
       },
       openModify(id) {
-        this.getRole(id).then((role)=>{
+        this.getRole(id).then((role) => {
           this.$router.push({
             name: 'roleModify',
             params: {

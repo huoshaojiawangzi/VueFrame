@@ -13,14 +13,15 @@
     <el-container>
       <el-header style="height:50px;font-size: 12px;" class="box">
         <div style="float: right;margin-top: 18px" class="pointer" @click="loginOut">
-            <i class="el-icon-switch-button" style="color:white;"></i>
+          <i class="el-icon-switch-button" style="color:white;"></i>
           <span style="color:white;font-size:13px;">退出</span>
         </div>
         <div><span style="color:white;font-size:13px;margin-right: 20px;float: right;margin-top: 18px" class="pointer"
                    v-if="userInfo!=null">{{userInfo.name}}</span></div>
-        <div style='height:30px;width:30px;float: right;border-radius: 50%;margin-right:5px;margin-top: 10px;background: url("/static/image/霞头像.jpg") no-repeat center top;background-size: 100%'></div>
+        <div
+          style='height:30px;width:30px;float: right;border-radius: 50%;margin-right:5px;margin-top: 10px;background: url("/static/image/霞头像.jpg") no-repeat center top;background-size: 100%'></div>
         <el-dropdown style="margin-right: 20px;float: right;margin-top: 18px" trigger="click" v-if="userInfo!=null">
-            <span style="color:white;font-size:13px;" class="pointer">{{userInfo.roles[userInfo.roleIndex].name}}</span>
+          <span style="color:white;font-size:13px;" class="pointer">{{userInfo.roles[userInfo.roleIndex].name}}</span>
           <el-dropdown-menu slot="dropdown" v-if="userInfo.roles.length>1">
             <template v-for="(item,roleIndex) in userInfo.roles" v-if="item!==userInfo.roles[userInfo.roleIndex]">
               <el-dropdown-item @click.native="roleSwitch(roleIndex)">{{item.name}}</el-dropdown-item>
@@ -68,9 +69,11 @@
     },
     mounted() {
       this.$nextTick(() => {
-        this.$store.dispatch('setFullHeight', document.documentElement.clientHeight).catch(()=>{});
+        this.$store.dispatch('setFullHeight', document.documentElement.clientHeight).catch(() => {
+        });
         window.onresize = () => {
-          this.$store.dispatch('setFullHeight', document.documentElement.clientHeight).catch(()=>{});
+          this.$store.dispatch('setFullHeight', document.documentElement.clientHeight).catch(() => {
+          });
         }
       })
     },
@@ -84,8 +87,7 @@
       },
       menuTree: {
         get: function () {
-          if(this.$store.getters.getMenuTree.length>0)
-          {
+          if (this.$store.getters.getMenuTree.length > 0) {
             return this.$store.getters.getMenuTree[0].children;
           }
         },
@@ -121,45 +123,47 @@
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
-        }).then(()=>{
+        }).then(() => {
           this.$axios({
             method: 'get',
             url: '/logout'
           }).then(() => {
             this.$router.push({path: "/login"});
           })
-        }).catch(()=>{})
+        }).catch(() => {
+        })
       },
       roleSwitch(roleIndex) {
         this.$confirm('确认要切换角色吗?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
-        }).then(()=>{
+        }).then(() => {
           this.$axios({
             method: 'get',
             url: '/role-switch',
             params: {
-              roleIndex:roleIndex
+              roleIndex: roleIndex
             }
           }).then(() => {
             this.userInfo.roleIndex = roleIndex;
             this.iniaData();
           })
-        }).catch(()=>{})
+        }).catch(() => {
+        })
       },
       //初始化数据
-      iniaData(){
+      iniaData() {
         this.$store.commit('set_loading', true);
-        this.setMenusAndPermissions().then((code)=>{
-            if(code === 0)
-            {
-              //在此切换首页
-              this.$router.push("/user/list");
-              this.initCommonData()
-            }
-        }).then(()=>{
-          this.$store.commit('set_loading', false);})
+        this.setMenusAndPermissions().then((code) => {
+          if (code === 0) {
+            //在此切换首页
+            this.$router.push("/user/list");
+            this.initCommonData()
+          }
+        }).then(() => {
+          this.$store.commit('set_loading', false);
+        })
       },
       //获取当前用户的菜单以及权限
       setMenusAndPermissions() {
@@ -177,7 +181,7 @@
         })
       },
       //初始化页面的公用数据
-      initCommonData(){
+      initCommonData() {
         this.setAllMenuTree();
         this.setAllPermissionTree();
         this.setOfficeTree();
@@ -196,7 +200,7 @@
           method: 'post',
           url: '/permission/find-roots'
         }).then((response) => {
-            this.$store.commit("set_all_permission_tree", this.$treeUtils.filterTree(response.data.result));
+          this.$store.commit("set_all_permission_tree", this.$treeUtils.filterTree(response.data.result));
         })
       },
       setOfficeTree() {

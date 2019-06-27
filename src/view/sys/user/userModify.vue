@@ -74,7 +74,7 @@
     },
     data() {
       let checkPhone = (rule, value, callback) => {
-        this.$validator.checkPhone(value,callback);
+        this.$validator.checkPhone(value, callback);
       };
       let duplicatePassword = (rule, value, callback) => {
         if (value === this.form.user.commonUser.password) {
@@ -107,7 +107,7 @@
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            this.$actionUtils.saveAndForward("user",this.form.user,this.$router)
+            this.$actionUtils.saveAndForward("user", this.form.user, this.$router)
           }
         });
       }

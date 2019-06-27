@@ -54,16 +54,16 @@
     name: "permissionForm",
     components: {cascader},
     created() {
-      if(this.$route.params.parent!==undefined){
+      if (this.$route.params.parent !== undefined) {
         this.form.permission.parent = this.$route.params.parent;
       }
     },
     data: function () {
       let duplicateUrl = (rule, value, callback) => {
-        this.$validator.duplicateFileds('permission',{url:value},null,callback,"url已存在");
+        this.$validator.duplicateFileds('permission', {url: value}, null, callback, "url已存在");
       };
       let duplicateTag = (rule, value, callback) => {
-        this.$validator.duplicateFileds('permission',{tag:value},null,callback,"标识已存在");
+        this.$validator.duplicateFileds('permission', {tag: value}, null, callback, "标识已存在");
       };
       return {
         form: {
@@ -79,8 +79,8 @@
             {required: true, message: "必填项不能为空", trigger: 'blur'}],
           'permission.name': [
             {required: true, message: "必填项不能为空", trigger: 'blur'}],
-          'permission.url': [{validator:duplicateUrl,tigger:"blur"}],
-          'permission.tag': [{validator:duplicateTag,tigger:"blur"}]
+          'permission.url': [{validator: duplicateUrl, tigger: "blur"}],
+          'permission.tag': [{validator: duplicateTag, tigger: "blur"}]
         }
       };
     },
@@ -88,7 +88,7 @@
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            this.$actionUtils.saveAndForward("permission",this.form.permission,this.$router)
+            this.$actionUtils.saveAndForward("permission", this.form.permission, this.$router)
           }
         });
       }

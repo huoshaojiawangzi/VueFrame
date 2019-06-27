@@ -1,7 +1,7 @@
 export default {
   state: {
-    allMenuTree:[],
-    allPermissionTree:[],
+    allMenuTree: [],
+    allPermissionTree: [],
     officeTree: [],
     userList: [],
     roleList: []

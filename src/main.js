@@ -33,7 +33,7 @@ Vue.config.devtools = true;
 
 axios.interceptors.response.use(function (response) {
   return response;
-} ,function (error) {
+}, function (error) {
   // 对响应错误做点什么
   return Promise.reject(error);
 });
