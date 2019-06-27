@@ -20,9 +20,9 @@ function getMenuByPath(path) {
 
 function loopGetPermissionByTag(PermissionTree, tag) {
   for (let item of PermissionTree) {
-    if ((item.children === undefined || item.children.length === 0) && item.path === tag) {
+    if (item.tag === tag) {
       return item;
-    } else if (item.children !== undefined && item.children.length > 0) {
+    } else if (item.children instanceof Array && item.children.length > 0) {
       let result = loopGetPermissionByTag(item.children, tag);
       if (result !== undefined) {
         return result

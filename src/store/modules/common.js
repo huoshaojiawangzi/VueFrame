@@ -1,5 +1,6 @@
 export default {
   state: {
+    dictionaryList: [],
     allMenuTree: [],
     allPermissionTree: [],
     officeTree: [],
@@ -7,6 +8,9 @@ export default {
     roleList: []
   },
   mutations: {
+    set_dictionaryList(state, dictionaryList) {
+      state.dictionaryList = dictionaryList;
+    },
     set_all_menu_tree(state, allMenuTree) {
       state.allMenuTree = allMenuTree;
     },
@@ -23,8 +27,12 @@ export default {
       state.roleList = roleList;
     },
   },
-  actions: {},
+  actions: {
+  },
   getters: {
+    getDictionaryList(state) {
+      return state.dictionaryList;
+    },
     getAllMenuTree(state) {
       return state.allMenuTree;
     },

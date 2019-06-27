@@ -26,7 +26,7 @@
           <el-form-item>
             <el-col :span="11">
               <el-form-item prop="user.commonUser.password" label="密码">
-                <el-input v-model="form.user.commonUser.password" autocomplete="off" show-password></el-input>
+                <el-input v-model="form.user.commonUser.password" autocomplete="off" type="password"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="11">
@@ -38,7 +38,7 @@
           <el-form-item>
             <el-col :span="11">
               <el-form-item prop="verifyPassword" label="确认密码">
-                <el-input v-model="form.verifyPassword" show-password autocomplete="off"></el-input>
+                <el-input v-model="form.verifyPassword" autocomplete="off" type="password"></el-input>
               </el-form-item>
             </el-col>
           </el-form-item>

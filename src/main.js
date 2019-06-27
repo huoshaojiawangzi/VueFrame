@@ -14,6 +14,7 @@ import treeUtils from '@/global/treeUtils'
 import userUtils from '@/global/userUtils'
 import validator from '@/global/validator'
 import actionUtils from '@/global/actionUtils'
+import dictUtils from '@/global/dictUtils'
 // noinspection ES6UnusedImports
 
 Vue.use(Element);
@@ -28,6 +29,7 @@ Vue.prototype.$treeUtils = treeUtils;
 Vue.prototype.$userUtils = userUtils;
 Vue.prototype.$validator = validator;
 Vue.prototype.$actionUtils = actionUtils;
+Vue.prototype.$dictUtils = dictUtils;
 //允许浏览器debug
 Vue.config.devtools = true;
 

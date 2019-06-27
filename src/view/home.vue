@@ -20,14 +20,15 @@
                    v-if="userInfo!=null">{{userInfo.name}}</span></div>
         <div
           style='height:30px;width:30px;float: right;border-radius: 50%;margin-right:5px;margin-top: 10px;background: url("/static/image/霞头像.jpg") no-repeat center top;background-size: 100%'></div>
-        <el-dropdown style="margin-right: 20px;float: right;margin-top: 18px" trigger="click" v-if="userInfo!=null">
+        <el-dropdown style="margin-right: 20px;float: right;margin-top: 18px" trigger="click" v-if="userInfo!=null&&userInfo.roles.length>1">
           <span style="color:white;font-size:13px;" class="pointer">{{userInfo.roles[userInfo.roleIndex].name}}</span>
-          <el-dropdown-menu slot="dropdown" v-if="userInfo.roles.length>1">
+          <el-dropdown-menu slot="dropdown">
             <template v-for="(item,roleIndex) in userInfo.roles" v-if="item!==userInfo.roles[userInfo.roleIndex]">
               <el-dropdown-item @click.native="roleSwitch(roleIndex)">{{item.name}}</el-dropdown-item>
             </template>
           </el-dropdown-menu>
         </el-dropdown>
+        <span style="margin-right: 20px;float: right;margin-top: 18px;color:white;font-size:13px;" v-else>{{userInfo.roles[userInfo.roleIndex].name}}</span>
         <div style="margin-top: 10px;font-size: 22px;color:white"><i class="el-icon-menu" @click="changeCollapse()"></i><span
           style="font-weight:bold;font-size: 21px;margin-left: 8px">后台管理系统</span></div>
       </el-header>
@@ -182,10 +183,19 @@
       },
       //初始化页面的公用数据
       initCommonData() {
+        this.setDictionaryList();
         this.setAllMenuTree();
         this.setAllPermissionTree();
         this.setOfficeTree();
         this.setRoleList();
+      },
+      setDictionaryList() {
+        this.$axios({
+          method: 'post',
+          url: '/dictionary/find-all'
+        }).then((response) => {
+          this.$store.commit("set_dictionaryList", response.data.result);
+        })
       },
       setAllMenuTree() {
         this.$axios({
