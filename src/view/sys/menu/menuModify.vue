@@ -12,7 +12,8 @@
                 <cascader
                   width="290px"
                   v-model="form.menu.parent"
-                  :options="this.$store.getters.getAllMenuTree">
+                  :options="this.$store.getters.getAllMenuTree"
+                  :exclude="form.menu">
                 </cascader>
               </el-form-item>
             </el-col>

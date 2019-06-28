@@ -12,7 +12,8 @@
                 <cascader
                   width="290px"
                   v-model="form.permission.parent"
-                  :options="this.$store.getters.getAllPermissionTree">
+                  :options="this.$store.getters.getAllPermissionTree"
+                  :exclude="form.permission">
                 </cascader>
               </el-form-item>
             </el-col>

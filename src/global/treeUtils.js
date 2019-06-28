@@ -1,4 +1,5 @@
-function filterTree(data, parent) {//将数据中的空children设置为null
+//将数据中的空children设置为undefined,设置parent
+function filterTree(data, parent) {
   let copyParent = null;
   if (parent != null) {
     copyParent = Object.assign({}, parent);

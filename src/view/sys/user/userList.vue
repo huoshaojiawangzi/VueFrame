@@ -66,7 +66,6 @@
     },
     methods: {
       sortChange(column) {
-        console.log(column);
         this.$refs.pageRef.sortChange(column);
       },
       openModify(user) {

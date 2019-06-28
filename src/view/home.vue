@@ -28,7 +28,7 @@
             </template>
           </el-dropdown-menu>
         </el-dropdown>
-        <span style="margin-right: 20px;float: right;margin-top: 18px;color:white;font-size:13px;" v-else>{{userInfo.roles[userInfo.roleIndex].name}}</span>
+        <span style="margin-right: 20px;float: right;margin-top: 18px;color:white;font-size:13px;" v-else-if="userInfo!=null">{{userInfo.roles[userInfo.roleIndex].name}}</span>
         <div style="margin-top: 10px;font-size: 22px;color:white"><i class="el-icon-menu" @click="changeCollapse()"></i><span
           style="font-weight:bold;font-size: 21px;margin-left: 8px">后台管理系统</span></div>
       </el-header>
@@ -61,12 +61,17 @@
   import golbalStyle from '@/style/globalStyle'
   import navMenu from '@/components/navMenu'
   import dynamicTab from '@/components/dynamicTab'
+  import userInfo from "@/view/sys/user/userInfo";
 
   export default {
     name: 'Home',
     components: {golbalStyle, navMenu, dynamicTab},
     created() {
-      this.iniaData();
+      if(this.userInfo == null){
+        this.$router.push({path: "/login"});
+      }else {
+        this.initData()
+      }
     },
     mounted() {
       this.$nextTick(() => {
@@ -154,12 +159,12 @@
         })
       },
       //初始化数据
-      iniaData() {
+      initData() {
         this.$store.commit('set_loading', true);
         this.setMenusAndPermissions().then((code) => {
           if (code === 0) {
             //在此切换首页
-            this.$router.push("/user/list");
+            //this.$router.push("/user/list");
             this.initCommonData()
           }
         }).then(() => {

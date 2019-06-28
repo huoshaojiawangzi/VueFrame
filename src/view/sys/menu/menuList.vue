@@ -26,7 +26,6 @@
   export default {
     name: "menuList",
     created() {
-      console.log(this.$store.getters.getMenuTree);
       this.setTree();
     },
     data() {
