@@ -26,9 +26,6 @@ export default {
   actions: {},
   getters: {
     getUserInfo(state) {
-      if (state.userInfo == null) {
-        state.userInfo = JSON.parse(sessionStorage.getItem("userInfo"));
-      }
       return state.userInfo;
     },
     getMenuTree(state) {

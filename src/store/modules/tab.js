@@ -29,6 +29,11 @@ export default {
     }
   },
   actions: {
+    clearAllTab(){
+      this.state.tab.tabOptions = [];
+      this.state.tab.activeIndex = [];
+      this.state.tab.keepLives = [];
+    },
     //路由变化时，调用此方法
     routeChange(context, to) {
       //判断路由是否已经打开

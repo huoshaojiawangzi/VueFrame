@@ -134,6 +134,7 @@
             method: 'get',
             url: '/logout'
           }).then(() => {
+            this.$store.dispatch("clearAllTab").catch(()=>{});
             this.$router.push({path: "/login"});
           })
         }).catch(() => {
@@ -152,6 +153,7 @@
               roleIndex: roleIndex
             }
           }).then(() => {
+            this.$store.dispatch("clearAllTab").catch(()=>{});
             this.userInfo.roleIndex = roleIndex;
             this.iniaData();
           })
@@ -189,10 +191,16 @@
       //初始化页面的公用数据
       initCommonData() {
         this.setDictionaryList();
-        this.setAllMenuTree();
-        this.setAllPermissionTree();
-        this.setOfficeTree();
         this.setRoleList();
+        if(this.$userUtils.hasPermissoin("sys:menu:list")){
+          this.setAllMenuTree();
+        }
+        if(this.$userUtils.hasPermissoin("sys:permission:list")){
+          this.setAllPermissionTree();
+        }
+        if(this.$userUtils.hasPermissoin("sys:office:list")){
+          this.setOfficeTree();
+        }
       },
       setDictionaryList() {
         this.$axios({
