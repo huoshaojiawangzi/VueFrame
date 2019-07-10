@@ -8,7 +8,7 @@ function duplicateFileds(name, map, id, callback, msg) {
       'Content-Type': 'application/json'
     },
     method: 'post',
-    url: '/' + name + '/find-by-filed',
+    url: '/' + name + '/find-by-fileds',
     transformRequest: [function (data) {
       data = JSON.stringify(data);
       return data;
