@@ -153,9 +153,12 @@
               roleIndex: roleIndex
             }
           }).then(() => {
+            this.$cache.clearAllSession();
+            this.$router.push({path: "/"});
             this.$store.dispatch("clearAllTab").catch(()=>{});
             this.userInfo.roleIndex = roleIndex;
-            this.iniaData();
+            this.$cache.setSessionObj("userInfo", this.userInfo);
+            this.initData();
           })
         }).catch(() => {
         })

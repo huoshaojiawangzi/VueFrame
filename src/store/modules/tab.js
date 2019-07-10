@@ -31,7 +31,7 @@ export default {
   actions: {
     clearAllTab(){
       this.state.tab.tabOptions = [];
-      this.state.tab.activeIndex = [];
+      this.state.tab.activeIndex = '/';
       this.state.tab.keepLives = [];
     },
     //路由变化时，调用此方法

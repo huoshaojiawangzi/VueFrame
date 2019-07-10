@@ -40,7 +40,7 @@
   import tree from '@/components/tree'
 
   export default {
-    name: "roleForm",
+    name: "roleModify",
     components: {tree},
     created() {
       this.form.role = this.$route.params.role;
