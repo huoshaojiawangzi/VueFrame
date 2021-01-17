@@ -231,7 +231,7 @@
       },
       setOfficeTree() {
         this.$axios({
-          method: 'get',
+          method: 'post',
           url: '/office/find-roots'
         }).then((response) => {
           if (response.data.code === 0) {
@@ -241,7 +241,7 @@
       },
       setRoleList() {
         this.$axios({
-          method: 'get',
+          method: 'post',
           url: '/role/find-all'
         }).then((response) => {
           if (response.data.code === 0) {
